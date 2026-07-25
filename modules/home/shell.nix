@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   pkgs,
   pkgsUnstable,
   repoPath,
@@ -21,6 +22,7 @@ in
     fd
     fzf
     jq
+    inputs.herdr.packages.${pkgs.system}.default
     pinentry-gnome3
     pipes
     rbw
@@ -33,7 +35,6 @@ in
     wofi
     wtype
     yazi
-    zellij
     zoxide
     pkgsUnstable.terminal-rain-lightning
   ];
@@ -63,7 +64,7 @@ in
       vim = "nvim";
       nvi = "nvim-ide";
       zed = "zeditor";
-      zj = "zellij";
+      hd = "herdr";
 
       # Git
       g = "git";
@@ -312,10 +313,10 @@ in
         "$schema" = "https://opencode.ai/tui.json";
         keybinds = {
           app_exit = "ctrl+c,<leader>q";
-          messages_page_up = "pageup,ctrl+alt+b,ctrl+u";
-          messages_page_down = "pagedown,ctrl+alt+f,ctrl+d";
-          messages_half_page_up = "ctrl+alt+u";
-          messages_half_page_down = "ctrl+alt+d";
+          messages_page_up = "pageup,ctrl+alt+b";
+          messages_page_down = "pagedown,ctrl+alt+f";
+          messages_half_page_up = "ctrl+u";
+          messages_half_page_down = "ctrl+d";
           input_delete_to_line_start = "none";
           input_delete = "delete,shift+delete";
         };

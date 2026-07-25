@@ -38,7 +38,7 @@
   "security.workspace.trust.untrustedFiles": "open",
   "telemetry.telemetryLevel": "off",
   "terminal.explorerKind": "both",
-  "terminal.external.linuxExec": "wezterm",
+  "terminal.external.linuxExec": "ghostty",
   "terminal.integrated.fontFamily": "Hurmit Nerd Font Mono",
   "terminal.sourceControlRepositoriesKind": "both",
   "vim.easymotion": true,

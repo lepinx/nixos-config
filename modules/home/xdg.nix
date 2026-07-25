@@ -3,7 +3,7 @@
 {
   home.sessionVariables = {
     EDITOR = "nvim";
-    TERMINAL = "wezterm";
+    TERMINAL = "ghostty";
     XCURSOR_THEME = "Adwaita";
     XCURSOR_SIZE = "24";
     NIXOS_OZONE_WL = "1";

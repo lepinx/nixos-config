@@ -66,7 +66,7 @@ environment {
     XDG_CURRENT_DESKTOP "niri"
     QT_QPA_PLATFORM "wayland"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
-    TERMINAL "wezterm"
+    TERMINAL "ghostty"
 }
 
 hotkey-overlay {
@@ -103,7 +103,7 @@ animations {
 }
 
 window-rule {
-    match app-id=r#"^(com\.mitchellh\.ghostty|ghostty|org\.wezfurlong\.wezterm)$"#
+    match app-id=r#"^(com\.mitchellh\.ghostty|ghostty)$"#
     draw-border-with-background false
     focus-ring {
         off
@@ -147,8 +147,8 @@ debug {
 binds {
     Mod+Shift+Slash hotkey-overlay-title="Show Shortcuts" { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Terminal" { spawn "wezterm"; }
-    Mod+Shift+Return hotkey-overlay-title="Ghostty" { spawn "ghostty"; }
+    Mod+Return hotkey-overlay-title="Terminal" { spawn "ghostty"; }
+    Mod+Shift+Return hotkey-overlay-title="Ghostty Shell" { spawn "ghostty" "-e" "fish"; }
     Mod+Space hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+S hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma hotkey-overlay-title="Noctalia Settings" { spawn-sh "noctalia msg settings-toggle"; }
@@ -158,8 +158,8 @@ binds {
     Mod+N hotkey-overlay-title="Notifications" { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
     Mod+M hotkey-overlay-title="System Monitor" { spawn-sh "noctalia msg panel-toggle control-center system"; }
     Mod+Alt+L hotkey-overlay-title="Lock" { spawn-sh "noctalia msg session lock"; }
-    Ctrl+Alt+Delete repeat=false hotkey-overlay-title="System Monitor" { spawn "wezterm" "start" "--" "btop"; }
-    Mod+F hotkey-overlay-title="Yazi" { spawn "wezterm" "start" "--" "yazi"; }
+    Ctrl+Alt+Delete repeat=false hotkey-overlay-title="System Monitor" { spawn "ghostty" "-e" "btop"; }
+    Mod+F hotkey-overlay-title="Yazi" { spawn "ghostty" "-e" "yazi"; }
     Mod+E hotkey-overlay-title="Zed" { spawn "zeditor"; }
     Mod+B hotkey-overlay-title="Chrome" { spawn "google-chrome-stable"; }
     Mod+Alt+B repeat=false hotkey-overlay-title="Bitwarden Password" { spawn "rofi-rbw" "--selector" "wofi" "--clipboarder" "wl-copy" "--typer" "wtype" "--action" "copy" "--target" "password" "--clear-after" "45" "--prompt" "Copy password"; }

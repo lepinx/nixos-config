@@ -30,6 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    herdr = {
+      url = "git+https://github.com/ogulcancelik/herdr?ref=refs/tags/v0.6.5";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =

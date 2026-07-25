@@ -17,7 +17,8 @@ También se puede abrir directamente con `Mod+Shift+/`.
 ## Fuentes vivas
 
 - Sistema y ventanas: `configs/niri/config.kdl.in`
-- Terminal WezTerm: `configs/wezterm/wezterm.lua`
+- Terminal Ghostty: `configs/ghostty/config`
+- Multiplexer Herdr: `~/.config/herdr/config.toml`
 - Neovim rápido: `configs/nvim/lua/config/keymaps.lua`
 - Neovim IDE/NvChad: `configs/nvim-ide/lua/mappings.lua`
 - Zed: `configs/zed/keymap.json`

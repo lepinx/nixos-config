@@ -61,13 +61,10 @@ in
     pkgsUnstable.dbeaver-bin
     seahorse
     thunderbird
-    wezterm
   ];
 
   xdg.configFile = {
     "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
-    "wezterm/wezterm.lua".source =
-      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/wezterm/wezterm.lua";
     "niri/config.kdl".text =
       builtins.replaceStrings [ "@niri_outputs_path@" ] [ "${config.xdg.configHome}/niri/outputs.kdl" ]
         niriConfig;

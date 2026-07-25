@@ -158,6 +158,27 @@
         "type": "github"
       }
     },
+    "herdr": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780080653,
+        "narHash": "sha256-Y/cZeBqYvSxo/cWyvEJP1opG2diG2LUUFPRy/0yMSKk=",
+        "ref": "refs/tags/v0.6.5",
+        "rev": "4219aec638cdd81efae6460c6fba28418925c37c",
+        "revCount": 649,
+        "type": "git",
+        "url": "https://github.com/ogulcancelik/herdr"
+      },
+      "original": {
+        "ref": "refs/tags/v0.6.5",
+        "type": "git",
+        "url": "https://github.com/ogulcancelik/herdr"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -279,6 +300,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "herdr": "herdr",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
