@@ -1,0 +1,14 @@
+[[mgr.prepend_keymap]]
+on = [ "g", "R" ]
+run = "plugin smart-cd -- yazi-remote path"
+desc = "Remotos"
+
+[[mgr.prepend_keymap]]
+on = [ "g", "M" ]
+run = "plugin smart-cd -- yazi-devices path"
+desc = "Discos externos"
+
+[[mgr.prepend_keymap]]
+on = [ "g", "T" ]
+run = "plugin smart-cd -- yazi-trash path"
+desc = "Papelera"

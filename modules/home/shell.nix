@@ -35,7 +35,6 @@ in
     wl-clipboard
     wofi
     wtype
-    yazi
     zoxide
     pkgsUnstable.terminal-rain-lightning
   ];

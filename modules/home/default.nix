@@ -9,5 +9,6 @@
     ./theme.nix
     ./update-check.nix
     ./xdg.nix
+    ./yazi.nix
   ];
 }

@@ -46,7 +46,6 @@ in
     ente-auth
     gnome-disk-utility
     ghostty
-    nautilus
     file-roller
     inkscape
     krita
