@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     direnv
     just-lsp
+    jujutsu
     lazydocker
     lazygit
     nil
