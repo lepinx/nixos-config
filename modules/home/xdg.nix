@@ -46,6 +46,10 @@
     };
   };
 
+  xdg.configFile."environment.d/20-podman.conf".text = ''
+    DOCKER_HOST=unix://$XDG_RUNTIME_DIR/podman/podman.sock
+  '';
+
   gtk = {
     enable = true;
     theme = {
