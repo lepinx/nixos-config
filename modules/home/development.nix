@@ -1,4 +1,4 @@
-{ pkgs, pkgsUnstable, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -12,7 +12,6 @@
     nix-direnv
     nixfmt
     shellcheck
-    pkgsUnstable.codex
   ];
 
   programs.direnv = {

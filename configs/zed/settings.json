@@ -1,15 +1,5 @@
 {
   "icon_theme": "Catppuccin Latte",
-  "agent_servers": {
-    "codex-acp": {
-      "favorite_config_option_values": {
-        "mode": [
-          "agent-full-access"
-        ]
-      },
-      "type": "registry"
-    }
-  },
   "cli_default_open_behavior": "existing_window",
   "base_keymap": "VSCode",
   "vim_mode": true,

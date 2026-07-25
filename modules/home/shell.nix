@@ -22,6 +22,7 @@ in
     fd
     fzf
     jq
+    nushell
     inputs.herdr.packages.${pkgs.system}.default
     pinentry-gnome3
     pipes
@@ -81,6 +82,7 @@ in
       gl = "git log --oneline --graph --decorate";
       gd = "git diff";
       gds = "git diff --staged";
+      lg = "lazygit";
 
       # Nix and this repo workflow
       n = "nix";
@@ -109,6 +111,7 @@ in
       dcd = "docker compose down";
       dcl = "docker compose logs -f";
       dps = "docker ps";
+      ld = "lazydocker";
     };
     functions = {
       mkcd = {
