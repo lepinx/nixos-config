@@ -51,7 +51,7 @@ in
     enable = true;
     automount = true;
     notify = true;
-    tray = "auto";
+    tray = "never";
   };
 
   home.packages = with pkgs; [
@@ -65,12 +65,6 @@ in
     yaziRemote
     yaziTrash
   ];
-
-  programs.fish.shellAbbrs = {
-    yd = "yazi-devices";
-    yr = "yazi-remote";
-    yt = "yazi-trash";
-  };
 
   xdg.configFile = {
     "yazi/keymap.toml".source = ../../configs/yazi/keymap.toml;

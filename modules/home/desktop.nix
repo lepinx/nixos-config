@@ -55,6 +55,7 @@ in
     mpv
     nerd-fonts.hurmit
     nerd-fonts.jetbrains-mono
+    networkmanagerapplet
     obsidian
     pkgsUnstable.bruno
     pkgsUnstable.dbeaver-bin
@@ -63,6 +64,13 @@ in
   ];
 
   xdg.configFile = {
+    "autostart/nm-applet.desktop".text = ''
+      [Desktop Entry]
+      Type=Application
+      Name=NetworkManager Applet
+      Hidden=true
+      X-GNOME-Autostart-enabled=false
+    '';
     "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
     "niri/config.kdl".text =
       builtins.replaceStrings [ "@niri_outputs_path@" ] [ "${config.xdg.configHome}/niri/outputs.kdl" ]
@@ -197,8 +205,6 @@ in
         ];
         center = [ "clock" ];
         end = [
-          "media"
-          "tray"
           "notifications"
           "network"
           "bluetooth"
@@ -216,14 +222,6 @@ in
           type = "clock";
           format = "{:%a %d %b  %H:%M}";
           tooltip_format = "{:%A, %d de %B de %Y}";
-        };
-        media = {
-          type = "media";
-          hide_when_no_media = true;
-          min_length = 80;
-          max_length = 180;
-          art_size = 18.0;
-          title_scroll = "on_hover";
         };
         network = {
           type = "network";

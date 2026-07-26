@@ -66,6 +66,12 @@ in
       zed = "zeditor";
       hd = "herdr";
 
+      # Desktop and file management
+      nmc = "nm-connection-editor";
+      yd = "yazi-devices";
+      yr = "yazi-remote";
+      yt = "yazi-trash";
+
       # Git
       g = "git";
       gs = "git status --short --branch";

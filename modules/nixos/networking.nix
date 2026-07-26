@@ -27,7 +27,6 @@
   environment.systemPackages = with pkgs; [
     cifs-utils
     nmap
-    networkmanagerapplet
     openvpn
     samba
     wireguard-tools
