@@ -9,6 +9,12 @@
 }:
 
 let
+  ghosttyConfig = builtins.readFile ../../configs/ghostty/config;
+  ghosttyFontSizes = {
+    workstation = 10;
+    office = 14;
+  };
+  ghosttyFontSize = ghosttyFontSizes.${hostName} or 10;
   niriConfig = builtins.readFile ../../configs/niri/config.kdl.in;
   niriOutputsPath = ../../hosts + "/${hostName}/niri-outputs.kdl";
   bitwardenFieldCopy = pkgs.writeShellApplication {
@@ -71,7 +77,10 @@ in
       Hidden=true
       X-GNOME-Autostart-enabled=false
     '';
-    "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
+    "ghostty/config".text = builtins.replaceStrings
+      [ "font-size = 10" ]
+      [ "font-size = ${toString ghosttyFontSize}" ]
+      ghosttyConfig;
     "niri/config.kdl".text =
       builtins.replaceStrings [ "@niri_outputs_path@" ] [ "${config.xdg.configHome}/niri/outputs.kdl" ]
         niriConfig;
