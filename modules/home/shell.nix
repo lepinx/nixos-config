@@ -22,7 +22,6 @@ in
     fd
     fzf
     jq
-    nushell
     inputs.herdr.packages.${pkgs.system}.default
     pinentry-gnome3
     pipes
@@ -147,6 +146,104 @@ in
       };
     };
   };
+
+  programs.nushell = {
+    enable = true;
+    settings = {
+      show_banner = false;
+      edit_mode = "vi";
+      completions.external = {
+        enable = true;
+        max_results = 200;
+      };
+    };
+    shellAliases = {
+      ll = "ls --long --all";
+      la = "ls --all";
+      vim = "nvim";
+      zed = "zeditor";
+      hd = "herdr";
+      nmc = "nm-connection-editor";
+      yd = "yazi-devices";
+      yr = "yazi-remote";
+      yt = "yazi-trash";
+      g = "git";
+      gs = "git status --short --branch";
+      ga = "git add";
+      gaa = "git add --all";
+      gc = "git commit";
+      gcm = "git commit -m";
+      gp = "git push";
+      gpl = "git pull --rebase";
+      gf = "git fetch --prune";
+      gb = "git branch";
+      gsw = "git switch";
+      gl = "git log --oneline --graph --decorate";
+      gd = "git diff";
+      gds = "git diff --staged";
+      lg = "lazygit";
+      n = "nix";
+      nr = "nix run";
+      ns = "nix shell";
+      nd = "nix develop";
+      nf = "nix flake";
+      nfc = "nix flake check";
+      nfu = "nix flake update";
+      j = "just";
+      jc = "just check";
+      jb = "just build";
+      jt = "just test";
+      js = "just switch";
+      nj = "nixcfg";
+      njc = "nixcfg check";
+      njb = "nixcfg build";
+      njt = "nixcfg test";
+      njs = "nixcfg switch";
+      nju = "nixcfg update";
+      d = "docker";
+      dc = "docker compose";
+      dcu = "docker compose up -d";
+      dcd = "docker compose down";
+      dcl = "docker compose logs -f";
+      dps = "docker ps";
+      ld = "lazydocker";
+    };
+    extraConfig = ''
+      def --env mkcd [directory: path] {
+        mkdir $directory
+        cd $directory
+      }
+
+      def nixcfg [...args: string] {
+        let repo = "${repoPath}"
+
+        if not ($repo | path join "justfile" | path exists) {
+          print --stderr $"nixcfg: ($repo)/justfile not found"
+          return
+        }
+
+        just --justfile ($repo | path join "justfile") --working-directory $repo ...$args
+      }
+    '';
+  };
+
+  programs.atuin = {
+    enable = true;
+    enableFishIntegration = true;
+    enableNushellIntegration = true;
+    forceOverwriteSettings = true;
+    flags = [ "--disable-up-arrow" ];
+    settings = {
+      auto_sync = false;
+      enter_accept = true;
+      filter_mode = "global";
+      search_mode = "fuzzy";
+      style = "compact";
+      update_check = false;
+    };
+  };
+
+  home.file."${config.xdg.configHome}/nushell/config.nu".force = true;
 
   programs.starship = {
     enable = true;
