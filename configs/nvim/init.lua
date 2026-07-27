@@ -1,4 +1,6 @@
 require("config.options")
-require("config.keymaps")
 require("config.autocmds")
-require("config.plugins")
+require("config.keymaps")
+require("config.lazy")
+
+vim.opt.list = false

@@ -19,8 +19,7 @@ También se puede abrir directamente con `Mod+Shift+/`.
 - Sistema y ventanas: `configs/niri/config.kdl.in`
 - Terminal Ghostty: `configs/ghostty/config`
 - Multiplexer Herdr: `~/.config/herdr/config.toml`
-- Neovim rápido: `configs/nvim/lua/config/keymaps.lua`
-- Neovim IDE/NvChad: `configs/nvim-ide/lua/mappings.lua`
+- Neovim: `configs/nvim/lua/config/keymaps.lua`
 - Zed: `configs/zed/keymap.json`
 - VS Code: `configs/vscode/keybindings.json`
 - Shell Fish: `modules/home/shell.nix`

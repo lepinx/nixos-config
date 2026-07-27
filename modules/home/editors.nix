@@ -9,57 +9,10 @@ let
   vscodeSecure = pkgs.vscode.override {
     commandLineArgs = "--password-store=gnome-libsecret";
   };
-  nvimPlugins = with pkgs.vimPlugins; [
-    gitsigns-nvim
-    lualine-nvim
-    mini-nvim
-    nvim-lspconfig
-    nvim-web-devicons
-    oil-nvim
-    plenary-nvim
-    telescope-fzf-native-nvim
-    telescope-nvim
-    tokyonight-nvim
-    which-key-nvim
-    (nvim-treesitter.withPlugins (
-      parsers: with parsers; [
-        bash
-        css
-        html
-        javascript
-        json
-        lua
-        markdown
-        markdown_inline
-        nix
-        python
-        regex
-        toml
-        tsx
-        typescript
-        vim
-        vimdoc
-        yaml
-      ]
-    ))
-  ];
-  nvimPack = pkgs.neovimUtils.packDir {
-    hm = {
-      start = nvimPlugins;
-      opt = [ ];
-    };
-  };
-  nvimIde = pkgs.writeShellApplication {
-    name = "nvim-ide";
-    text = ''
-      export NVIM_APPNAME=nvim-ide
-      exec nvim "$@"
-    '';
-  };
 in
 {
   home.packages = [
-    nvimIde
+    pkgs.gh-dash
     pkgs.lua-language-server
     pkgs.package-version-server
     pkgs.zed-editor
@@ -69,7 +22,6 @@ in
     "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/lua";
     "nvim/stylua.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/stylua.toml";
-    "nvim-ide".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim-ide";
     "Code/User/settings.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/settings.json";
@@ -123,26 +75,44 @@ in
     viAlias = true;
     vimAlias = true;
     initLua = ''
-      vim.opt.packpath:prepend("${nvimPack}")
-      vim.opt.runtimepath:prepend("${nvimPack}")
+      vim.env.NVIM_MARKDOWN_PREVIEW_PLUGIN = "${pkgs.vimPlugins.markdown-preview-nvim}"
       vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")
       dofile("${repoPath}/configs/nvim/init.lua")
     '';
     extraPackages = with pkgs; [
       biome
+      curl
+      delve
       fd
       gcc
+      git
       gnumake
+      gnutar
+      go
+      gofumpt
+      gopls
+      gotools
+      gzip
       lazygit
       lua-language-server
       nil
       nixfmt
+      nodejs
       prettier
       pyright
       ripgrep
+      ruff
+      rust-analyzer
+      rustfmt
+      shfmt
+      statix
       stylua
+      taplo
       tree-sitter
       typescript-language-server
+      unzip
+      vtsls
+      wget
       vscode-langservers-extracted
     ];
   };
