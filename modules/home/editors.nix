@@ -40,81 +40,82 @@ in
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/keymap.json";
   };
 
-  programs.vscode = {
-    enable = true;
-    package = vscodeSecure;
-    mutableExtensionsDir = true;
-    argvSettings = {
-      enable-crash-reporter = false;
-      locale = "en";
-    };
-  };
-
-  programs.helix = {
-    enable = true;
-    settings = {
-      theme = "onedarker";
-      editor = {
-        line-number = "relative";
-        mouse = false;
-        bufferline = "multiple";
-        cursorline = true;
-        true-color = true;
-        cursor-shape.insert = "bar";
+  programs = {
+    vscode = {
+      enable = true;
+      package = vscodeSecure;
+      mutableExtensionsDir = true;
+      argvSettings = {
+        enable-crash-reporter = false;
+        locale = "en";
       };
-      keys.normal.esc = [
-        "collapse_selection"
-        "keep_primary_selection"
+    };
+
+    helix = {
+      enable = true;
+      settings = {
+        theme = "onedarker";
+        editor = {
+          line-number = "relative";
+          mouse = false;
+          bufferline = "multiple";
+          cursorline = true;
+          true-color = true;
+          cursor-shape.insert = "bar";
+        };
+        keys.normal.esc = [
+          "collapse_selection"
+          "keep_primary_selection"
+        ];
+      };
+    };
+
+    neovim = {
+      enable = true;
+      defaultEditor = false;
+      viAlias = true;
+      vimAlias = true;
+      initLua = ''
+        vim.env.NVIM_RENDER_MARKDOWN_PLUGIN = "${pkgs.vimPlugins.render-markdown-nvim}"
+        vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")
+        dofile("${repoPath}/configs/nvim/init.lua")
+      '';
+      extraPackages = with pkgs; [
+        biome
+        curl
+        delve
+        fd
+        gcc
+        git
+        gnumake
+        gnutar
+        go
+        gofumpt
+        gopls
+        gotools
+        gzip
+        lua-language-server
+        nil
+        nixfmt
+        nodejs
+        prettier
+        pyright
+        ripgrep
+        ruff
+        rust-analyzer
+        rustfmt
+        shfmt
+        statix
+        stylua
+        taplo
+        tree-sitter
+        typescript-language-server
+        unzip
+        vtsls
+        wget
+        vscode-langservers-extracted
       ];
     };
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = false;
-    viAlias = true;
-    vimAlias = true;
-    initLua = ''
-      vim.env.NVIM_RENDER_MARKDOWN_PLUGIN = "${pkgs.vimPlugins.render-markdown-nvim}"
-      vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")
-      dofile("${repoPath}/configs/nvim/init.lua")
-    '';
-    extraPackages = with pkgs; [
-      biome
-      curl
-      delve
-      fd
-      gcc
-      git
-      gnumake
-      gnutar
-      go
-      gofumpt
-      gopls
-      gotools
-      gzip
-      lazygit
-      lua-language-server
-      nil
-      nixfmt
-      nodejs
-      prettier
-      pyright
-      ripgrep
-      ruff
-      rust-analyzer
-      rustfmt
-      shfmt
-      statix
-      stylua
-      taplo
-      tree-sitter
-      typescript-language-server
-      unzip
-      vtsls
-      wget
-      vscode-langservers-extracted
-    ];
   };
 
   # VS Code extensions remain mutable and are handled by VS Code Settings Sync.

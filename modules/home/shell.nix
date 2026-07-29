@@ -80,7 +80,7 @@ in
     fd
     fzf
     jq
-    inputs.herdr.packages.${pkgs.system}.default
+    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     pinentry-gnome3
     pipes
     rbw
