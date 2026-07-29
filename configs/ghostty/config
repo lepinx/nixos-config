@@ -1,6 +1,6 @@
 theme = Ayu
 
-font-size = 10
+font-size = 9
 font-family = JetBrains Mono Nerd Font
 
 window-decoration = false

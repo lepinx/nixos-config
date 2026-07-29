@@ -9,6 +9,64 @@
 
 let
   colors = config.lib.stylix.colors.withHashtag;
+  shellShortcuts = {
+    # Editors and helpers
+    vim = "nvim";
+    zed = "zeditor";
+    hd = "herdr";
+
+    # Desktop and file management
+    nmc = "nm-connection-editor";
+    yd = "yazi-devices";
+    yr = "yazi-remote";
+    yt = "yazi-trash";
+
+    # Git
+    g = "git";
+    gs = "git status --short --branch";
+    ga = "git add";
+    gaa = "git add --all";
+    gc = "git commit";
+    gcm = "git commit -m";
+    gp = "git push";
+    gpl = "git pull --rebase";
+    gf = "git fetch --prune";
+    gb = "git branch";
+    gsw = "git switch";
+    gl = "git log --oneline --graph --decorate";
+    gd = "git diff";
+    gds = "git diff --staged";
+    lg = "lazygit";
+
+    # Nix and this repo workflow
+    n = "nix";
+    nr = "nix run";
+    ns = "nix shell";
+    nd = "nix develop";
+    nf = "nix flake";
+    nfc = "nix flake check";
+    nfu = "nix flake update";
+    j = "just";
+    jc = "just check";
+    jb = "just build";
+    jt = "just test";
+    js = "just switch";
+    nj = "nixcfg";
+    njc = "nixcfg check";
+    njb = "nixcfg build";
+    njt = "nixcfg test";
+    njs = "nixcfg switch";
+    nju = "nixcfg update";
+
+    # Containers: Docker-compatible CLI backed by Podman.
+    d = "docker";
+    dc = "docker compose";
+    dcu = "docker compose up -d";
+    dcd = "docker compose down";
+    dcl = "docker compose logs -f";
+    dps = "docker ps";
+    ld = "lazydocker";
+  };
 in
 {
   home.packages = with pkgs; [
@@ -58,64 +116,7 @@ in
       la = "eza -a --icons";
       lt = "eza --tree --icons";
     };
-    shellAbbrs = {
-      # Editors and helpers
-      vim = "nvim";
-      zed = "zeditor";
-      hd = "herdr";
-
-      # Desktop and file management
-      nmc = "nm-connection-editor";
-      yd = "yazi-devices";
-      yr = "yazi-remote";
-      yt = "yazi-trash";
-
-      # Git
-      g = "git";
-      gs = "git status --short --branch";
-      ga = "git add";
-      gaa = "git add --all";
-      gc = "git commit";
-      gcm = "git commit -m";
-      gp = "git push";
-      gpl = "git pull --rebase";
-      gf = "git fetch --prune";
-      gb = "git branch";
-      gsw = "git switch";
-      gl = "git log --oneline --graph --decorate";
-      gd = "git diff";
-      gds = "git diff --staged";
-      lg = "lazygit";
-
-      # Nix and this repo workflow
-      n = "nix";
-      nr = "nix run";
-      ns = "nix shell";
-      nd = "nix develop";
-      nf = "nix flake";
-      nfc = "nix flake check";
-      nfu = "nix flake update";
-      j = "just";
-      jc = "just check";
-      jb = "just build";
-      jt = "just test";
-      js = "just switch";
-      nj = "nixcfg";
-      njc = "nixcfg check";
-      njb = "nixcfg build";
-      njt = "nixcfg test";
-      njs = "nixcfg switch";
-      nju = "nixcfg update";
-
-      # Containers: Docker-compatible CLI backed by Podman.
-      d = "docker";
-      dc = "docker compose";
-      dcu = "docker compose up -d";
-      dcd = "docker compose down";
-      dcl = "docker compose logs -f";
-      dps = "docker ps";
-      ld = "lazydocker";
-    };
+    shellAbbrs = shellShortcuts;
     functions = {
       mkcd = {
         description = "Create a directory and enter it";
@@ -148,9 +149,11 @@ in
 
   programs.nushell = {
     enable = true;
+    package = pkgsUnstable.nushell;
     settings = {
       show_banner = false;
       edit_mode = "vi";
+      abbreviations = shellShortcuts;
       completions.external = {
         enable = true;
         max_results = 200;
@@ -159,53 +162,6 @@ in
     shellAliases = {
       ll = "ls --long --all";
       la = "ls --all";
-      vim = "nvim";
-      zed = "zeditor";
-      hd = "herdr";
-      nmc = "nm-connection-editor";
-      yd = "yazi-devices";
-      yr = "yazi-remote";
-      yt = "yazi-trash";
-      g = "git";
-      gs = "git status --short --branch";
-      ga = "git add";
-      gaa = "git add --all";
-      gc = "git commit";
-      gcm = "git commit -m";
-      gp = "git push";
-      gpl = "git pull --rebase";
-      gf = "git fetch --prune";
-      gb = "git branch";
-      gsw = "git switch";
-      gl = "git log --oneline --graph --decorate";
-      gd = "git diff";
-      gds = "git diff --staged";
-      lg = "lazygit";
-      n = "nix";
-      nr = "nix run";
-      ns = "nix shell";
-      nd = "nix develop";
-      nf = "nix flake";
-      nfc = "nix flake check";
-      nfu = "nix flake update";
-      j = "just";
-      jc = "just check";
-      jb = "just build";
-      jt = "just test";
-      js = "just switch";
-      nj = "nixcfg";
-      njc = "nixcfg check";
-      njb = "nixcfg build";
-      njt = "nixcfg test";
-      njs = "nixcfg switch";
-      nju = "nixcfg update";
-      d = "docker";
-      dc = "docker compose";
-      dcu = "docker compose up -d";
-      dcd = "docker compose down";
-      dcl = "docker compose logs -f";
-      dps = "docker ps";
-      ld = "lazydocker";
     };
     extraConfig = ''
       def --env mkcd [directory: path] {
@@ -409,8 +365,27 @@ in
     };
   };
 
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = false;
+    options = {
+      features = "line-numbers decorations";
+      syntax-theme = "Monokai Extended";
+    };
+  };
+
   xdg.configFile = {
     "git/ignore".source = ../../configs/git/ignore;
+    "lazygit/config.yml" = {
+      force = true;
+      text = ''
+        git:
+          pagers:
+            - name: delta
+              colorArg: always
+              pager: delta --dark --paging=never --features='line-numbers decorations'
+      '';
+    };
     "opencode/tui.json" = {
       force = true;
       text = builtins.toJSON {

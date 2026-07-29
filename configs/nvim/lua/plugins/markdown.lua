@@ -1,28 +1,24 @@
-local markdown_preview_plugin = vim.env.NVIM_MARKDOWN_PREVIEW_PLUGIN
+local render_markdown_plugin = vim.env.NVIM_RENDER_MARKDOWN_PLUGIN
 
-if not markdown_preview_plugin or markdown_preview_plugin == "" then
+if not render_markdown_plugin or render_markdown_plugin == "" then
   return {}
 end
 
 return {
   {
-    dir = markdown_preview_plugin,
-    name = "markdown-preview.nvim",
-    cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" },
+    dir = render_markdown_plugin,
+    name = "render-markdown.nvim",
     ft = { "markdown" },
     keys = {
-      { "<leader>mp", "<cmd>MarkdownPreviewToggle<CR>", ft = "markdown", desc = "Markdown preview" },
+      { "<leader>um", "<cmd>RenderMarkdown buf_toggle<CR>", ft = "markdown", desc = "Toggle Markdown render" },
     },
-    init = function()
-      vim.g.mkdp_auto_start = 0
-      vim.g.mkdp_auto_close = 1
-      vim.g.mkdp_refresh_slow = 0
-      vim.g.mkdp_command_for_global = 0
-      vim.g.mkdp_open_to_the_world = 0
-      vim.g.mkdp_open_ip = "127.0.0.1"
-      vim.g.mkdp_browser = ""
-      vim.g.mkdp_echo_preview_url = 1
-      vim.g.mkdp_filetypes = { "markdown" }
+    opts = {
+      completions = {
+        lsp = { enabled = true },
+      },
+    },
+    config = function(_, opts)
+      require("render-markdown").setup(opts)
     end,
   },
 }

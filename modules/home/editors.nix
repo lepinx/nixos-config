@@ -75,7 +75,7 @@ in
     viAlias = true;
     vimAlias = true;
     initLua = ''
-      vim.env.NVIM_MARKDOWN_PREVIEW_PLUGIN = "${pkgs.vimPlugins.markdown-preview-nvim}"
+      vim.env.NVIM_RENDER_MARKDOWN_PLUGIN = "${pkgs.vimPlugins.render-markdown-nvim}"
       vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")
       dofile("${repoPath}/configs/nvim/init.lua")
     '';

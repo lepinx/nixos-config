@@ -1,7 +1,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.opt.exrc = false
+vim.opt.exrc = true
 vim.opt.relativenumber = true
 vim.opt.wrap = true
 vim.opt.breakindent = true
