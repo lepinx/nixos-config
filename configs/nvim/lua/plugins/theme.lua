@@ -3,9 +3,6 @@ return {
     "olimorris/onedarkpro.nvim",
     priority = 1000,
     opts = {
-      options = {
-        transparency = true,
-      },
       styles = {
         comments = "italic",
         keywords = "italic",
@@ -19,36 +16,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "onedark",
+      colorscheme = "onedark_dark",
     },
-  },
-  {
-    "LazyVim/LazyVim",
-    init = function()
-      local transparent_groups = {
-        "Normal",
-        "NormalNC",
-        "NormalFloat",
-        "FloatBorder",
-        "FoldColumn",
-        "Folded",
-        "SignColumn",
-        "StatusLine",
-        "StatusLineNC",
-        "TabLine",
-        "TabLineFill",
-        "WinBar",
-        "WinBarNC",
-      }
-
-      vim.api.nvim_create_autocmd("ColorScheme", {
-        group = vim.api.nvim_create_augroup("user-transparent-background", { clear = true }),
-        callback = function()
-          for _, group in ipairs(transparent_groups) do
-            vim.api.nvim_set_hl(0, group, { bg = "none" })
-          end
-        end,
-      })
-    end,
   },
 }

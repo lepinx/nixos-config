@@ -370,7 +370,7 @@ in
     enableGitIntegration = false;
     options = {
       features = "line-numbers decorations";
-      syntax-theme = "Monokai Extended";
+      syntax-theme = "OneHalfDark";
     };
   };
 
@@ -383,7 +383,7 @@ in
           pagers:
             - name: delta
               colorArg: always
-              pager: delta --dark --paging=never --features='line-numbers decorations'
+              pager: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
       '';
     };
     "opencode/tui.json" = {
