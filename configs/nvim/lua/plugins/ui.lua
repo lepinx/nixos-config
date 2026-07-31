@@ -5,6 +5,9 @@ return {
       indent = { enabled = false },
       scroll = { enabled = false },
       scope = { enabled = false },
+      terminal = {
+        shell = { "nu" },
+      },
     },
     keys = {
       { "<leader>gd", false },

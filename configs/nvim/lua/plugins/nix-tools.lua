@@ -37,14 +37,23 @@ return {
     opts = function(_, opts)
       opts.servers = opts.servers or {}
       opts.servers.gopls = vim.tbl_deep_extend("force", opts.servers.gopls or {}, {
+        settings = {
+          gopls = {
+            analyses = {
+              ST1000 = false,
+            },
+          },
+        },
         root_dir = function(bufnr, on_dir)
           if not normal_file_buffer(bufnr) then
             return
           end
 
           local fname = vim.api.nvim_buf_get_name(bufnr)
-          local root = vim.fs.root(fname, "go.work") or vim.fs.root(fname, "go.mod") or vim.fs.root(fname, ".git")
-          on_dir(root)
+          local root = vim.fs.root(fname, "go.work") or vim.fs.root(fname, "go.mod")
+          if root then
+            on_dir(root)
+          end
         end,
       })
 
