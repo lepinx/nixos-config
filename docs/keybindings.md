@@ -30,6 +30,11 @@ Niri cubre los atajos globales del escritorio: lanzar apps, mover ventanas,
 cambiar workspaces, screenshots, media y brillo. Los atajos internos de cada
 aplicación viven en su propia config para evitar duplicación.
 
+`Mod+Enter` abre Ghostty con la sesión persistente default de Herdr.
+`Mod+Shift+Enter` abre una sesión persistente separada,
+`alternative-workspace`, para trabajo paralelo que no debe quedar atado al
+workspace principal.
+
 Para mantener esta documentación fresca, no se duplica toda la tabla de binds
 acá. El resumen vivo es el overlay de Niri y los archivos anteriores son la
 referencia versionada.

@@ -45,6 +45,7 @@ let
 in
 {
   home.packages = with pkgs; [
+    alacritty
     appflowy
     bitwarden-cli
     bitwardenFieldCopy

@@ -147,8 +147,8 @@ debug {
 binds {
     Mod+Shift+Slash hotkey-overlay-title="Show Shortcuts" { show-hotkey-overlay; }
 
-    Mod+Return hotkey-overlay-title="Terminal" { spawn "ghostty"; }
-    Mod+Shift+Return hotkey-overlay-title="Ghostty Shell" { spawn "ghostty" "-e" "nu"; }
+    Mod+Return hotkey-overlay-title="Terminal Workspace" { spawn "ghostty"; }
+    Mod+Shift+Return hotkey-overlay-title="Alternative Workspace" { spawn "ghostty" "-e" "herdr" "--session" "alternative-workspace"; }
     Mod+Space hotkey-overlay-title="Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
     Mod+S hotkey-overlay-title="Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
     Mod+Comma hotkey-overlay-title="Noctalia Settings" { spawn-sh "noctalia msg settings-toggle"; }
