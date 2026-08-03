@@ -121,14 +121,11 @@ bluetoothctl power on
 
 ## Navegadores
 
-Google Chrome es el navegador predeterminado para HTTP/HTTPS y HTML. Se
-prefiere sync del navegador antes que políticas declarativas de extensiones,
-para evitar que Chromium marque el perfil como administrado por una organización
-y restrinja herramientas como DevTools. El repositorio no contiene perfiles,
-sesiones, cookies, contraseñas ni datos de wallets.
-
-Firefox queda instalado como navegador secundario. El perfil diario mantiene un
-conjunto acotado de navegadores.
+Firefox es el navegador predeterminado para HTTP/HTTPS y HTML. Helium queda
+instalado como alternativa Chromium para pruebas puntuales de motor. Se evita
+Google Chrome en el perfil diario para no depender de su manejo de sesión bajo
+Niri/Noctalia. El repositorio no contiene perfiles, sesiones, cookies,
+contraseñas ni datos de wallets.
 
 ## Dónde agregar paquetes
 
@@ -236,7 +233,7 @@ Después de cambios de arranque, LUKS o greeter, validar:
 just switch
 reboot
 powerprofilesctl get
-google-chrome-stable
+firefox
 ghostty
 zeditor
 systemctl --failed

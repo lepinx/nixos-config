@@ -161,7 +161,7 @@ binds {
     Ctrl+Alt+Delete repeat=false hotkey-overlay-title="System Monitor" { spawn "ghostty" "-e" "btop"; }
     Mod+F hotkey-overlay-title="Yazi" { spawn "ghostty" "-e" "yazi"; }
     Mod+E hotkey-overlay-title="Zed" { spawn "zeditor"; }
-    Mod+B hotkey-overlay-title="Chrome" { spawn "google-chrome-stable"; }
+    Mod+B hotkey-overlay-title="Firefox" { spawn "firefox"; }
     Mod+Alt+B repeat=false hotkey-overlay-title="Bitwarden Password" { spawn "rofi-rbw" "--selector" "wofi" "--clipboarder" "wl-copy" "--typer" "wtype" "--action" "copy" "--target" "password" "--clear-after" "45" "--prompt" "Copy password"; }
     Mod+Alt+U repeat=false hotkey-overlay-title="Bitwarden Username" { spawn "rofi-rbw" "--selector" "wofi" "--clipboarder" "wl-copy" "--typer" "wtype" "--action" "copy" "--target" "username" "--prompt" "Copy username"; }
     Mod+Alt+Shift+B repeat=false hotkey-overlay-title="Bitwarden Field" { spawn "bitwarden-field-copy"; }

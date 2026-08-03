@@ -127,7 +127,7 @@ Criterios esperados:
 - `/`, `/home` y `/nix` montan desde Btrfs dentro de `cryptroot`.
 - `/boot` monta desde la partición EFI sin cifrar.
 - Noctalia Greeter inicia Niri.
-- Red, audio, Bluetooth, Chrome, terminal y editores abren normalmente.
+- Red, audio, Bluetooth, Firefox, terminal y editores abren normalmente.
 
 ## Si `just switch` falla por `/boot`
 

@@ -19,9 +19,9 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "text/html" = [ "google-chrome.desktop" ];
-        "x-scheme-handler/http" = [ "google-chrome.desktop" ];
-        "x-scheme-handler/https" = [ "google-chrome.desktop" ];
+        "text/html" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
         "x-scheme-handler/mailto" = [ "thunderbird.desktop" ];
         "message/rfc822" = [ "thunderbird.desktop" ];
         "application/x-extension-eml" = [ "thunderbird.desktop" ];
