@@ -32,9 +32,21 @@ return {
         signs = {
           linehl = {
             [vim.diagnostic.severity.ERROR] = "DiagnosticLineError",
+            [vim.diagnostic.severity.WARN] = "DiagnosticLineWarn",
           },
         },
-        virtual_text = false,
+        virtual_text = {
+          severity = { min = vim.diagnostic.severity.WARN },
+          spacing = 2,
+          source = "if_many",
+          prefix = "●",
+          format = function(diagnostic)
+            if diagnostic.code then
+              return diagnostic.code .. ": " .. diagnostic.message
+            end
+            return diagnostic.message
+          end,
+        },
       }
 
       local function set_diagnostic_highlights()
@@ -43,6 +55,7 @@ return {
         vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = "#82aaff", bg = "#14243b" })
         vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = "#c3e88d", bg = "#203019" })
         vim.api.nvim_set_hl(0, "DiagnosticLineError", { bg = "#2a0f14" })
+        vim.api.nvim_set_hl(0, "DiagnosticLineWarn", { bg = "#241f10" })
         vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#ff5370" })
         vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = "#ffcb6b" })
         vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = "#82aaff" })
@@ -82,9 +95,21 @@ return {
         signs = {
           linehl = {
             [vim.diagnostic.severity.ERROR] = "DiagnosticLineError",
+            [vim.diagnostic.severity.WARN] = "DiagnosticLineWarn",
           },
         },
-        virtual_text = false,
+        virtual_text = {
+          severity = { min = vim.diagnostic.severity.WARN },
+          spacing = 2,
+          source = "if_many",
+          prefix = "●",
+          format = function(diagnostic)
+            if diagnostic.code then
+              return diagnostic.code .. ": " .. diagnostic.message
+            end
+            return diagnostic.message
+          end,
+        },
       })
     end,
   },

@@ -386,20 +386,5 @@ in
               pager: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
       '';
     };
-    "opencode/tui.json" = {
-      force = true;
-      text = builtins.toJSON {
-        "$schema" = "https://opencode.ai/tui.json";
-        keybinds = {
-          app_exit = "ctrl+c,<leader>q";
-          messages_page_up = "pageup,ctrl+alt+b";
-          messages_page_down = "pagedown,ctrl+alt+f";
-          messages_half_page_up = "ctrl+u";
-          messages_half_page_down = "ctrl+d";
-          input_delete_to_line_start = "none";
-          input_delete = "delete,shift+delete";
-        };
-      };
-    };
   };
 }

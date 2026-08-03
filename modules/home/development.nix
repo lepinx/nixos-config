@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    codex
     direnv
     just-lsp
     jujutsu
@@ -13,6 +14,7 @@
     nix-direnv
     nixfmt
     shellcheck
+    sql-formatter
   ];
 
   programs.direnv = {

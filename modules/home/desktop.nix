@@ -77,10 +77,9 @@ in
       Hidden=true
       X-GNOME-Autostart-enabled=false
     '';
-    "ghostty/config".text = builtins.replaceStrings
-      [ "font-size = 10" ]
-      [ "font-size = ${toString ghosttyFontSize}" ]
-      ghosttyConfig;
+    "ghostty/config".text =
+      builtins.replaceStrings [ "font-size = 10" ] [ "font-size = ${toString ghosttyFontSize}" ]
+        ghosttyConfig;
     "niri/config.kdl".text =
       builtins.replaceStrings [ "@niri_outputs_path@" ] [ "${config.xdg.configHome}/niri/outputs.kdl" ]
         niriConfig;

@@ -1,5 +1,12 @@
 return {
   {
+    "folke/noice.nvim",
+    keys = {
+      { "<c-f>", false, mode = { "i", "n", "s" } },
+      { "<c-b>", false, mode = { "i", "n", "s" } },
+    },
+  },
+  {
     "snacks.nvim",
     opts = {
       indent = { enabled = false },

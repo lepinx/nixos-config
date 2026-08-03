@@ -52,6 +52,8 @@ keybind = ctrl+alt+arrow_up=unbind
 keybind = ctrl+alt+arrow_down=unbind
 keybind = ctrl+alt+arrow_left=unbind
 keybind = ctrl+alt+arrow_right=unbind
+keybind = ctrl+alt+b=csi:5~
+keybind = ctrl+alt+f=csi:6~
 keybind = super+ctrl+[=unbind
 keybind = super+ctrl+]=unbind
 keybind = super+ctrl+shift+arrow_up=unbind
