@@ -7,6 +7,9 @@ return {
         comments = "italic",
         keywords = "italic",
       },
+      highlights = {
+        LspInlayHint = { fg = "#6b7280", italic = true },
+      },
       plugins = {
         lsp_semantic_tokens = true,
         treesitter = true,
