@@ -67,6 +67,9 @@ let
     dps = "docker ps";
     ld = "lazydocker";
   };
+  nushellShortcuts = shellShortcuts // {
+    fk = "kill -9";
+  };
 in
 {
   home.packages = with pkgs; [
@@ -78,11 +81,11 @@ in
     eza
     fastfetch
     fd
-    fzf
     jq
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     pinentry-gnome3
     pipes
+    procps
     rbw
     ripgrep
     rofi-rbw
@@ -93,6 +96,7 @@ in
     wofi
     wtype
     zoxide
+    pkgsUnstable.fzf
     pkgsUnstable.terminal-rain-lightning
   ];
 
@@ -153,17 +157,20 @@ in
     settings = {
       show_banner = false;
       edit_mode = "vi";
-      abbreviations = shellShortcuts;
+      abbreviations = nushellShortcuts;
       completions.external = {
         enable = true;
         max_results = 200;
       };
     };
     shellAliases = {
+      kill = "^kill";
       ll = "ls --long --all";
       la = "ls --all";
     };
     extraConfig = ''
+      source ${pkgsUnstable.fzf}/share/fzf/completion.nu
+
       def --env mkcd [directory: path] {
         mkdir $directory
         cd $directory
