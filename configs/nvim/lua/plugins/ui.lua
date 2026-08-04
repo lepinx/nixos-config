@@ -16,6 +16,9 @@ return {
         shell = { "nu" },
       },
       lazygit = {
+        env = {
+          SHELL = vim.fn.exepath("nu"),
+        },
         config = {
           os = {
             editPreset = "nvim-remote",
