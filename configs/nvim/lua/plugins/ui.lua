@@ -15,11 +15,19 @@ return {
       terminal = {
         shell = { "nu" },
       },
+      lazygit = {
+        config = {
+          os = {
+            editPreset = "nvim-remote",
+            editInTerminal = false,
+          },
+        },
+      },
     },
     keys = {
       { "<leader>gd", false },
       { "<leader>gD", false },
-      { "<leader>gh", function() Snacks.picker.git_diff() end, desc = "Git Diff (hunks)" },
+      { "<leader>gh", function() require("snacks").picker.git_diff() end, desc = "Git Diff (hunks)" },
     },
   },
 }

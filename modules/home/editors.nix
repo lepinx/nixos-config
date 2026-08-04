@@ -14,6 +14,7 @@ in
   home.packages = [
     pkgs.gh-dash
     pkgs.lua-language-server
+    pkgs.neovim-remote
     pkgs.package-version-server
     pkgs.zed-editor
   ];
