@@ -75,6 +75,7 @@ return {
       set_diagnostic_highlights()
       vim.diagnostic.config(diagnostics_config)
       vim.keymap.set("n", "K", diagnostic_or_hover, { desc = "Hover diagnostics or docs" })
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
       vim.keymap.set("n", "]d", diagnostic_jump(1), { desc = "Next diagnostic" })
       vim.keymap.set("n", "[d", diagnostic_jump(-1), { desc = "Prev diagnostic" })
       vim.keymap.set("n", "]e", diagnostic_jump(1, vim.diagnostic.severity.ERROR), { desc = "Next error" })

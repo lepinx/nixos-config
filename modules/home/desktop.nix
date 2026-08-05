@@ -229,7 +229,7 @@ in
         };
         clock = {
           type = "clock";
-          format = "{:%a %d %b  %H:%M}";
+          format = "{:%a %d %b  %H:%M:%S}";
           tooltip_format = "{:%A, %d de %B de %Y}";
         };
         network = {
