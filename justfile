@@ -1,6 +1,6 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-host := env("NIXOS_HOST", "workstation")
+host := env("NIXOS_HOST", `hostname -s`)
 
 default:
     @just --list

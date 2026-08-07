@@ -104,6 +104,16 @@
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
 
       nixosConfigurations = {
+        office = mkNixos {
+          hostName = "office";
+          diskDevice = "/dev/sda";
+          modules = [
+            ./hosts/office
+            inputs.disko.nixosModules.disko
+            ./modules/nixos/virtualization.nix
+          ];
+        };
+
         workstation = mkNixos {
           hostName = "workstation";
           diskDevice = "/dev/nvme0n1";

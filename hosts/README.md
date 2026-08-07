@@ -24,13 +24,19 @@ No se agregan como `nixosConfigurations` hasta tener su
 definición construible.
 
 El flake pasa `hostName`, `userName`, `repoName` y `repoPath` a los módulos para
-evitar rutas hardcodeadas. El `justfile` usa `NIXOS_HOST` si se define:
+evitar rutas hardcodeadas. El `justfile` usa el hostname corto de la máquina por
+defecto:
+
+```bash
+just build
+```
+
+Si hace falta apuntar a otro host manualmente, `NIXOS_HOST` funciona como
+override:
 
 ```bash
 NIXOS_HOST=office just build
 ```
-
-Si no se define, usa `workstation`.
 
 ## Perfiles
 
