@@ -46,7 +46,6 @@ in
 {
   home.packages = with pkgs; [
     alacritty
-    appflowy
     bitwarden-cli
     bitwardenFieldCopy
     clock-rs
@@ -63,7 +62,6 @@ in
     nerd-fonts.hurmit
     nerd-fonts.jetbrains-mono
     networkmanagerapplet
-    obsidian
     pkgsUnstable.bruno
     pkgsUnstable.dbeaver-bin
     seahorse

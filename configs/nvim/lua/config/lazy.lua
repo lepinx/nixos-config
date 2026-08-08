@@ -39,6 +39,10 @@ require("lazy").setup({
     enabled = false,
     notify = false,
   },
+  pkg = {
+    cache = vim.fn.stdpath("state") .. "/lazy/pkg-cache-v2.lua",
+    sources = { "lazy", "packspec" },
+  },
   performance = {
     rtp = {
       disabled_plugins = {

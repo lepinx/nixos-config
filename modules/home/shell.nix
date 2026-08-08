@@ -23,6 +23,7 @@ let
 
     # Git
     g = "git";
+    lq = "lazysql";
     gs = "git status --short --branch";
     ga = "git add";
     gaa = "git add --all";

@@ -12,7 +12,6 @@ let
 in
 {
   home.packages = [
-    pkgs.gh-dash
     pkgs.lua-language-server
     pkgs.neovim-remote
     pkgs.package-version-server
@@ -76,6 +75,9 @@ in
       defaultEditor = false;
       viAlias = true;
       vimAlias = true;
+      extraLuaPackages = luaPkgs: [
+        luaPkgs.rest-nvim
+      ];
       initLua = ''
         vim.env.NVIM_RENDER_MARKDOWN_PLUGIN = "${pkgs.vimPlugins.render-markdown-nvim}"
         vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")

@@ -141,6 +141,22 @@
         "type": "github"
       }
     },
+    "glab-tui": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785887307,
+        "narHash": "sha256-zRH7iZfSCyjovN4vzu6KOTfXTWj5B2E4dqxOwQG9Zm8=",
+        "owner": "rcieri",
+        "repo": "glab-tui",
+        "rev": "c11c244a43d9cc1c71952ab887d09c9bba9476f3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "rcieri",
+        "repo": "glab-tui",
+        "type": "github"
+      }
+    },
     "gnome-shell": {
       "flake": false,
       "locked": {
@@ -300,6 +316,7 @@
     "root": {
       "inputs": {
         "disko": "disko",
+        "glab-tui": "glab-tui",
         "herdr": "herdr",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
