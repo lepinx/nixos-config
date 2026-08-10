@@ -1,6 +1,6 @@
 [[mgr.prepend_keymap]]
 on = [ "g", "R" ]
-run = "plugin smart-cd -- yazi-remote path"
+run = "shell --block -- yazi-remote"
 desc = "Remotos"
 
 [[mgr.prepend_keymap]]
