@@ -145,6 +145,8 @@ debug {
 }
 
 binds {
+    @niri_host_binds@
+
     Mod+Shift+Slash hotkey-overlay-title="Show Shortcuts" { show-hotkey-overlay; }
 
     Mod+Return hotkey-overlay-title="Terminal Workspace" { spawn "ghostty"; }
@@ -217,6 +219,10 @@ binds {
     Mod+Ctrl+Shift+Down hotkey-overlay-title="Move to Monitor Down" { move-column-to-monitor-down; }
     Mod+Ctrl+Shift+Up hotkey-overlay-title="Move to Monitor Up" { move-column-to-monitor-up; }
     Mod+Ctrl+Shift+Right hotkey-overlay-title="Move to Monitor Right" { move-column-to-monitor-right; }
+    Mod+Ctrl+Shift+H hotkey-overlay-title="Move to Monitor Left" { move-column-to-monitor-left; }
+    Mod+Ctrl+Shift+J hotkey-overlay-title="Move to Monitor Down" { move-column-to-monitor-down; }
+    Mod+Ctrl+Shift+K hotkey-overlay-title="Move to Monitor Up" { move-column-to-monitor-up; }
+    Mod+Ctrl+Shift+L hotkey-overlay-title="Move to Monitor Right" { move-column-to-monitor-right; }
 
     Mod+U hotkey-overlay-title="Workspace Down" { focus-workspace-down; }
     Mod+I hotkey-overlay-title="Workspace Up" { focus-workspace-up; }

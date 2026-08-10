@@ -11,12 +11,20 @@
 let
   ghosttyConfig = builtins.readFile ../../configs/ghostty/config;
   ghosttyFontSizes = {
-    workstation = 10;
-    office = 14;
+    workstation = 9;
+    office = 13;
   };
-  ghosttyFontSize = ghosttyFontSizes.${hostName} or 10;
+  ghosttyFontSize = ghosttyFontSizes.${hostName} or 9;
   niriConfig = builtins.readFile ../../configs/niri/config.kdl.in;
   niriOutputsPath = ../../hosts + "/${hostName}/niri-outputs.kdl";
+  niriHostBindsPath = ../../hosts + "/${hostName}/niri-host.kdl";
+  niriHostBinds =
+    if builtins.pathExists niriHostBindsPath then builtins.readFile niriHostBindsPath else "";
+  noctaliaUiScales = {
+    workstation = 0.8;
+    office = 0.95;
+  };
+  noctaliaUiScale = noctaliaUiScales.${hostName} or 0.8;
   bitwardenFieldCopy = pkgs.writeShellApplication {
     name = "bitwarden-field-copy";
     runtimeInputs = with pkgs; [
@@ -77,10 +85,18 @@ in
       X-GNOME-Autostart-enabled=false
     '';
     "ghostty/config".text =
-      builtins.replaceStrings [ "font-size = 10" ] [ "font-size = ${toString ghosttyFontSize}" ]
+      builtins.replaceStrings [ "font-size = 9" ] [ "font-size = ${toString ghosttyFontSize}" ]
         ghosttyConfig;
     "niri/config.kdl".text =
-      builtins.replaceStrings [ "@niri_outputs_path@" ] [ "${config.xdg.configHome}/niri/outputs.kdl" ]
+      builtins.replaceStrings
+        [
+          "@niri_outputs_path@"
+          "@niri_host_binds@"
+        ]
+        [
+          "${config.xdg.configHome}/niri/outputs.kdl"
+          niriHostBinds
+        ]
         niriConfig;
     "niri/outputs.kdl".source = niriOutputsPath;
   };
@@ -99,7 +115,7 @@ in
     settings = {
       shell = {
         font_family = "JetBrainsMono Nerd Font";
-        ui_scale = 0.8;
+        ui_scale = noctaliaUiScale;
         telemetry_enabled = false;
         polkit_agent = true;
         niri_overview_type_to_launch_enabled = true;

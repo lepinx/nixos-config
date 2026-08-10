@@ -16,7 +16,7 @@ let
 in
 {
   home.packages = with pkgs; [
-    codex
+    pkgsUnstable.codex
     direnv
     gh
     pkgsUnstable.gh-dash
