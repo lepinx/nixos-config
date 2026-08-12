@@ -1,9 +1,4 @@
 [[mgr.prepend_keymap]]
-on = [ "g", "R" ]
-run = "shell --block -- yazi-remote"
-desc = "Remotos"
-
-[[mgr.prepend_keymap]]
 on = [ "g", "M" ]
 run = "plugin smart-cd -- yazi-devices path"
 desc = "Discos externos"

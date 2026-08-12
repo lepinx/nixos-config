@@ -1,22 +1,6 @@
 { pkgs, ... }:
 
 let
-  yaziRemote = pkgs.writeShellApplication {
-    name = "yazi-remote";
-    runtimeInputs = with pkgs; [
-      coreutils
-      findutils
-      fuse3
-      fzf
-      gawk
-      glib
-      rclone
-      util-linux
-      yazi
-    ];
-    text = builtins.readFile ../../configs/scripts/yazi-remote.sh;
-  };
-
   yaziDevices = pkgs.writeShellApplication {
     name = "yazi-devices";
     runtimeInputs = with pkgs; [
@@ -55,14 +39,9 @@ in
   };
 
   home.packages = with pkgs; [
-    fuse3
-    glib
-    rclone
-    sshfs
     trash-cli
     udiskie
     yaziDevices
-    yaziRemote
     yaziTrash
   ];
 

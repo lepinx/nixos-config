@@ -32,6 +32,7 @@ in
 {
   environment.systemPackages = with pkgs; [
     helium
+    nautilus
     podman-compose
     pkgsUnstable.opencode
   ];
