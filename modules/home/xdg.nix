@@ -25,6 +25,8 @@
         "x-scheme-handler/mailto" = [ "thunderbird.desktop" ];
         "message/rfc822" = [ "thunderbird.desktop" ];
         "application/x-extension-eml" = [ "thunderbird.desktop" ];
+        "application/pdf" = [ "firefox.desktop" ];
+        "application/x-pdf" = [ "firefox.desktop" ];
         "image/avif" = [ "org.gnome.Loupe.desktop" ];
         "image/bmp" = [ "org.gnome.Loupe.desktop" ];
         "image/gif" = [ "org.gnome.Loupe.desktop" ];
