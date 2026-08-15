@@ -382,6 +382,27 @@ in
   };
 
   xdg.configFile = {
+    "herdr/config.toml" = {
+      # Adopt the existing file on the first activation. Its contents are
+      # declared below, so subsequent rebuilds remain fully reproducible.
+      force = true;
+      text = ''
+        onboarding = false
+
+        [ui]
+        agent_panel_scope = "all"
+
+        [ui.toast]
+        delivery = "herdr"
+
+        [theme]
+        name = "one-dark"
+
+        [keys]
+        # Focus agent rows 1–9 with Ctrl+B, then Ctrl+<number>.
+        focus_agent = "prefix+ctrl+1..9"
+      '';
+    };
     "git/ignore".source = ../../configs/git/ignore;
     "lazygit/config.yml" = {
       force = true;
