@@ -22,7 +22,6 @@ let
 
     # Git
     g = "git";
-    lq = "lazysql";
     gs = "git status --short --branch";
     ga = "git add";
     gaa = "git add --all";
@@ -397,6 +396,9 @@ in
 
         [theme]
         name = "one-dark"
+
+        [terminal]
+        default_shell = "${pkgs.fish}/bin/fish"
 
         [keys]
         # Focus agent rows 1–9 with Ctrl+B, then Ctrl+<number>.

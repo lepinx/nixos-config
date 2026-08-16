@@ -67,6 +67,8 @@ environment {
     QT_QPA_PLATFORM "wayland"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     TERMINAL "ghostty"
+    EDITOR "nvim"
+    VISUAL "nvim"
 }
 
 hotkey-overlay {

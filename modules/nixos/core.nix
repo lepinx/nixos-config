@@ -1,5 +1,5 @@
 {
-  pkgsUnstable,
+  pkgs,
   hostName,
   userName,
   ...
@@ -47,7 +47,7 @@
   users.users.${userName} = {
     isNormalUser = true;
     description = userName;
-    shell = pkgsUnstable.nushell;
+    shell = pkgs.fish;
     extraGroups = [
       "kvm"
       "libvirtd"

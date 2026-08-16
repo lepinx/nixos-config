@@ -10,7 +10,7 @@ El perfil diario es `workstation`. El layout de disco usa LUKS + Btrfs:
 de `cryptroot`.
 
 ```bash
-just check     # evalúa y valida el flake
+just check     # evalúa el flake y detecta código Nix sin uso
 just build     # construye sin activar
 just boot      # deja la generación lista para el próximo arranque
 just test      # activa temporalmente hasta el próximo arranque

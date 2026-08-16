@@ -40,6 +40,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sqlit = {
+      url = "github:Maxteabag/sqlit";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -107,6 +112,17 @@
     in
     {
       formatter.${system} = nixpkgs.legacyPackages.${system}.nixfmt-tree;
+
+      checks.${system}.deadnix =
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.runCommand "deadnix" {
+          nativeBuildInputs = [ pkgs.deadnix ];
+        } ''
+          deadnix --fail ${./.}
+          touch "$out"
+        '';
 
       nixosConfigurations = {
         office = mkNixos {

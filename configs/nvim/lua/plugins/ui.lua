@@ -13,11 +13,11 @@ return {
       scroll = { enabled = false },
       scope = { enabled = false },
       terminal = {
-        shell = { "nu" },
+        shell = { "fish" },
       },
       lazygit = {
         env = {
-          SHELL = vim.fn.exepath("nu"),
+          SHELL = vim.fn.exepath("fish"),
         },
         config = {
           os = {

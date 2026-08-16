@@ -22,11 +22,11 @@ in
     pkgsUnstable.gh-dash
     pkgsUnstable.glab
     glab-tui
+    inputs.sqlit.packages.${pkgs.stdenv.hostPlatform.system}.default
     just-lsp
     jujutsu
     lazydocker
     lazygit
-    pkgsUnstable.lazysql
     nil
     nixd
     just
@@ -36,6 +36,11 @@ in
     sql-formatter
     pkgsUnstable.tuicr
   ];
+
+  xdg.configFile."sqlit/keymap.json" = {
+    force = true;
+    source = ../../configs/sqlit/keymap.json;
+  };
 
   programs.direnv = {
     enable = true;
