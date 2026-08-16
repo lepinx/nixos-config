@@ -21,23 +21,6 @@ return {
     end,
   },
   {
-    "mfussenegger/nvim-lint",
-    event = { "BufReadPost", "BufNewFile" },
-    config = function()
-      local lint = require("lint")
-
-      vim.api.nvim_create_autocmd("BufWritePost", {
-        group = vim.api.nvim_create_augroup("user-sql-lint", { clear = true }),
-        pattern = "*.sql",
-        callback = function(args)
-          if is_sqlfluff_project(args.buf) then
-            lint.try_lint("sqlfluff")
-          end
-        end,
-      })
-    end,
-  },
-  {
     "tpope/vim-dadbod",
     cmd = "DB",
   },
