@@ -9,6 +9,13 @@ return {
   {
     "snacks.nvim",
     opts = {
+      picker = {
+        sources = {
+          explorer = {
+            layout = { layout = { position = "right" } },
+          },
+        },
+      },
       indent = { enabled = false },
       scroll = { enabled = false },
       scope = { enabled = false },
