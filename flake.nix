@@ -40,11 +40,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sqlit = {
-      url = "github:Maxteabag/sqlit";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
   };
 
   outputs =
