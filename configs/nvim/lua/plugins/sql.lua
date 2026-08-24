@@ -21,21 +21,12 @@ return {
     end,
   },
   {
-    "tpope/vim-dadbod",
-    cmd = "DB",
-  },
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    ft = { "sql", "mysql", "plsql", "pgsql" },
-    dependencies = { "tpope/vim-dadbod" },
-  },
-  {
     "saghen/blink.cmp",
     optional = true,
     opts = {
       sources = {
         per_filetype = {
-          sql = { "snippets", "dadbod", "buffer" },
+          sql = { "snippets", "buffer" },
         },
         providers = {
           buffer = {
@@ -43,7 +34,6 @@ return {
               return not vim.b.sql_disable_buffer_completion
             end,
           },
-          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
         },
       },
     },
