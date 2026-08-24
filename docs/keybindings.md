@@ -21,7 +21,6 @@ También se puede abrir directamente con `Mod+Shift+/`.
 - Multiplexer Herdr: `~/.config/herdr/config.toml`
 - Neovim: `configs/nvim/lua/config/keymaps.lua`
 - Zed: `configs/zed/keymap.json`
-- VS Code: `configs/vscode/keybindings.json`
 - Shell Fish: `modules/home/shell.nix`
 
 ## Criterio

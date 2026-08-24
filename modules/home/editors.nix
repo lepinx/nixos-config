@@ -4,12 +4,6 @@
   repoPath,
   ...
 }:
-
-let
-  vscodeSecure = pkgs.vscode.override {
-    commandLineArgs = "--password-store=gnome-libsecret";
-  };
-in
 {
   home.packages = [
     pkgs.lua-language-server
@@ -22,18 +16,6 @@ in
     "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/lua";
     "nvim/stylua.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/stylua.toml";
-    "Code/User/settings.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/settings.json";
-    };
-    "Code/User/keybindings.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/keybindings.json";
-    };
-    "Code/User/snippets/python.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/snippets/python.json";
-    };
     "zed/settings.json".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/settings.json";
     "zed/keymap.json".source =
@@ -41,16 +23,6 @@ in
   };
 
   programs = {
-    vscode = {
-      enable = true;
-      package = vscodeSecure;
-      mutableExtensionsDir = true;
-      argvSettings = {
-        enable-crash-reporter = false;
-        locale = "en";
-      };
-    };
-
     helix = {
       enable = true;
       settings = {
@@ -120,8 +92,4 @@ in
       ];
     };
   };
-
-  # VS Code extensions remain mutable and are handled by VS Code Settings Sync.
-  # User JSON files are versioned in this repo and linked out-of-store so VS Code
-  # can still update them without hitting Nix store read-only paths.
 }
