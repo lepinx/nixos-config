@@ -46,6 +46,7 @@ in
   ];
 
   xdg.configFile = {
+    "yazi/yazi.toml".source = ../../configs/yazi/yazi.toml;
     "yazi/keymap.toml".source = ../../configs/yazi/keymap.toml;
     "yazi/plugins/smart-cd.yazi/main.lua".source = ../../configs/yazi/plugins/smart-cd.yazi/main.lua;
   };
