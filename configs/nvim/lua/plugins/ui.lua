@@ -1,3 +1,10 @@
+local lazygit_win_by_host = {
+  workstation = { width = 0.90, height = 0.90 },
+  office = { width = 0.78, height = 0.80 },
+}
+
+local lazygit_win = lazygit_win_by_host[vim.g.nixos_host] or lazygit_win_by_host.workstation
+
 return {
   {
     "folke/noice.nvim",
@@ -23,6 +30,11 @@ return {
         shell = { "fish" },
       },
       lazygit = {
+        win = {
+          style = "lazygit",
+          width = lazygit_win.width,
+          height = lazygit_win.height,
+        },
         env = {
           SHELL = vim.fn.exepath("fish"),
         },

@@ -5,6 +5,8 @@ local function set_terminal_and_comment_keymaps()
   map("x", "<C-/>", "gc", { remap = true, desc = "Toggle comment" })
   map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
   map("x", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
+  map("i", "<C-/>", "<C-g>u<C-o>gcc", { remap = true, desc = "Toggle comment" })
+  map("i", "<C-_>", "<C-g>u<C-o>gcc", { remap = true, desc = "Toggle comment" })
   map("t", "<C-/>", "<Nop>", { desc = "Disabled terminal toggle" })
   map("t", "<C-_>", "<Nop>", { desc = "Disabled terminal toggle" })
 end

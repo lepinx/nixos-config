@@ -409,6 +409,12 @@ in
     "lazygit/config.yml" = {
       force = true;
       text = ''
+        gui:
+          sidePanelWidth: 0.23
+          mainPanelSplitMode: horizontal
+          showNumstatInFilesView: true
+          wrapLinesInStagingView: false
+
         git:
           pagers:
             - name: delta
