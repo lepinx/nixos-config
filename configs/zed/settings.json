@@ -1,126 +1,126 @@
 {
-  "icon_theme": "Catppuccin Latte",
-  "cli_default_open_behavior": "existing_window",
-  "base_keymap": "VSCode",
-  "vim_mode": true,
-  "relative_line_numbers": "enabled",
-  "show_edit_predictions": false,
-  "edit_predictions": {
-    "provider": "zed"
-  },
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false
-  },
-  "outline_panel": {
-    "dock": "left"
-  },
-  "collaboration_panel": {
-    "dock": "left"
-  },
-  "git_panel": {
-    "dock": "left",
-    "tree_view": true
-  },
-  "agent": {
-    "dock": "right",
-    "use_modifier_to_send": true
-  },
-  "project_panel": {
-    "auto_fold_dirs": false,
-    "dock": "right"
-  },
-  "gutter": {
-    "line_numbers": true
-  },
-  "minimap": {
-    "show": "never"
-  },
-  "file_types": {
-    "dotenv": [".env*"]
-  },
-  "linked_edits": true,
-  "show_whitespaces": "none",
-  "soft_wrap": "editor_width",
-  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
-  "buffer_font_weight": 500,
-  "buffer_font_size": 14,
-  "ui_font_family": "Hurmit Nerd Font",
-  "ui_font_weight": 500,
-  "ui_font_size": 16,
-  "terminal": {
-    "shell": {
-      "program": "fish"
+    "icon_theme": "Catppuccin Latte",
+    "cli_default_open_behavior": "existing_window",
+    "base_keymap": "VSCode",
+    "vim_mode": true,
+    "relative_line_numbers": "enabled",
+    "show_edit_predictions": false,
+    "edit_predictions": {
+        "provider": "zed",
     },
-    "font_family": "Hurmit Nerd Font Mono"
-  },
-  "theme": {
-    "mode": "dark",
-    "light": "Gruvbox Light",
-    "dark": "One Dark Pro Max"
-  },
-  "theme_overrides": {
-    "One Dark Pro Max": {
-      "syntax": {
-        "comment": {
-          "color": "#5c6370",
-          "font_style": "italic"
-        }
-      },
-      "hint": "#7e8683"
-    }
-  },
-  "tab_size": 4,
-  "cursor_blink": false,
-  "inlay_hints": {
-    "enabled": true
-  },
-  "lsp": {
-    "lua-language-server": {
-      "binary": {
-        "ignore_system_version": false,
-        "path": "lua-language-server",
-        "arguments": []
-      }
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false,
     },
-    "package-version-server": {
-      "binary": {
-        "ignore_system_version": false,
-        "path": "package-version-server",
-        "arguments": []
-      }
+    "outline_panel": {
+        "dock": "left",
     },
-    "vtsls": {
-      "settings": {
-        "typescript": {
-          "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
+    "collaboration_panel": {
+        "dock": "left",
+    },
+    "git_panel": {
+        "dock": "left",
+        "tree_view": true,
+    },
+    "agent": {
+        "dock": "right",
+        "use_modifier_to_send": true,
+    },
+    "project_panel": {
+        "auto_fold_dirs": false,
+        "dock": "right",
+    },
+    "gutter": {
+        "line_numbers": true,
+    },
+    "minimap": {
+        "show": "never",
+    },
+    "file_types": {
+        "dotenv": [".env*"],
+    },
+    "linked_edits": true,
+    "show_whitespaces": "none",
+    "soft_wrap": "editor_width",
+    "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+    "buffer_font_weight": 500,
+    "buffer_font_size": 14,
+    "ui_font_family": "JetBrainsMono Nerd Font",
+    "ui_font_weight": 500,
+    "ui_font_size": 16,
+    "terminal": {
+        "shell": {
+            "program": "fish",
         },
-        "javascript": {
-          "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
-        }
-      },
-      "enable_lsp_tasks": true
-    }
-  },
-  "languages": {
-    "Python": {
-      "formatter": {
-        "external": {
-          "command": "ruff",
-          "arguments": ["format", "-"]
-        }
-      }
+        "font_family": "JetBrainsMono Nerd Font Mono",
     },
-    "JavaScript": {
-      "formatter": "prettier"
+    "theme": {
+        "mode": "dark",
+        "light": "Gruvbox Light",
+        "dark": "One Dark Pro Max",
     },
-    "CSS": {
-      "formatter": "prettier",
-      "language_servers": ["tailwindcss-language-server"]
-    }
-  }
+    "theme_overrides": {
+        "One Dark Pro Max": {
+            "syntax": {
+                "comment": {
+                    "color": "#5c6370",
+                    "font_style": "italic",
+                },
+            },
+            "hint": "#7e8683",
+        },
+    },
+    "tab_size": 4,
+    "cursor_blink": false,
+    "inlay_hints": {
+        "enabled": true,
+    },
+    "lsp": {
+        "lua-language-server": {
+            "binary": {
+                "ignore_system_version": false,
+                "path": "lua-language-server",
+                "arguments": [],
+            },
+        },
+        "package-version-server": {
+            "binary": {
+                "ignore_system_version": false,
+                "path": "package-version-server",
+                "arguments": [],
+            },
+        },
+        "vtsls": {
+            "settings": {
+                "typescript": {
+                    "updateImportsOnFileMove": {
+                        "enabled": "always",
+                    },
+                },
+                "javascript": {
+                    "updateImportsOnFileMove": {
+                        "enabled": "always",
+                    },
+                },
+            },
+            "enable_lsp_tasks": true,
+        },
+    },
+    "languages": {
+        "Python": {
+            "formatter": {
+                "external": {
+                    "command": "ruff",
+                    "arguments": ["format", "-"],
+                },
+            },
+        },
+        "JavaScript": {
+            "formatter": "prettier",
+        },
+        "CSS": {
+            "formatter": "prettier",
+            "language_servers": ["tailwindcss-language-server"],
+        },
+    },
 }
