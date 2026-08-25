@@ -1,0 +1,102 @@
+[
+  {
+    "command": "explorer.newFile",
+    "key": "a",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "workbench.action.zoomReset",
+    "key": "ctrl+0"
+  },
+  {
+    "command": "workbench.action.toggleSidebarVisibility",
+    "key": "ctrl+e"
+  },
+  {
+    "command": "workbench.files.action.focusFilesExplorer",
+    "key": "ctrl+e",
+    "when": "editorTextFocus"
+  },
+  {
+    "command": "renameFile",
+    "key": "r",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "filesExplorer.copy",
+    "key": "c",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "filesExplorer.paste",
+    "key": "p",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "deleteFile",
+    "key": "d",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "workbench.action.openEditorAtIndex1",
+    "key": "ctrl+1"
+  },
+  {
+    "command": "workbench.action.openEditorAtIndex2",
+    "key": "ctrl+2"
+  },
+  {
+    "command": "workbench.action.openEditorAtIndex3",
+    "key": "ctrl+3"
+  },
+  {
+    "command": "workbench.action.openEditorAtIndex4",
+    "key": "ctrl+4"
+  },
+  {
+    "command": "workbench.action.openEditorAtIndex5",
+    "key": "ctrl+5"
+  },
+  {
+    "command": "mssql.changeDatabase",
+    "key": "ctrl+shift+d"
+  },
+  {
+    "command": "mssql.runQuery",
+    "key": "ctrl+enter",
+    "when": "editorTextFocus && editorLangId == 'sql'"
+  },
+  {
+    "command": "-mssql.runQuery",
+    "key": "ctrl+shift+e",
+    "when": "editorTextFocus && editorLangId == 'sql'"
+  },
+  {
+    "command": "workbench.action.togglePanel",
+    "key": "ctrl+shift+r"
+  },
+  {
+    "command": "selectPrevSuggestion",
+    "key": "ctrl+k",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "command": "selectNextSuggestion",
+    "key": "ctrl+j",
+    "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "command": "workbench.action.quickOpenSelectNext",
+    "key": "ctrl+j",
+    "when": "inQuickOpen"
+  },
+  {
+    "command": "workbench.action.quickOpenSelectPrevious",
+    "key": "ctrl+k",
+    "when": "inQuickOpen"
+  },
+  {
+    "command": "chatgpt.openSidebar",
+    "key": "ctrl+shift+/"
+  }
+]

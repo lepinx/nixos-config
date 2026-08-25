@@ -1,0 +1,7 @@
+{
+  "Custom Print Function": {
+    "prefix": "pr",
+    "body": "print('$1', $1)",
+    "description": "Print snippet with comment"
+  }
+}

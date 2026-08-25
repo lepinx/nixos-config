@@ -15,6 +15,7 @@
   networking.firewall.allowedTCPPorts = [ 1433 ];
 
   environment.systemPackages = with pkgs; [
+    remmina
     teams-for-linux
   ];
 }

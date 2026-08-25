@@ -1,0 +1,203 @@
+{
+  "breadcrumbs.enabled": true,
+  "chatgpt.commentCodeLensEnabled": false,
+  "conventionalCommits.showNewVersionNotes": false,
+  "diffEditor.ignoreTrimWhitespace": true,
+  "diffEditor.maxComputationTime": 0,
+  "editor.cursorBlinking": "solid",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.fontFamily": "Hurmit Nerd Font Mono, JetBrainsMono Nerd Font Mono",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 16,
+  "editor.fontWeight": "400",
+  "editor.formatOnSave": true,
+  "editor.guides.bracketPairs": true,
+  "editor.inlayHints.enabled": "on",
+  "editor.lineNumbers": "relative",
+  "editor.linkedEditing": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.scrollbar.verticalScrollbarSize": 20,
+  "editor.semanticHighlighting.enabled": true,
+  "editor.wordWrap": "on",
+  "explorer.compactFolders": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+  "extensions.experimental.affinity": {
+    "vscodevim.vim": 1
+  },
+  "git.autofetch": true,
+  "git.autoStash": true,
+  "git.confirmSync": false,
+  "git.openRepositoryInParentFolders": "always",
+  "git.rebaseWhenSync": true,
+  "githubPullRequests.createOnPublishBranch": "never",
+  "security.workspace.trust.untrustedFiles": "open",
+  "telemetry.telemetryLevel": "off",
+  "terminal.explorerKind": "both",
+  "terminal.external.linuxExec": "ghostty",
+  "terminal.integrated.fontFamily": "Hurmit Nerd Font Mono",
+  "terminal.sourceControlRepositoriesKind": "both",
+  "vim.easymotion": true,
+  "vim.foldfix": true,
+  "vim.handleKeys": {
+    "<C-d>": true,
+    "<C-p>": false,
+    "<C-s>": false,
+    "<C-z>": true
+  },
+  "vim.highlightedyank.enable": true,
+  "vim.leader": "<space>",
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "after": [
+        "1",
+        "5",
+        "g",
+        "j",
+        "z",
+        "z"
+      ],
+      "before": [
+        "<C-d>"
+      ]
+    },
+    {
+      "after": [
+        "1",
+        "5",
+        "g",
+        "k",
+        "z",
+        "z"
+      ],
+      "before": [
+        "<C-u>"
+      ]
+    },
+    {
+      "before": [
+        "<S-h>"
+      ],
+      "commands": [
+        ":bprevious"
+      ]
+    },
+    {
+      "before": [
+        "<S-l>"
+      ],
+      "commands": [
+        ":bnext"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "v"
+      ],
+      "commands": [
+        ":vsplit"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "s"
+      ],
+      "commands": [
+        ":split"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "h"
+      ],
+      "commands": [
+        "workbench.action.focusLeftGroup"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "l"
+      ],
+      "commands": [
+        "workbench.action.focusRightGroup"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "j"
+      ],
+      "commands": [
+        "workbench.action.focusBelowGroup"
+      ]
+    },
+    {
+      "before": [
+        "leader",
+        "k"
+      ],
+      "commands": [
+        "workbench.action.focusAboveGroup"
+      ]
+    },
+    {
+      "after": [
+        "g",
+        "g",
+        "V",
+        "G"
+      ],
+      "before": [
+        "leader",
+        "a"
+      ]
+    }
+  ],
+  "vim.useSystemClipboard": true,
+  "window.customTitleBarVisibility": "auto",
+  "window.menuBarVisibility": "toggle",
+  "window.newWindowProfile": "Default",
+  "window.titleBarStyle": "custom",
+  "workbench.activityBar.location": "top",
+  "workbench.colorTheme": "One Dark Pro Night Flat",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.sideBar.location": "right",
+  "mssql.enableRichExperiences": true,
+  "mssql.openQueryResultsInTabByDefault": false,
+  "mssql.openQueryResultsInTabByDefaultDoNotShowPrompt": true,
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "ROOT"
+    }
+  ],
+  "mssql.connections": [
+    {
+      "authenticationType": "SqlLogin",
+      "connectTimeout": 30,
+      "applicationName": "vscode-mssql",
+      "applicationIntent": "ReadWrite",
+      "server": "localhost",
+      "database": "",
+      "user": "sa",
+      "password": "",
+      "commandTimeout": 30,
+      "encrypt": "Mandatory",
+      "groupId": "ROOT",
+      "profileName": "Sql Palmares Local",
+      "trustServerCertificate": true,
+      "savePassword": true,
+      "id": "f04cb2cf-48fb-4c20-9aa6-ca019716ede6",
+      "profileSource": 0,
+      "containerName": "mssql-db"
+    }
+  ]
+}

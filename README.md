@@ -104,7 +104,7 @@ congelar las aplicaciones que evolucionan rápido.
 ## Login, secretos y Bluetooth
 
 Noctalia Greeter lanza Niri directamente. `gnome-keyring` está disponible y PAM
-de greetd lo desbloquea para que las aplicaciones que lo necesiten usen
+de greetd lo desbloquea para que aplicaciones como VS Code en `office` puedan usar
 `gnome-libsecret` sin caer en almacenamiento inseguro.
 
 Bluetooth se activa con BlueZ y se configura para encenderse al arrancar.
@@ -149,7 +149,8 @@ La gestión de credenciales usa la extensión del navegador y `bitwarden-cli`.
 Podman es el runtime de containers del sistema. `docker` queda como alias de
 `podman` para compatibilidad CLI, y `podman-compose` cubre stacks locales de
 bases de datos. El socket Docker-compatible queda desactivado por defecto porque
-requiere dar permisos equivalentes a Docker.
+requiere dar permisos equivalentes a Docker; se puede evaluar si VS Code
+Dev Containers lo necesita de verdad.
 
 Los runtimes, linters y CLIs específicos viven en `devShell`/`direnv` por
 repositorio. El perfil global conserva sólo herramientas transversales de uso
@@ -160,6 +161,14 @@ diario.
 Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
+
+En `office`, VS Code usa un modelo híbrido. Home Manager instala la aplicación,
+fuerza el keyring seguro con `gnome-libsecret` y enlaza `settings.json`,
+`keybindings.json` y snippets desde `configs/vscode` como symlinks mutables
+fuera del store de Nix. Así quedan versionados por Git, pero VS Code puede
+escribirlos sin chocar con archivos read-only. Las extensiones quedan a cargo de
+VS Code Settings Sync; credenciales, conexiones SQL, hosts SSH, cachés,
+perfiles, sesiones y estado quedan fuera del repositorio.
 
 ## Git y archivos generados
 

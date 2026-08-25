@@ -5,6 +5,12 @@
   repoPath,
   ...
 }:
+let
+  isOffice = hostName == "office";
+  vscodeSecure = pkgs.vscode.override {
+    commandLineArgs = "--password-store=gnome-libsecret";
+  };
+in
 {
   home.packages = [
     pkgs.lua-language-server
@@ -21,9 +27,33 @@
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/settings.json";
     "zed/keymap.json".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/keymap.json";
+  }
+  // pkgs.lib.optionalAttrs isOffice {
+    "Code/User/settings.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/settings.json";
+    };
+    "Code/User/keybindings.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/keybindings.json";
+    };
+    "Code/User/snippets/python.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/snippets/python.json";
+    };
   };
 
   programs = {
+    vscode = pkgs.lib.mkIf isOffice {
+      enable = true;
+      package = vscodeSecure;
+      mutableExtensionsDir = true;
+      argvSettings = {
+        enable-crash-reporter = false;
+        locale = "en";
+      };
+    };
+
     helix = {
       enable = true;
       settings = {
@@ -94,4 +124,7 @@
       ];
     };
   };
+
+  # VS Code is office-only. Its extensions remain mutable and are handled by
+  # Settings Sync; the JSON files stay versioned but linked out-of-store.
 }
