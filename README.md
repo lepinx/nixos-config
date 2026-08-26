@@ -162,13 +162,15 @@ Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
 
-En `office`, VS Code usa un modelo híbrido. Home Manager instala la aplicación,
-fuerza el keyring seguro con `gnome-libsecret` y enlaza `settings.json`,
-`keybindings.json` y snippets desde `configs/vscode` como symlinks mutables
-fuera del store de Nix. Así quedan versionados por Git, pero VS Code puede
-escribirlos sin chocar con archivos read-only. Las extensiones quedan a cargo de
-VS Code Settings Sync; credenciales, conexiones SQL, hosts SSH, cachés,
-perfiles, sesiones y estado quedan fuera del repositorio.
+En `office`, Home Manager sólo instala VS Code y lo configura para usar el
+keyring seguro con `gnome-libsecret`. VS Code administra localmente sus ajustes,
+atajos, snippets, extensiones y estado en `~/.config/Code`; esas preferencias no
+se versionan. Settings Sync puede sincronizarlas entre equipos.
+
+Las conexiones MSSQL se guardan como ajustes de usuario. Para que sus hosts y
+grupos no se sincronicen, agregar localmente `mssql.connections`,
+`mssql.connectionGroups` y `mssql.defaultConnectionId` a
+`settingsSync.ignoredSettings`.
 
 ## Git y archivos generados
 

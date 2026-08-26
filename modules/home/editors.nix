@@ -27,20 +27,6 @@ in
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/settings.json";
     "zed/keymap.json".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/keymap.json";
-  }
-  // pkgs.lib.optionalAttrs isOffice {
-    "Code/User/settings.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/settings.json";
-    };
-    "Code/User/keybindings.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/keybindings.json";
-    };
-    "Code/User/snippets/python.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/vscode/snippets/python.json";
-    };
   };
 
   programs = {
@@ -125,6 +111,5 @@ in
     };
   };
 
-  # VS Code is office-only. Its extensions remain mutable and are handled by
-  # Settings Sync; the JSON files stay versioned but linked out-of-store.
+  # VS Code is office-only. It owns its local configuration and extensions.
 }
