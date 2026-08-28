@@ -14,6 +14,7 @@ local function diagnostic_or_hover()
   end
 
   local _, win = vim.diagnostic.open_float(nil, {
+    border = "rounded",
     focus = false,
     scope = "line",
     source = "if_many",

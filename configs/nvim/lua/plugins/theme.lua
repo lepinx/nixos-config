@@ -9,6 +9,9 @@ return {
       },
       highlights = {
         LspInlayHint = { fg = "#6b7280", italic = true },
+        Cursor = { fg = "#000000", bg = "#61afef" },
+        Visual = { bg = "#303b4a" },
+        FloatBorder = { fg = "#abb2bf" },
       },
       plugins = {
         lsp_semantic_tokens = true,

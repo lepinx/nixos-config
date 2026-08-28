@@ -8,6 +8,16 @@ local lazygit_win = lazygit_win_by_host[vim.g.nixos_host] or lazygit_win_by_host
 return {
   {
     "folke/noice.nvim",
+    opts = {
+      lsp = {
+        hover = {
+          silent = true,
+        },
+      },
+      presets = {
+        lsp_doc_border = true,
+      },
+    },
     keys = {
       { "<c-f>", false, mode = { "i", "n", "s" } },
       { "<c-b>", false, mode = { "i", "n", "s" } },

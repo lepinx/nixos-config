@@ -1,5 +1,16 @@
 return {
   {
+    "folke/flash.nvim",
+    opts = {
+      modes = {
+        char = {
+          enabled = true,
+          autohide = true,
+        },
+      },
+    },
+  },
+  {
     "stevearc/oil.nvim",
     keys = {
       { "-", "<cmd>Oil --float<CR>", desc = "Open parent directory" },
