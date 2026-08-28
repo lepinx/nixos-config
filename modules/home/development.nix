@@ -9,8 +9,10 @@ let
   glab-tui = pkgs.rustPlatform.buildRustPackage {
     pname = "glab-tui";
     version = "0.8.3";
+    cargoLock = {
+      lockFile = "${inputs.glab-tui}/Cargo.lock";
+    };
     src = inputs.glab-tui;
-    cargoHash = "sha256-IcScQ4vY5Q1BusNSgpwF2EiykACBlFr6GZK3t0V8fV4=";
     doCheck = false;
   };
 in

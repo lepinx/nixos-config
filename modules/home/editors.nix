@@ -6,7 +6,6 @@
   ...
 }:
 let
-  isOffice = hostName == "office";
   vscodeSecure = pkgs.vscode.override {
     commandLineArgs = "--password-store=gnome-libsecret";
   };
@@ -30,7 +29,7 @@ in
   };
 
   programs = {
-    vscode = pkgs.lib.mkIf isOffice {
+    vscode = {
       enable = true;
       package = vscodeSecure;
       mutableExtensionsDir = true;
@@ -111,5 +110,5 @@ in
     };
   };
 
-  # VS Code is office-only. It owns its local configuration and extensions.
+  # VS Code owns its local configuration and extensions.
 }
