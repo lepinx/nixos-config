@@ -112,12 +112,14 @@
         let
           pkgs = nixpkgs.legacyPackages.${system};
         in
-        pkgs.runCommand "deadnix" {
-          nativeBuildInputs = [ pkgs.deadnix ];
-        } ''
-          deadnix --fail ${./.}
-          touch "$out"
-        '';
+        pkgs.runCommand "deadnix"
+          {
+            nativeBuildInputs = [ pkgs.deadnix ];
+          }
+          ''
+            deadnix --fail ${./.}
+            touch "$out"
+          '';
 
       nixosConfigurations = {
         office = mkNixos {

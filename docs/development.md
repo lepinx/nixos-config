@@ -67,6 +67,136 @@ exit
 Con `direnv`, el flujo es más cómodo: al entrar al directorio se carga el shell,
 y al salir se descarga.
 
+## Entorno FHS para agentes
+
+Las herramientas de agentes no usan un `devShell` ni instalan Node, npm, PNPM o
+Go globalmente. Nix provee un entorno FHS llamado `gentle-agent`, expuesto por
+el comando `agent`. Dentro existen rutas Linux convencionales como
+`/usr/bin/tar`, necesarias para extensiones como `gentle-pi`.
+
+El entorno es una capa de compatibilidad, no una sandbox de seguridad: los
+procesos conservan tus permisos de usuario y pueden modificar tu directorio
+personal. Al cerrarlo, Node, npm, PNPM y Go dejan de estar en el `PATH` normal.
+
+Los comandos cotidianos `pi`, `gentle-ai`, `engram` y `gga` son
+wrappers que entran al entorno automáticamente. Para abrir una terminal con
+todas las herramientas disponibles:
+
+```bash
+agent
+```
+
+También podés ejecutar un comando puntual:
+
+```bash
+agent pi
+agent gentle-ai doctor
+```
+
+### Instalación de Gentle AI
+
+Después de aplicar la configuración, abrir el entorno FHS:
+
+```bash
+agent
+```
+
+Y ejecutar el instalador oficial, sin fijar una versión en esta configuración:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
+```
+
+El instalador oficial elige y mantiene su canal estable. Cuando termine, salir
+del shell (`exit`) e iniciar el configurador normalmente:
+
+```bash
+gentle-ai
+```
+
+Elegir Codex, OpenCode y Pi, y los componentes que quieras. El instalador y
+`gentle-ai sync` son los dueños de sus skills, prompts, configuraciones MCP y
+perfiles: no mezclar esos archivos con `home.file` de Home Manager.
+
+Pi usa npm internamente incluso si PNPM es el gestor preferido para proyectos.
+Su prefijo mutable queda aislado en:
+
+```text
+~/.local/share/gentle-agent/npm/
+```
+
+No se escribe nunca dentro de `/nix/store` y no se instala Node/npm/Go en el
+perfil global. El estado normal de Gentle AI también es mutable y vive en:
+
+```text
+~/.gentle-ai/    # selección de agentes, backups y configuración gestionada
+~/.pi/           # paquetes y configuración de Pi
+~/.engram/       # memoria SQLite local
+~/.local/bin/    # gentle-ai, engram y gga instalados por upstream
+```
+
+### Engram
+
+Engram aporta memoria persistente de agentes. El instalador de Gentle AI lo
+instala en `~/.local/bin`; los datos viven fuera del store:
+
+```text
+~/.engram/engram.db
+```
+
+La base SQLite local es la fuente de verdad. Sus archivos `-wal` y `-shm` son
+parte normal de SQLite y nunca se borran por separado. Para explorarla:
+
+```bash
+engram tui
+engram search "texto a buscar"
+```
+
+La sincronización de memoria por proyecto es opcional y crea `.engram/` dentro
+del repositorio. Antes de versionarla, revisar su contenido: puede contener
+decisiones, contexto o referencias que no querés compartir.
+
+### GGA
+
+GGA (Gentleman Guardian Angel) es una revisión de código mediante IA ejecutada
+como hook de Git. Es opt-in por repositorio; instalar el binario no activa nada
+ni modifica commits.
+
+En un proyecto donde quieras probarlo:
+
+```bash
+gga init
+gga install
+```
+
+Después configurar `PROVIDER="codex"` en el `.gga` de ese proyecto. El hook
+revisa los cambios staged antes de cada commit. Para omitirlo de forma puntual:
+
+```bash
+git commit --no-verify
+```
+
+No habilitar GGA por defecto en todos los repositorios: usa un agente/modelo y
+agrega tiempo y costo a cada commit.
+
+### Pi y las extensiones Gentle
+
+Usar `pi` normalmente. El wrapper lo ejecuta dentro del entorno FHS, con el
+prefijo npm aislado y con `tar` en una ruta FHS. Por eso `gentle-ai install` y
+las posteriores instalaciones con `pi install` pueden usar el flujo soportado
+por Gentle AI sin intentar escribir en el store de Nix.
+
+Para actualizar el ecosistema, seguir el flujo de upstream dentro del wrapper:
+
+```bash
+gentle-ai upgrade
+gentle-ai sync
+```
+
+Revisar los cambios y los backups que Gentle AI crea antes de aceptar una
+actualización. Las extensiones de Pi ejecutan código con tus permisos de
+usuario; instalarlas sólo desde fuentes que revisaste o en las que confiás.
+
 ## Abbreviations, aliases y funciones Fish
 
 En Fish, las abbreviations son expansores de texto. Por ejemplo, `gs` se expande
@@ -276,9 +406,10 @@ usuario normal. No reemplaza una VM/sandbox cuando hay desconfianza real.
 
 ## Política actual de este repo
 
-Por ahora mantenemos Go, Rust y Python globales para no cortar el flujo diario
-mientras migramos. El objetivo final es mover versiones específicas a cada
-proyecto con `devShell` + `direnv`.
+Los runtimes y versiones específicas viven en los `devShell` de cada proyecto.
+`gentle-agent` es la excepción deliberada: un entorno FHS invocado mediante
+wrappers para compatibilidad con el ecosistema mutable de Gentle AI, sin volver
+globales Node, npm, PNPM o Go.
 
 La virtualización local queda disponible en el perfil diario para poder aislar
 proyectos o probar sistemas sin cambiar de configuración. Paquetes ocasionales

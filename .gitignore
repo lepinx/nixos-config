@@ -1,3 +1,7 @@
 result
 result-*
 .direnv/
+# Local Pi runtime state
+.atl/
+.codegraph
+.pi
