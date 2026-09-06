@@ -57,6 +57,7 @@ in
     bitwarden-cli
     bitwardenFieldCopy
     clock-rs
+    discord
     ente-auth
     gnome-disk-utility
     ghostty
