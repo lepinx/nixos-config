@@ -8,18 +8,18 @@
 
 let
   agentFhs = pkgs.buildFHSEnv {
-    name = "gentle-agent";
+    name = "agent-runtime";
     targetPkgs =
       _pkgs: with pkgsUnstable; [
+        bubblewrap
         go
         nodejs
         pnpm
-        pi-coding-agent
       ];
     profile = ''
       export GOBIN="$HOME/.local/bin"
-      export NPM_CONFIG_PREFIX="$HOME/.local/share/gentle-agent/npm"
-      export NPM_CONFIG_CACHE="$HOME/.cache/gentle-agent/npm"
+      export NPM_CONFIG_PREFIX="$HOME/.local/share/agent-runtime/npm"
+      export NPM_CONFIG_CACHE="$HOME/.cache/agent-runtime/npm"
       export PATH="$HOME/.local/bin:$NPM_CONFIG_PREFIX/bin:$PATH"
     '';
     runScript = "bash -l";
@@ -30,7 +30,7 @@ let
     pkgs.writeShellApplication {
       inherit name;
       text = ''
-        exec ${agentFhs}/bin/gentle-agent -lc 'exec "$@"' -- ${command} "$@"
+        exec ${agentFhs}/bin/agent-runtime -lc 'exec "$@"' -- ${command} "$@"
       '';
     };
 
@@ -38,16 +38,16 @@ let
     name = "agent";
     text = ''
       if [ "$#" -eq 0 ]; then
-        exec ${agentFhs}/bin/gentle-agent
+        exec ${agentFhs}/bin/agent-runtime
       fi
-      exec ${agentFhs}/bin/gentle-agent -lc 'exec "$@"' -- "$@"
+      exec ${agentFhs}/bin/agent-runtime -lc 'exec "$@"' -- "$@"
     '';
   };
 
   codex = pkgs.writeShellApplication {
     name = "codex";
     text = ''
-      exec ${agentFhs}/bin/gentle-agent -lc 'exec ${pkgsUnstable.codex}/bin/codex "$@"' -- "$@"
+      exec ${agentFhs}/bin/agent-runtime -lc 'exec /home/${userName}/.local/bin/codex "$@"' -- "$@"
     '';
   };
 
@@ -76,7 +76,7 @@ in
     nil
     nixd
     agentShell
-    (agentCommand "pi" "pi")
+    (agentCommand "pi" "/home/${userName}/.local/share/agent-runtime/npm/bin/pi")
     (agentCommand "codegraph" "codegraph")
     (agentCommand "gentle-ai" "/home/${userName}/.local/bin/gentle-ai")
     (agentCommand "engram" "/home/${userName}/.local/bin/engram")

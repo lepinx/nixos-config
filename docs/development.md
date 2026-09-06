@@ -70,7 +70,7 @@ y al salir se descarga.
 ## Entorno FHS para agentes
 
 Las herramientas de agentes no usan un `devShell` ni instalan Node, npm, PNPM o
-Go globalmente. Nix provee un entorno FHS llamado `gentle-agent`, expuesto por
+Go globalmente. Nix provee un entorno FHS llamado `agent-runtime`, expuesto por
 el comando `agent`. Dentro existen rutas Linux convencionales como
 `/usr/bin/tar`, necesarias para extensiones como `gentle-pi`.
 
@@ -92,6 +92,19 @@ También podés ejecutar un comando puntual:
 agent pi
 agent gentle-ai doctor
 ```
+
+### Codex
+
+El comando `codex` conserva el wrapper FHS para ejecutar con el mismo entorno
+de agentes, pero la CLI se instala y actualiza directamente desde OpenAI. Tras
+aplicar esta configuración, instalarla —o actualizarla— con:
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+El instalador deja el binario en `~/.local/bin/codex`; el wrapper lo invoca sin
+depender de la versión que empaquete nixpkgs.
 
 ### Instalación de Gentle AI
 
@@ -122,8 +135,11 @@ Pi usa npm internamente incluso si PNPM es el gestor preferido para proyectos.
 Su prefijo mutable queda aislado en:
 
 ```text
-~/.local/share/gentle-agent/npm/
+~/.local/share/agent-runtime/npm/
 ```
+
+Su caché se guarda en `~/.cache/agent-runtime/npm/`. Ambos directorios se
+migran juntos al renombrar el runtime, sin reinstalar paquetes.
 
 No se escribe nunca dentro de `/nix/store` y no se instala Node/npm/Go en el
 perfil global. El estado normal de Gentle AI también es mutable y vive en:
@@ -181,12 +197,26 @@ agrega tiempo y costo a cada commit.
 
 ### Pi y las extensiones Gentle
 
-Usar `pi` normalmente. El wrapper lo ejecuta dentro del entorno FHS, con el
-prefijo npm aislado y con `tar` en una ruta FHS. Por eso `gentle-ai install` y
-las posteriores instalaciones con `pi install` pueden usar el flujo soportado
-por Gentle AI sin intentar escribir en el store de Nix.
+El binario de Pi se instala desde npm en el prefijo mutable del runtime:
 
-Para actualizar el ecosistema, seguir el flujo de upstream dentro del wrapper:
+```bash
+agent npm install -g --ignore-scripts --min-release-age=0 @earendil-works/pi-coding-agent
+```
+
+El wrapper lo ejecuta dentro del entorno FHS, con el prefijo npm aislado y con
+`tar` en una ruta FHS. El binario y las extensiones se actualizan por separado:
+
+```bash
+pi update self
+pi update --extensions
+```
+
+Por eso `gentle-ai install` y las posteriores instalaciones con `pi install`
+pueden usar el flujo soportado por Gentle AI sin intentar escribir en el store
+de Nix.
+
+Para actualizar Gentle AI, Engram, GGA y sus configuraciones gestionadas,
+seguir el flujo de upstream dentro del wrapper:
 
 ```bash
 gentle-ai upgrade
@@ -407,7 +437,7 @@ usuario normal. No reemplaza una VM/sandbox cuando hay desconfianza real.
 ## Política actual de este repo
 
 Los runtimes y versiones específicas viven en los `devShell` de cada proyecto.
-`gentle-agent` es la excepción deliberada: un entorno FHS invocado mediante
+`agent-runtime` es la excepción deliberada: un entorno FHS invocado mediante
 wrappers para compatibilidad con el ecosistema mutable de Gentle AI, sin volver
 globales Node, npm, PNPM o Go.
 
