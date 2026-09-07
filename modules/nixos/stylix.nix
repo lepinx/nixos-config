@@ -1,25 +1,5 @@
-{ hostName, pkgs, ... }:
+{ pkgs, ... }:
 
-let
-  fontSizesByHost = {
-    workstation = {
-      applications = 11;
-      desktop = 11;
-      popups = 11;
-      terminal = 14;
-    };
-    office = {
-      applications = 13;
-      desktop = 13;
-      popups = 13;
-      terminal = 13;
-    };
-  };
-  cursorSizesByHost = {
-    workstation = 24;
-    office = 28;
-  };
-in
 {
   stylix = {
     enable = true;
@@ -45,7 +25,12 @@ in
         name = "Noto Color Emoji";
       };
 
-      sizes = fontSizesByHost.${hostName} or fontSizesByHost.workstation;
+      sizes = {
+        applications = 11;
+        desktop = 11;
+        popups = 11;
+        terminal = 14;
+      };
     };
 
     opacity = {
@@ -58,7 +43,7 @@ in
     cursor = {
       package = pkgs.adwaita-icon-theme;
       name = "Adwaita";
-      size = cursorSizesByHost.${hostName} or cursorSizesByHost.workstation;
+      size = 24;
     };
 
     targets.grub.enable = false;

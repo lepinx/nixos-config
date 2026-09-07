@@ -104,8 +104,8 @@ congelar las aplicaciones que evolucionan rápido.
 ## Login, secretos y Bluetooth
 
 Noctalia Greeter lanza Niri directamente. `gnome-keyring` está disponible y PAM
-de greetd lo desbloquea para que aplicaciones como VS Code en `office` puedan usar
-`gnome-libsecret` sin caer en almacenamiento inseguro.
+de greetd lo desbloquea para que las aplicaciones puedan usar `gnome-libsecret`
+sin caer en almacenamiento inseguro.
 
 Bluetooth se activa con BlueZ y se configura para encenderse al arrancar.
 WirePlumber limita los perfiles Bluetooth a A2DP para priorizar auriculares de
@@ -161,16 +161,6 @@ diario.
 Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
-
-En `office`, Home Manager sólo instala VS Code y lo configura para usar el
-keyring seguro con `gnome-libsecret`. VS Code administra localmente sus ajustes,
-atajos, snippets, extensiones y estado en `~/.config/Code`; esas preferencias no
-se versionan. Settings Sync puede sincronizarlas entre equipos.
-
-Las conexiones MSSQL se guardan como ajustes de usuario. Para que sus hosts y
-grupos no se sincronicen, agregar localmente `mssql.connections`,
-`mssql.connectionGroups` y `mssql.defaultConnectionId` a
-`settingsSync.ignoredSettings`.
 
 ## Git y archivos generados
 

@@ -1,9 +1,4 @@
-local lazygit_win_by_host = {
-  workstation = { width = 0.90, height = 0.90 },
-  office = { width = 0.78, height = 0.80 },
-}
-
-local lazygit_win = lazygit_win_by_host[vim.g.nixos_host] or lazygit_win_by_host.workstation
+local lazygit_win = { width = 0.90, height = 0.90 }
 
 return {
   {

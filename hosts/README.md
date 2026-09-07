@@ -16,7 +16,6 @@ La regla práctica:
 
 ## Hosts disponibles como plantillas
 
-- `office`: notebook/PC de oficina.
 - `homelab`: servidor casero.
 
 No se agregan como `nixosConfigurations` hasta tener su
@@ -31,13 +30,6 @@ defecto:
 just build
 ```
 
-Si hace falta apuntar a otro host manualmente, `NIXOS_HOST` funciona como
-override:
-
-```bash
-NIXOS_HOST=office just build
-```
-
 ## Perfiles
 
 Los hosts importan un perfil base junto con sus módulos específicos:
@@ -47,8 +39,8 @@ Los hosts importan un perfil base junto con sus módulos específicos:
 - `modules/nixos/profiles/server.nix`: servidor/headless sin Niri, Noctalia ni
   apps de escritorio.
 
-La plantilla `homelab` parte del perfil `server`; `workstation` y `office`
-parten del perfil `workstation`.
+La plantilla `homelab` parte del perfil `server`; `workstation` parte del perfil
+`workstation`.
 
 Para `homelab`, el output del flake usa `enableHomeManager = false` o un perfil
 Home Manager específico de servidor. El perfil `home/lucho` es de escritorio y

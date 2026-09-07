@@ -1,6 +1,0 @@
-// Initial placeholder. Replace this with the real output name, mode and scale
-// after booting the office machine.
-output "eDP-1" {
-    scale 1.25
-    position x=0 y=0
-}

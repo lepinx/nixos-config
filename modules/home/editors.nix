@@ -1,6 +1,5 @@
 {
   config,
-  hostName,
   pkgs,
   repoPath,
   ...
@@ -67,7 +66,6 @@ in
         luaPkgs.rest-nvim
       ];
       initLua = ''
-        vim.g.nixos_host = "${hostName}"
         vim.env.NVIM_RENDER_MARKDOWN_PLUGIN = "${pkgs.vimPlugins.render-markdown-nvim}"
         vim.opt.runtimepath:prepend("${repoPath}/configs/nvim")
         dofile("${repoPath}/configs/nvim/init.lua")

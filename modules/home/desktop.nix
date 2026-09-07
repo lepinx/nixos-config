@@ -10,21 +10,13 @@
 
 let
   ghosttyConfig = builtins.readFile ../../configs/ghostty/config;
-  ghosttyFontSizes = {
-    workstation = 9;
-    office = 13;
-  };
-  ghosttyFontSize = ghosttyFontSizes.${hostName} or 9;
+  ghosttyFontSize = 9;
   niriConfig = builtins.readFile ../../configs/niri/config.kdl.in;
   niriOutputsPath = ../../hosts + "/${hostName}/niri-outputs.kdl";
   niriHostBindsPath = ../../hosts + "/${hostName}/niri-host.kdl";
   niriHostBinds =
     if builtins.pathExists niriHostBindsPath then builtins.readFile niriHostBindsPath else "";
-  noctaliaUiScales = {
-    workstation = 0.8;
-    office = 0.95;
-  };
-  noctaliaUiScale = noctaliaUiScales.${hostName} or 0.8;
+  noctaliaUiScale = 0.8;
   bitwardenFieldCopy = pkgs.writeShellApplication {
     name = "bitwarden-field-copy";
     runtimeInputs = with pkgs; [
