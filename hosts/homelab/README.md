@@ -15,9 +15,11 @@ Checklist inicial:
 1. Auditar servicios del servidor.
 2. Listar discos, mounts y datos que no pueden perderse.
 3. Definir hostname, IP fija/DHCP reservation y DNS local.
-4. Elegir estrategia de disco: conservar layout, migrar con Disko o reinstalar.
-5. Crear módulos por servicio en `modules/nixos/services/`.
-6. Agregar `nixosConfigurations.homelab` junto con el hardware real.
+4. Elegir boot BIOS/UEFI y declarar el bootloader en el host.
+5. Elegir estrategia de disco: conservar layout, migrar con Disko o reinstalar.
+6. Crear el usuario administrador y habilitar SSH de forma explícita.
+7. Crear módulos por servicio en `modules/nixos/services/`.
+8. Agregar `nixosConfigurations.homelab` junto con el hardware real.
    Usar `enableHomeManager = false`, o crear un perfil Home Manager propio de
    servidor si realmente hace falta.
 

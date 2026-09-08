@@ -1,19 +1,6 @@
-{
-  pkgs,
-  hostName,
-  userName,
-  ...
-}:
+_:
 
 {
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking = {
-    inherit hostName;
-    networkmanager.enable = true;
-  };
-
   nix = {
     settings = {
       experimental-features = [
@@ -42,32 +29,6 @@
     LC_PAPER = "es_AR.UTF-8";
     LC_TELEPHONE = "es_AR.UTF-8";
     LC_TIME = "es_AR.UTF-8";
-  };
-
-  users.users.${userName} = {
-    isNormalUser = true;
-    description = userName;
-    shell = pkgs.fish;
-    extraGroups = [
-      "kvm"
-      "libvirtd"
-      "networkmanager"
-      "wheel"
-    ];
-  };
-
-  programs.fish.enable = true;
-
-  security.rtkit.enable = true;
-
-  virtualisation.podman = {
-    enable = true;
-    dockerCompat = true;
-    defaultNetwork.settings.dns_enabled = true;
-    autoPrune = {
-      enable = true;
-      dates = "weekly";
-    };
   };
 
   system.stateVersion = "26.05";

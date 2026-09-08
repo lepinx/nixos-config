@@ -9,8 +9,10 @@
     ../greeter.nix
     ../hardware
     ../maintenance.nix
-    ../networking.nix
+    ../workstation-networking.nix
     ../packages.nix
     ../stylix.nix
+    ../virtualization.nix
+    ../workstation.nix
   ];
 }

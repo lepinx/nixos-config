@@ -6,6 +6,10 @@ compartidos.
 La regla práctica:
 
 - `modules/nixos/`: comportamiento reusable del sistema.
+- `modules/nixos/core.nix`: base independiente del tipo de máquina: Nix,
+  locale y compatibilidad de estado.
+- `modules/nixos/workstation.nix`: política de notebook/escritorio: boot UEFI,
+  NetworkManager, usuario interactivo y contenedores locales.
 - `modules/home/`: configuración reusable del usuario.
 - `hosts/<nombre>/`: hardware, discos, red, pantallas y decisiones específicas
   de esa máquina.
@@ -37,7 +41,8 @@ Los hosts importan un perfil base junto con sus módulos específicos:
 - `modules/nixos/profiles/workstation.nix`: escritorio personal o laboral con
   Niri, Noctalia, greeter, apps gráficas y Home Manager.
 - `modules/nixos/profiles/server.nix`: servidor/headless sin Niri, Noctalia ni
-  apps de escritorio.
+  apps de escritorio. Sólo trae base NixOS y mantenimiento; red, boot, usuarios
+  y servicios se declaran explícitamente por host o por módulo de servicio.
 
 La plantilla `homelab` parte del perfil `server`; `workstation` parte del perfil
 `workstation`.

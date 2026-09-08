@@ -128,7 +128,6 @@
           modules = [
             ./hosts/workstation
             inputs.disko.nixosModules.disko
-            ./modules/nixos/virtualization.nix
           ];
         };
       };

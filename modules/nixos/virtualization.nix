@@ -1,6 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, userName, ... }:
 
 {
+  users.users.${userName}.extraGroups = [
+    "kvm"
+    "libvirtd"
+  ];
+
   virtualisation.libvirtd = {
     enable = true;
     qemu = {

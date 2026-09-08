@@ -129,8 +129,9 @@ contraseñas ni datos de wallets.
 
 ## Dónde agregar paquetes
 
-- `modules/nixos/packages.nix`: componentes compartidos por toda la máquina,
-  programas con políticas globales y herramientas necesarias antes del login.
+- `modules/nixos/packages.nix`: programas del perfil `workstation` que
+  requieren política de sistema o están disponibles antes del login. Los
+  servicios de un servidor deben vivir en módulos específicos de ese perfil.
 - `modules/home/*.nix`: aplicaciones, fuentes y herramientas del usuario de
   Home Manager. Elegir el módulo por función: escritorio, editores, shell o
   desarrollo.
