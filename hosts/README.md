@@ -18,9 +18,9 @@ La regla práctica:
 
 - `workstation`: notebook personal.
 
-## Hosts disponibles como plantillas
+## Próximo host previsto
 
-- `homelab`: servidor casero.
+- `homelab`: servidor casero documentado, todavía sin definición NixOS.
 
 No se agregan como `nixosConfigurations` hasta tener su
 `hardware-configuration.nix` real. Así el flake sólo expone máquinas con
@@ -44,8 +44,8 @@ Los hosts importan un perfil base junto con sus módulos específicos:
   apps de escritorio. Sólo trae base NixOS y mantenimiento; red, boot, usuarios
   y servicios se declaran explícitamente por host o por módulo de servicio.
 
-La plantilla `homelab` parte del perfil `server`; `workstation` parte del perfil
-`workstation`.
+Cuando exista, `homelab` partirá del perfil `server`; `workstation` parte del
+perfil `workstation`.
 
 Para `homelab`, el output del flake usa `enableHomeManager = false` o un perfil
 Home Manager específico de servidor. El perfil `home/lucho` es de escritorio y

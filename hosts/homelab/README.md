@@ -1,6 +1,6 @@
 # Host homelab
 
-Plantilla para un servidor casero en NixOS.
+Notas para un futuro servidor casero en NixOS.
 
 Este host usa criterios distintos a una workstation:
 
