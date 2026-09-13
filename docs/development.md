@@ -78,8 +78,8 @@ El entorno es una capa de compatibilidad, no una sandbox de seguridad: los
 procesos conservan tus permisos de usuario y pueden modificar tu directorio
 personal. Al cerrarlo, Node, npm, PNPM y Go dejan de estar en el `PATH` normal.
 
-Los comandos cotidianos `pi`, `gentle-ai`, `engram` y `gga` son
-wrappers que entran al entorno automáticamente. Para abrir una terminal con
+Los comandos cotidianos `pi`, `gentle-ai` y `engram` son wrappers que entran al
+entorno automáticamente. Para abrir una terminal con
 todas las herramientas disponibles:
 
 ```bash
@@ -148,7 +148,7 @@ perfil global. El estado normal de Gentle AI también es mutable y vive en:
 ~/.gentle-ai/    # selección de agentes, backups y configuración gestionada
 ~/.pi/           # paquetes y configuración de Pi
 ~/.engram/       # memoria SQLite local
-~/.local/bin/    # gentle-ai, engram y gga instalados por upstream
+~/.local/bin/    # gentle-ai y engram instalados por upstream
 ```
 
 ### Engram
@@ -172,28 +172,6 @@ La sincronización de memoria por proyecto es opcional y crea `.engram/` dentro
 del repositorio. Antes de versionarla, revisar su contenido: puede contener
 decisiones, contexto o referencias que no querés compartir.
 
-### GGA
-
-GGA (Gentleman Guardian Angel) es una revisión de código mediante IA ejecutada
-como hook de Git. Es opt-in por repositorio; instalar el binario no activa nada
-ni modifica commits.
-
-En un proyecto donde quieras probarlo:
-
-```bash
-gga init
-gga install
-```
-
-Después configurar `PROVIDER="codex"` en el `.gga` de ese proyecto. El hook
-revisa los cambios staged antes de cada commit. Para omitirlo de forma puntual:
-
-```bash
-git commit --no-verify
-```
-
-No habilitar GGA por defecto en todos los repositorios: usa un agente/modelo y
-agrega tiempo y costo a cada commit.
 
 ### Pi y las extensiones Gentle
 
@@ -215,8 +193,8 @@ Por eso `gentle-ai install` y las posteriores instalaciones con `pi install`
 pueden usar el flujo soportado por Gentle AI sin intentar escribir en el store
 de Nix.
 
-Para actualizar Gentle AI, Engram, GGA y sus configuraciones gestionadas,
-seguir el flujo de upstream dentro del wrapper:
+Para actualizar Gentle AI, Engram y sus configuraciones gestionadas, seguir el
+flujo de upstream dentro del wrapper:
 
 ```bash
 gentle-ai upgrade

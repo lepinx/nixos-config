@@ -80,7 +80,6 @@ in
     (agentCommand "codegraph" "codegraph")
     (agentCommand "gentle-ai" "/home/${userName}/.local/bin/gentle-ai")
     (agentCommand "engram" "/home/${userName}/.local/bin/engram")
-    (agentCommand "gga" "/home/${userName}/.local/bin/gga")
     just
     nix-direnv
     nixfmt
