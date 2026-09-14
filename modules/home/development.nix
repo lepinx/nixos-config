@@ -20,19 +20,10 @@ let
       export GOBIN="$HOME/.local/bin"
       export NPM_CONFIG_PREFIX="$HOME/.local/share/agent-runtime/npm"
       export NPM_CONFIG_CACHE="$HOME/.cache/agent-runtime/npm"
-      export PATH="$HOME/.local/bin:$NPM_CONFIG_PREFIX/bin:$PATH"
+      export PATH="$NPM_CONFIG_PREFIX/bin:$HOME/.local/bin:$PATH"
     '';
     runScript = "bash -l";
   };
-
-  agentCommand =
-    name: command:
-    pkgs.writeShellApplication {
-      inherit name;
-      text = ''
-        exec ${agentFhs}/bin/agent-runtime -lc 'exec "$@"' -- ${command} "$@"
-      '';
-    };
 
   agentShell = pkgs.writeShellApplication {
     name = "agent";
@@ -62,6 +53,26 @@ let
   };
 in
 {
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
+  home.file = {
+    ".local/bin/pi" = {
+      executable = true;
+      text = ''
+        #!${pkgs.runtimeShell}
+        exec ${agentFhs}/bin/agent-runtime -lc 'exec "$NPM_CONFIG_PREFIX/bin/pi" "$@"' -- "$@"
+      '';
+    };
+
+    ".local/bin/codegraph" = {
+      executable = true;
+      text = ''
+        #!${pkgs.runtimeShell}
+        exec ${agentFhs}/bin/agent-runtime -lc 'exec "$NPM_CONFIG_PREFIX/bin/codegraph" "$@"' -- "$@"
+      '';
+    };
+  };
+
   home.packages = with pkgs; [
     codex
     direnv
@@ -76,10 +87,6 @@ in
     nil
     nixd
     agentShell
-    (agentCommand "pi" "/home/${userName}/.local/share/agent-runtime/npm/bin/pi")
-    (agentCommand "codegraph" "codegraph")
-    (agentCommand "gentle-ai" "/home/${userName}/.local/bin/gentle-ai")
-    (agentCommand "engram" "/home/${userName}/.local/bin/engram")
     just
     nix-direnv
     nixfmt

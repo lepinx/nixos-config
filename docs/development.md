@@ -78,20 +78,43 @@ El entorno es una capa de compatibilidad, no una sandbox de seguridad: los
 procesos conservan tus permisos de usuario y pueden modificar tu directorio
 personal. Al cerrarlo, Node, npm, PNPM y Go dejan de estar en el `PATH` normal.
 
-Los comandos cotidianos `pi`, `gentle-ai` y `engram` son wrappers que entran al
-entorno automáticamente. Para abrir una terminal con
-todas las herramientas disponibles:
+Home Manager instala shims declarativos para `pi` y `codegraph` en
+`~/.local/bin`. Esos comandos entran directamente al entorno FHS y ejecutan sus
+binarios npm mutables, así que para el uso diario se invocan sin el prefijo
+`agent`. El comando `agent` se conserva como punto de entrada FHS genérico y
+explícito, útil para depuración o para ejecutar herramientas puntuales dentro del
+entorno. Usá `gentle-ai` (`install`, `upgrade` y `sync`) y `engram` directamente
+desde un shell host normal, nunca mediante `agent`: `gentle-ai sync` es
+incompatible con la vista de rutas de ejecutables del entorno FHS. Para abrir una
+terminal FHS cuando haga falta:
 
 ```bash
 agent
 ```
 
-También podés ejecutar un comando puntual:
+También podés ejecutar un comando puntual. El split soportado es:
 
 ```bash
-agent pi
-agent gentle-ai doctor
+# Herramientas FHS diarias, mediante shims declarativos
+pi
+codegraph
+
+# Entrada FHS genérica o de depuración
+agent npm --version
+
+# Herramientas host; nunca mediante agent
+gentle-ai install
+gentle-ai upgrade
+gentle-ai sync
+engram
 ```
+
+Después de activar esta configuración de Home Manager, abrí una terminal host
+nueva (o iniciá sesión de nuevo): las sesiones que ya estaban abiertas conservan
+su `PATH` anterior. Fish también incorpora `~/.local/bin` al iniciar una shell
+interactiva. Si `pi`, `codegraph`, `gentle-ai` o `engram` responden `command not
+found` después de la activación, recargá Fish con `exec fish -l` y verificá el
+`PATH` con `printf '%s\n' "$PATH"`.
 
 ### Codex
 
@@ -108,20 +131,15 @@ depender de la versión que empaquete nixpkgs.
 
 ### Instalación de Gentle AI
 
-Después de aplicar la configuración, abrir el entorno FHS:
-
-```bash
-agent
-```
-
-Y ejecutar el instalador oficial, sin fijar una versión en esta configuración:
+Después de aplicar la configuración, ejecutar el instalador oficial desde un
+shell host normal, sin fijar una versión en esta configuración:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
 ```
 
-El instalador oficial elige y mantiene su canal estable. Cuando termine, salir
-del shell (`exit`) e iniciar el configurador normalmente:
+El instalador oficial elige y mantiene su canal estable. Cuando termine,
+iniciar el configurador directamente desde el shell host:
 
 ```bash
 gentle-ai
@@ -175,13 +193,14 @@ decisiones, contexto o referencias que no querés compartir.
 
 ### Pi y las extensiones Gentle
 
-El binario de Pi se instala desde npm en el prefijo mutable del runtime:
+El binario de Pi se instala desde npm en el prefijo mutable del runtime. Usá
+la entrada FHS genérica para npm:
 
 ```bash
 agent npm install -g --ignore-scripts --min-release-age=0 @earendil-works/pi-coding-agent
 ```
 
-El wrapper lo ejecuta dentro del entorno FHS, con el prefijo npm aislado y con
+El shim `pi` lo ejecuta dentro del entorno FHS, con el prefijo npm aislado y con
 `tar` en una ruta FHS. El binario y las extensiones se actualizan por separado:
 
 ```bash
@@ -189,12 +208,12 @@ pi update self
 pi update --extensions
 ```
 
-Por eso `gentle-ai install` y las posteriores instalaciones con `pi install`
-pueden usar el flujo soportado por Gentle AI sin intentar escribir en el store
-de Nix.
+Las instalaciones posteriores con `pi install` pueden usar el flujo soportado
+sin intentar escribir en el store de Nix. En cambio, `gentle-ai install` se
+ejecuta directamente desde el shell host normal, nunca mediante `agent`.
 
-Para actualizar Gentle AI, Engram y sus configuraciones gestionadas, seguir el
-flujo de upstream dentro del wrapper:
+Para actualizar Gentle AI y sus configuraciones gestionadas, seguir el flujo de
+upstream directamente desde un shell host normal, nunca mediante `agent`:
 
 ```bash
 gentle-ai upgrade

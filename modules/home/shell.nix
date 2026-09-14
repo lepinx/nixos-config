@@ -102,6 +102,7 @@ in
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      set -gx PATH "$HOME/.local/bin" (string match -v -- "$HOME/.local/bin" $PATH)
       fish_vi_key_bindings
       set fish_greeting
 
