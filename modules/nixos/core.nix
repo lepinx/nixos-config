@@ -1,4 +1,4 @@
-_:
+{ pkgs, ... }:
 
 {
   nix = {
@@ -15,6 +15,13 @@ _:
     config = {
       allowUnfree = true;
     };
+  };
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      icu
+    ];
   };
 
   time.timeZone = "America/Argentina/Cordoba";

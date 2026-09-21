@@ -5,3 +5,6 @@ result-*
 .atl/
 .codegraph
 .pi
+
+# Local Organic Driven Development task state
+odd/
