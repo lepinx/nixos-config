@@ -1,8 +1,4 @@
-{
-  pkgs,
-  pkgsUnstable,
-  ...
-}:
+{ pkgs, ... }:
 
 let
   heliumVersion = "0.15.1.1";
@@ -34,7 +30,6 @@ in
     helium
     nautilus
     podman-compose
-    pkgsUnstable.opencode
   ];
 
   programs = {

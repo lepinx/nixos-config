@@ -67,119 +67,97 @@ exit
 Con `direnv`, el flujo es más cómodo: al entrar al directorio se carga el shell,
 y al salir se descarga.
 
-## Entorno FHS para agentes
+## Runtime de agentes
 
-Las herramientas de agentes no usan un `devShell` ni instalan Node, npm, PNPM o
-Go globalmente. Nix provee un entorno FHS llamado `agent-runtime`, expuesto por
-el comando `agent`. Dentro existen rutas Linux convencionales como
-`/usr/bin/tar`, necesarias para extensiones como `gentle-pi`.
+Pi y Codex son los agentes de código soportados por esta configuración. Sus
+**ejecutables** los provee `pkgsUnstable` mediante el perfil de usuario de Nix;
+la revisión queda fijada por `flake.lock`. No instalar ni actualizar esos
+binarios con npm, instaladores upstream, `pi update self` ni el mecanismo de
+autoactualización upstream de Codex: esos flujos no deben reemplazar los
+binarios administrados por Nix. Para actualizarlos, revisar y actualizar el
+input bloqueado y luego aplicar la generación de Home Manager.
 
-El entorno es una capa de compatibilidad, no una sandbox de seguridad: los
-procesos conservan tus permisos de usuario y pueden modificar tu directorio
-personal. Al cerrarlo, Node, npm, PNPM y Go dejan de estar en el `PATH` normal.
-
-Home Manager instala shims declarativos para `pi` y `codegraph` en
-`~/.local/bin`. Esos comandos entran directamente al entorno FHS y ejecutan sus
-binarios npm mutables, así que para el uso diario se invocan sin el prefijo
-`agent`. El comando `agent` se conserva como punto de entrada FHS genérico y
-explícito, útil para depuración o para ejecutar herramientas puntuales dentro del
-entorno. Usá `gentle-ai` (`install`, `upgrade` y `sync`) y `engram` directamente
-desde un shell host normal, nunca mediante `agent`: `gentle-ai sync` es
-incompatible con la vista de rutas de ejecutables del entorno FHS. Para abrir una
-terminal FHS cuando haga falta:
+Node y el prefijo npm aislado continúan siendo dependencias de host declaradas
+por Nix/Home Manager. Home Manager expone `NPM_CONFIG_PREFIX` y
+`NPM_CONFIG_CACHE`, mantiene disponibles `~/.local/bin` y el directorio `bin`
+del prefijo, y Nix provee Node. El perfil Nix tiene prioridad: `pi` y `codex`
+resuelven allí antes que los binarios heredados en esas rutas mutables. Abrí una
+terminal host nueva —o ejecutá `exec fish -l`— después de activar cambios de
+Home Manager y verificá el orden con:
 
 ```bash
-agent
+type -a pi codex
 ```
 
-También podés ejecutar un comando puntual. El split soportado es:
+El prefijo y su caché permanecen deliberadamente mutables y fuera del store:
+
+```text
+~/.local/share/agent-runtime/npm/  # prefijo npm para CodeGraph y otras herramientas
+~/.cache/agent-runtime/npm/        # caché npm correspondiente
+```
+
+Los binarios heredados y el estado de Pi, Codex, CodeGraph, Gentle AI y Engram
+se conservan sin que Nix/Home Manager los borre ni sobrescriba. No se escribe
+nunca dentro de `/nix/store`.
+
+### Pi, CodeGraph y extensiones
+
+CodeGraph y otras herramientas npm siguen instalándose y actualizándose mediante
+sus flujos upstream en el prefijo npm mutable. Las extensiones de Pi también son
+mutables: `pi install` y `pi update --extensions` las gestionan fuera del store,
+sin modificar el ejecutable Nix de Pi. Las extensiones ejecutan código con tus
+permisos de usuario; instalalas sólo desde fuentes revisadas o confiables.
+
+Después de cambios upstream en extensiones de Pi, Gentle AI o Engram, ejecutá:
 
 ```bash
-# Herramientas FHS diarias, mediante shims declarativos
-pi
-codegraph
-
-# Entrada FHS genérica o de depuración
-agent npm --version
-
-# Herramientas host; nunca mediante agent
-gentle-ai install
-gentle-ai upgrade
 gentle-ai sync
-engram
 ```
 
-Después de activar esta configuración de Home Manager, abrí una terminal host
-nueva (o iniciá sesión de nuevo): las sesiones que ya estaban abiertas conservan
-su `PATH` anterior. Fish también incorpora `~/.local/bin` al iniciar una shell
-interactiva. Si `pi`, `codegraph`, `gentle-ai` o `engram` responden `command not
-found` después de la activación, recargá Fish con `exec fish -l` y verificá el
-`PATH` con `printf '%s\n' "$PATH"`.
+Eso sincroniza los artefactos administrados por Gentle AI; no instala ni
+actualiza automáticamente los ejecutables Nix de Pi o Codex.
 
-### Codex
+#### Limitación de gentle-pi
 
-El comando `codex` conserva el wrapper FHS para ejecutar con el mismo entorno
-de agentes, pero la CLI se instala y actualiza directamente desde OpenAI. Tras
-aplicar esta configuración, instalarla —o actualizarla— con:
+El instalador package-local de `gentle-pi` 3.7.0 sólo confía en `/usr/bin/tar`
+o `/bin/tar`; esas rutas no existen en una instalación NixOS vanilla. Por eso
+puede fallar una instalación nueva o la autoreparación, aunque un binario ya
+instalado puede seguir funcionando.
 
-```bash
-curl -fsSL https://chatgpt.com/codex/install.sh | sh
-```
+### Gentle AI y Engram
 
-El instalador deja el binario en `~/.local/bin/codex`; el wrapper lo invoca sin
-depender de la versión que empaquete nixpkgs.
-
-### Instalación de Gentle AI
-
-Después de aplicar la configuración, ejecutar el instalador oficial desde un
-shell host normal, sin fijar una versión en esta configuración:
+El CLI independiente de Gentle AI se instala desde un shell host normal, sin
+fijar una versión en esta configuración. Este comando no soluciona la
+instalación package-local de `gentle-pi` descrita arriba:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
 ```
 
-El instalador oficial elige y mantiene su canal estable. Cuando termine,
-iniciar el configurador directamente desde el shell host:
+El instalador oficial elige y mantiene su canal estable. Al terminar, iniciá
+`gentle-ai` y configurá únicamente Pi. El instalador y `gentle-ai sync` son los
+dueños de sus skills, prompts, configuraciones MCP y perfiles; no mezclar esos
+archivos con `home.file` de Home Manager. Para actualizar Gentle AI y sus
+configuraciones gestionadas, seguí el flujo upstream desde un shell host:
 
 ```bash
-gentle-ai
+gentle-ai upgrade
+gentle-ai sync
 ```
 
-Elegir Codex, OpenCode y Pi, y los componentes que quieras. El instalador y
-`gentle-ai sync` son los dueños de sus skills, prompts, configuraciones MCP y
-perfiles: no mezclar esos archivos con `home.file` de Home Manager.
-
-Pi usa npm internamente incluso si PNPM es el gestor preferido para proyectos.
-Su prefijo mutable queda aislado en:
+El estado gestionado de Gentle AI y la memoria local de Engram permanecen fuera
+del store:
 
 ```text
-~/.local/share/agent-runtime/npm/
-```
-
-Su caché se guarda en `~/.cache/agent-runtime/npm/`. Ambos directorios se
-migran juntos al renombrar el runtime, sin reinstalar paquetes.
-
-No se escribe nunca dentro de `/nix/store` y no se instala Node/npm/Go en el
-perfil global. El estado normal de Gentle AI también es mutable y vive en:
-
-```text
-~/.gentle-ai/    # selección de agentes, backups y configuración gestionada
+~/.gentle-ai/    # configuración y backups gestionados
 ~/.pi/           # paquetes y configuración de Pi
-~/.engram/       # memoria SQLite local
+~/.engram/       # memoria SQLite local de Engram
 ~/.local/bin/    # gentle-ai y engram instalados por upstream
 ```
 
-### Engram
-
-Engram aporta memoria persistente de agentes. El instalador de Gentle AI lo
-instala en `~/.local/bin`; los datos viven fuera del store:
-
-```text
-~/.engram/engram.db
-```
-
-La base SQLite local es la fuente de verdad. Sus archivos `-wal` y `-shm` son
-parte normal de SQLite y nunca se borran por separado. Para explorarla:
+La base `~/.engram/engram.db` es la fuente de verdad de Engram. Sus archivos
+`-wal` y `-shm` son parte normal de SQLite y nunca se borran por separado. Para
+explorarla:
 
 ```bash
 engram tui
@@ -187,42 +165,8 @@ engram search "texto a buscar"
 ```
 
 La sincronización de memoria por proyecto es opcional y crea `.engram/` dentro
-del repositorio. Antes de versionarla, revisar su contenido: puede contener
+del repositorio. Antes de versionarla, revisá su contenido: puede incluir
 decisiones, contexto o referencias que no querés compartir.
-
-
-### Pi y las extensiones Gentle
-
-El binario de Pi se instala desde npm en el prefijo mutable del runtime. Usá
-la entrada FHS genérica para npm:
-
-```bash
-agent npm install -g --ignore-scripts --min-release-age=0 @earendil-works/pi-coding-agent
-```
-
-El shim `pi` lo ejecuta dentro del entorno FHS, con el prefijo npm aislado y con
-`tar` en una ruta FHS. El binario y las extensiones se actualizan por separado:
-
-```bash
-pi update self
-pi update --extensions
-```
-
-Las instalaciones posteriores con `pi install` pueden usar el flujo soportado
-sin intentar escribir en el store de Nix. En cambio, `gentle-ai install` se
-ejecuta directamente desde el shell host normal, nunca mediante `agent`.
-
-Para actualizar Gentle AI y sus configuraciones gestionadas, seguir el flujo de
-upstream directamente desde un shell host normal, nunca mediante `agent`:
-
-```bash
-gentle-ai upgrade
-gentle-ai sync
-```
-
-Revisar los cambios y los backups que Gentle AI crea antes de aceptar una
-actualización. Las extensiones de Pi ejecutan código con tus permisos de
-usuario; instalarlas sólo desde fuentes que revisaste o en las que confiás.
 
 ## Abbreviations, aliases y funciones Fish
 

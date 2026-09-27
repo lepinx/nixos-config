@@ -97,7 +97,7 @@ rollback.
 
 ## Política de versiones
 
-El sistema sigue `nixos-26.05`. Niri y OpenCode provienen selectivamente de
+El sistema sigue `nixos-26.05`. Niri proviene selectivamente de
 `nixos-unstable`; Noctalia sigue su rama v5. Esto mantiene estable la base sin
 congelar las aplicaciones que evolucionan rápido.
 
@@ -162,6 +162,20 @@ diario.
 Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
+
+Pi y Codex son los agentes de código soportados. Sus ejecutables provienen de
+`pkgsUnstable` y quedan fijados por `flake.lock`; no usar `pi update self` ni el
+auto-update upstream de Codex para reemplazarlos. Las extensiones de Pi, Gentle
+AI, Engram y sus datos siguen siendo mutables y se conservan fuera del store.
+Tras cambios upstream en esos componentes, ejecutar `gentle-ai sync`. El orden
+del `PATH` debe resolver primero los binarios Nix; verificarlo con
+`type -a pi codex`.
+
+El instalador package-local de `gentle-pi` 3.7.0 sólo confía en
+`/usr/bin/tar` o `/bin/tar`; esas rutas no existen en una instalación NixOS
+vanilla. Por eso puede fallar una instalación nueva o la autoreparación, aunque
+un binario ya instalado puede seguir funcionando. Ver
+[Desarrollo con devShells](docs/development.md).
 
 ## Git y archivos generados
 

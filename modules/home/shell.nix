@@ -102,7 +102,15 @@ in
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
-      set -gx PATH "$HOME/.local/bin" (string match -v -- "$HOME/.local/bin" $PATH)
+      set -gx PATH \
+        "/etc/profiles/per-user/$USER/bin" \
+        (string match -v -- \
+          "/etc/profiles/per-user/$USER/bin" \
+          (string match -v -- \
+            "$HOME/.local/share/agent-runtime/npm/bin" \
+            (string match -v -- "$HOME/.local/bin" $PATH))) \
+        "$HOME/.local/share/agent-runtime/npm/bin" \
+        "$HOME/.local/bin"
       fish_vi_key_bindings
       set fish_greeting
 
