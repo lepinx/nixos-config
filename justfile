@@ -39,6 +39,12 @@ health:
 hotkeys:
     niri msg action show-hotkey-overlay
 
+# Report Noctalia keys set by both layers, where the UI override wins.
+noctalia-diff:
+    nix-instantiate --eval --raw configs/scripts/noctalia-shadowed-keys.nix \
+        --argstr declarative "${XDG_CONFIG_HOME:-$HOME/.config}/noctalia/config.toml" \
+        --argstr overrides "${XDG_STATE_HOME:-$HOME/.local/state}/noctalia/settings.toml"
+
 warnings lines="120":
     journalctl -p warning..alert -b --no-pager -n {{ lines }}
     journalctl --user -p warning..alert -b --no-pager -n {{ lines }}
