@@ -193,16 +193,16 @@ desde la configuración global de Git; crear ese archivo localmente usando
 
 - Niri se configura en la plantilla `configs/niri/config.kdl.in`; Home Manager
   genera el archivo final `~/.config/niri/config.kdl`.
-- La barra, tema, escala, wallpaper y Dock de Noctalia se declaran en
-  `modules/home/desktop.nix`.
+- La capa declarativa de Noctalia (barra, tema, escala, idle, keybinds) se
+  declara en `modules/home/desktop.nix`.
 - La barra ocupa todo el ancho, mantiene el reloj centrado y oculta multimedia,
   Bluetooth y notificaciones cuando no tienen información útil.
-- La interfaz de Noctalia permite probar cambios, pero los guarda como
-  sobrescrituras mutables en `~/.local/state/noctalia/settings.toml`; ese archivo
-  no pertenece al repositorio. Una vez elegido un cambio permanente, debe
-  trasladarse al módulo de Home Manager para que aparezca en `git diff`.
-- El wallpaper seleccionado, historiales y cachés son estado local deliberado y
-  no se versionan.
+- La interfaz de Noctalia permite probar cambios y los guarda como
+  sobrescrituras en `configs/noctalia/settings.toml`, linkeado desde Home
+  Manager: lo que toques en la UI queda versionado y aparece en `git diff`.
+  `just noctalia-diff` avisa si una clave quedó duplicada entre las dos capas.
+- Los historiales, plugins y cachés de Noctalia siguen siendo estado local
+  deliberado y no se versionan.
 
 ## Energía y bloqueo
 

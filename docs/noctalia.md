@@ -1,83 +1,69 @@
-# Noctalia: cambios en vivo y configuración declarativa
+# Noctalia: capa declarativa y overrides versionados
 
-La configuración permanente de Noctalia vive en:
+Noctalia arma la configuración efectiva en dos capas, y **la segunda siempre
+gana**:
 
-```text
-modules/home/desktop.nix
-```
+| Capa | Archivo | Quién escribe |
+| --- | --- | --- |
+| Base declarativa | `~/.config/noctalia/config.toml` → symlink al Nix store | Home Manager, desde `modules/home/desktop.nix` |
+| Overrides | `~/.local/state/noctalia/settings.toml` → symlink a `configs/noctalia/settings.toml` | La UI de Settings y ediciones a mano |
 
-Home Manager genera:
+Noctalia lee primero todos los `*.toml` del config dir y después superpone el
+`settings.toml` del state dir. Ese archivo queda fuera del Nix store a propósito,
+porque la UI necesita poder escribirlo, y está linkeado a un archivo del repo
+para que todo lo que toques en la UI quede versionado.
 
-```text
-~/.config/noctalia/config.toml
-```
+Noctalia escribe el override resolviendo el symlink, y además vigila con inotify
+el directorio destino, así que:
 
-Ese archivo apunta al Nix store y no se edita a mano.
+- lo que guardás en la UI se aplica sin rebuild y aparece en `git diff`;
+- lo que editás a mano en el repo se recarga en vivo.
 
-## Abrir la configuración visual
+## Flujo normal
 
-Desde Niri:
+1. Cambiás algo en la UI de Noctalia (`Win+,` o `noctalia msg settings-open`).
+2. Noctalia escribe el override en `configs/noctalia/settings.toml`.
+3. `git diff configs/noctalia/settings.toml` te muestra exactamente qué cambió.
+4. `git commit`.
 
-```text
-Win+,
-```
+Para volver atrás no hace falta rollback del sistema: alcanza con
+`git checkout configs/noctalia/settings.toml`. Noctalia recarga solo.
 
-O desde terminal:
+**Regla de oro:** si una clave está en `configs/noctalia/settings.toml`, esa
+manda. No la repitas en `programs.noctalia.settings`, porque el valor declarativo
+queda muerto y un rebuild parecería no hacer nada.
 
-```bash
-noctalia msg settings-open
-```
-
-La UI de Noctalia permite probar cambios en vivo. Cuando guardás algo desde la
-UI, Noctalia lo escribe como override mutable en:
-
-```text
-~/.local/state/noctalia/settings.toml
-```
-
-Ese archivo es estado local. Sirve para experimentar, pero no se versiona.
-
-## Ver la configuración activa
-
-Ver sólo overrides locales:
+## Detectar claves tapadas
 
 ```bash
-sed -n '1,220p' ~/.local/state/noctalia/settings.toml
+just noctalia-diff
 ```
 
-Ver configuración efectiva/mezclada:
+Compara las dos capas, lista las claves que existen en ambas y muestra el valor
+de cada lado. Si no hay duplicados, lo dice. Corrélo después de promover claves
+a la capa declarativa.
 
-```bash
-noctalia config export merged
-```
+## Qué vive en la capa declarativa
 
-Ver configuración completa:
+Todo lo que la UI no toca, porque necesita cálculo en Nix o simplemente no se
+ajusta desde la interfaz:
 
-```bash
-noctalia config export full
-```
+- datos de la shell: fuente, escala, telemetría, agente polkit, apps como
+  servicios systemd;
+- idle, bloqueo y umbral de batería;
+- keybinds de la UI;
+- `theme.templates.user.niri`, que necesita el store path de `niri` en el
+  `post_hook`;
+- `wallpaper.directory`, clima y ubicación;
+- plugins.
 
-Validar:
+El resto —dock, layout del lockscreen, wallpaper concreto, y cualquier cosa que
+toques desde la UI— vive en `configs/noctalia/settings.toml`.
 
-```bash
-noctalia config validate
-```
+## Promover un cambio a la capa declarativa
 
-Recargar Noctalia:
-
-```bash
-noctalia msg config-reload
-```
-
-Reiniciar el servicio de usuario:
-
-```bash
-systemctl --user restart noctalia
-```
-
-## Cómo copiar un cambio al repo
-
-La conversión es directa:
+A veces conviene que un valor quede en Nix (por ejemplo, para que se valide en el
+build o para parametrizarlo). El pasaje es directo:
 
 ```toml
 [bar.main]
@@ -99,39 +85,60 @@ programs.noctalia.settings.bar.main = {
 };
 ```
 
-Otro ejemplo:
-
-```toml
-[widget.media]
-max_length = 220
-hide_when_no_media = true
-```
-
-se vuelve:
-
-```nix
-programs.noctalia.settings.widget.media = {
-  max_length = 220;
-  hide_when_no_media = true;
-};
-```
-
-Regla práctica:
+Reglas:
 
 - tabla TOML `[a.b.c]` → atributo Nix `a.b.c = { ... };`
-- strings TOML → strings Nix;
-- arrays TOML → listas Nix;
-- booleanos TOML → `true`/`false`;
-- números TOML → números Nix;
-- claves con `_` se mantienen igual.
+- strings, booleanos, números y listas se traducen uno a uno;
+- las claves con `_` se mantienen igual.
+
+Después de promover, **borrá la clave del TOML**, o vas a crear un valor muerto.
+`just noctalia-diff` te lo recuerda.
+
+## Migración (una sola vez)
+
+El `settings.toml` del state dir tiene que dejar de ser un archivo real para
+pasar a ser el symlink. Home Manager no reemplaza archivos existentes que no
+gestiona, así que el orden importa:
+
+```bash
+systemctl --user stop noctalia
+rm ~/.local/state/noctalia/settings.toml
+just switch
+systemctl --user start noctalia
+```
+
+## Ver y validar la configuración activa
+
+```bash
+# Config efectiva, con los overrides ya mezclados
+noctalia config export merged
+
+# Config completa, incluyendo defaults de fábrica
+noctalia config export full
+
+# Valida la config tal como la carga la shell y reporta claves obsoletas
+noctalia config validate
+
+# Solo un archivo
+noctalia config validate configs/noctalia/settings.toml
+
+# Recargar, o reiniciar el servicio de usuario
+noctalia msg config-reload
+systemctl --user restart noctalia
+```
+
+`noctalia config validate` sin argumentos avisa cuando una clave quedó obsoleta
+o no existe. Corrélo después de tocar la capa declarativa: el módulo de Home
+Manager también valida en tiempo de build, pero solo si el paquete está
+disponible.
 
 ## Clima y ubicación
 
-Noctalia usa una única configuración de ubicación para clima, night light y
-modo de tema automático.
+Noctalia usa una única configuración de ubicación para clima, night light y modo
+de tema automático. En este repo vive en la capa declarativa.
 
-Para una PC personal con repo público, lo más privado y reproducible es usar
-una ciudad amplia o coordenadas aproximadas:
+Para una PC personal, lo más privado y reproducible es usar una ciudad amplia o
+coordenadas aproximadas:
 
 ```nix
 programs.noctalia.settings = {
@@ -148,40 +155,32 @@ programs.noctalia.settings = {
 };
 ```
 
-Si preferís que detecte dónde estás cuando viajás:
+Con `auto_locate = true` Noctalia consulta geolocalización por IP a su propio
+servicio. Es lo que está configurado hoy; conviene solo si esa comodidad vale la
+pena.
 
-```nix
-programs.noctalia.settings.location.auto_locate = true;
-```
+## Notas y límites
 
-Ese modo consulta geolocalización por IP mediante el servicio de Noctalia, así
-que conviene usarlo sólo si esa comodidad vale la pena.
-
-## Flujo recomendado
-
-1. Probar en la UI de Noctalia.
-2. Mirar qué apareció en `~/.local/state/noctalia/settings.toml`.
-3. Copiar sólo el cambio útil a `modules/home/desktop.nix`.
-4. Ejecutar `just check`.
-5. Aplicar con `just test` o `just switch`.
-6. Reiniciar Noctalia si no se actualiza sola.
-
-Una vez copiado al repo, conviene limpiar el override local correspondiente
-para que no tape la configuración declarativa.
+- **Nada de comentarios en `configs/noctalia/settings.toml`.** Noctalia reescribe
+  el archivo completo al guardar y los pierde. La documentación va acá.
+- El TOML versionado incluye estado de máquina: el path absoluto del wallpaper y
+  las posiciones de los widgets del lockscreen. Es esperable que cambie seguido.
+- `state.toml`, plugins, templates de la comunidad e historial de notificaciones
+  siguen siendo estado local en `~/.local/state/noctalia` y no se versionan.
+- Los valores de `accessibility.ui_scale` y otros que se ajustan en la UI se
+  pueden mover entre capas, pero nunca tienen que estar en las dos.
 
 ## Revisión pendiente para Noctalia v5 estable
 
-Cuando Noctalia v5 salga estable, revisar si ya soporta de forma nativa cosas
-que hoy resolvemos a mano:
+Cuando Noctalia v5 salga estable, revisar si ya soporta de forma nativa cosas que
+hoy resolvemos a mano:
 
-- integración de secretos/launcher, para reemplazar o simplificar
-  `rofi-rbw` + `wofi`;
+- integración de secretos/launcher, para reemplazar o simplificar `rofi-rbw` +
+  `wofi`;
 - acciones custom del launcher para buscar secretos, copiar usuario/password,
   autotype con confirmación y abrir URLs asociadas al item;
 - un plugin propio de Noctalia para consultar `rbw` sin depender de un launcher
   externo, si la API de plugins lo vuelve cómodo;
 - keybinds estilo Vim en launcher y paneles;
 - generación de tema desde wallpaper y compatibilidad con Stylix;
-- overrides locales en `~/.local/state/noctalia/settings.toml` que puedan haber
-  quedado obsoletos;
 - nombres de opciones que hayan cambiado entre la versión actual y v5 estable.
