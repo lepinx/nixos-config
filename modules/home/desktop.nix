@@ -106,9 +106,11 @@ in
     enable = true;
     systemd.enable = true;
     settings = {
+      accessibility = {
+        ui_scale = noctaliaUiScale;
+      };
       shell = {
         font_family = "JetBrainsMono Nerd Font";
-        ui_scale = noctaliaUiScale;
         telemetry_enabled = false;
         polkit_agent = true;
         niri_overview_type_to_launch_enabled = true;
@@ -232,7 +234,7 @@ in
       widget = {
         workspaces = {
           type = "workspaces";
-          display = "none";
+          show_labels = false;
         };
         clock = {
           type = "clock";
