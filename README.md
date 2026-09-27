@@ -150,8 +150,8 @@ La gestión de credenciales usa la extensión del navegador y `bitwarden-cli`.
 Podman es el runtime de containers del sistema. `docker` queda como alias de
 `podman` para compatibilidad CLI, y `podman-compose` cubre stacks locales de
 bases de datos. El socket Docker-compatible queda desactivado por defecto porque
-requiere dar permisos equivalentes a Docker; se puede evaluar si VS Code
-Dev Containers lo necesita de verdad.
+requiere dar permisos equivalentes a Docker; habilitarlo sólo cuando un flujo
+local concreto lo justifique.
 
 Los runtimes, linters y CLIs específicos viven en `devShell`/`direnv` por
 repositorio. El perfil global conserva sólo herramientas transversales de uso

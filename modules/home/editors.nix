@@ -4,11 +4,6 @@
   repoPath,
   ...
 }:
-let
-  vscodeSecure = pkgs.vscode.override {
-    commandLineArgs = "--password-store=gnome-libsecret";
-  };
-in
 {
   home.packages = [
     pkgs.lua-language-server
@@ -28,16 +23,6 @@ in
   };
 
   programs = {
-    vscode = {
-      enable = true;
-      package = vscodeSecure;
-      mutableExtensionsDir = true;
-      argvSettings = {
-        enable-crash-reporter = false;
-        locale = "en";
-      };
-    };
-
     helix = {
       enable = true;
       settings = {
@@ -108,5 +93,4 @@ in
     };
   };
 
-  # VS Code owns its local configuration and extensions.
 }
