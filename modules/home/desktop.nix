@@ -69,29 +69,40 @@ in
     thunderbird
   ];
 
-  xdg.configFile = {
-    "autostart/nm-applet.desktop".text = ''
-      [Desktop Entry]
-      Type=Application
-      Name=NetworkManager Applet
-      Hidden=true
-      X-GNOME-Autostart-enabled=false
-    '';
-    "ghostty/config".text =
-      builtins.replaceStrings [ "font-size = 9" ] [ "font-size = ${toString ghosttyFontSize}" ]
-        ghosttyConfig;
-    "niri/config.kdl".text =
-      builtins.replaceStrings
-        [
-          "@niri_outputs_path@"
-          "@niri_host_binds@"
-        ]
-        [
-          "${config.xdg.configHome}/niri/outputs.kdl"
-          niriHostBinds
-        ]
-        niriConfig;
-    "niri/outputs.kdl".source = niriOutputsPath;
+  xdg = {
+    configFile = {
+      "autostart/nm-applet.desktop".text = ''
+        [Desktop Entry]
+        Type=Application
+        Name=NetworkManager Applet
+        Hidden=true
+        X-GNOME-Autostart-enabled=false
+      '';
+      "ghostty/config".text =
+        builtins.replaceStrings [ "font-size = 9" ] [ "font-size = ${toString ghosttyFontSize}" ]
+          ghosttyConfig;
+      "niri/config.kdl".text =
+        builtins.replaceStrings
+          [
+            "@niri_outputs_path@"
+            "@niri_host_binds@"
+          ]
+          [
+            "${config.xdg.configHome}/niri/outputs.kdl"
+            niriHostBinds
+          ]
+          niriConfig;
+      "niri/outputs.kdl".source = niriOutputsPath;
+    };
+
+    # Noctalia reads every file in the config dir and then overlays the state-dir
+    # settings.toml, which the Settings UI writes and which always wins. That
+    # path must stay writable and outside the Nix store, so it is linked to the
+    # tracked file below; a plain source would resolve into the store and the UI
+    # would fail to save. Noctalia writes through the symlink and watches the
+    # target directory, so UI edits land here and external edits reload live.
+    stateFile."noctalia/settings.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/noctalia/settings.toml";
   };
 
   home.activation.ensureNoctaliaThemeTargets = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -260,7 +271,6 @@ in
         };
       };
       dock = {
-        enabled = true;
         position = "bottom";
         icon_size = 44;
         auto_hide = false;
