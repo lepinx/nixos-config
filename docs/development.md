@@ -159,6 +159,23 @@ del store:
 ~/.local/bin/    # gentle-ai y engram instalados por upstream
 ```
 
+La excepción deliberada es el store de perfiles de agentes
+(`~/.pi/gentle-ai/profiles.json`): es una decisión autoral, no estado, y se
+versiona como copia manual en `configs/pi/gentle-ai/profiles.json`. Nunca como
+`home.file`, porque el panel `/gentle:profiles` reescribe el marcador de perfil
+activo y el snapshot no debe pelear con esa escritura. Después de un cambio de
+routing a propósito, refrescar la copia desde la raíz del repositorio:
+
+```bash
+cp ~/.pi/gentle-ai/profiles.json configs/pi/gentle-ai/profiles.json
+```
+
+Tras una reinstalación, restaurar con la copia inversa:
+
+```bash
+cp configs/pi/gentle-ai/profiles.json ~/.pi/gentle-ai/profiles.json
+```
+
 La base `~/.engram/engram.db` es la fuente de verdad de Engram. Sus archivos
 `-wal` y `-shm` son parte normal de SQLite y nunca se borran por separado. Para
 explorarla:
