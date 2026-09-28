@@ -163,13 +163,13 @@ Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
 
-Pi y Codex son los agentes de código soportados. Sus ejecutables provienen de
-`pkgsUnstable` y quedan fijados por `flake.lock`; no usar `pi update self` ni el
-auto-update upstream de Codex para reemplazarlos. Las extensiones de Pi, Gentle
-AI, Engram y sus datos siguen siendo mutables y se conservan fuera del store.
-Tras cambios upstream en esos componentes, ejecutar `gentle-ai sync`. El orden
-del `PATH` debe resolver primero los binarios Nix; verificarlo con
-`type -a pi codex`.
+Pi, Codex y OpenCode son los agentes de código soportados. Sus ejecutables
+provienen de `pkgsUnstable` y quedan fijados por `flake.lock`; no usar
+`pi update self` ni los auto-updates upstream de Codex y OpenCode para
+reemplazarlos. Las extensiones de Pi, Gentle AI, Engram y sus datos siguen
+siendo mutables y se conservan fuera del store. Tras cambios upstream en esos
+componentes, ejecutar `gentle-ai sync`. El orden del `PATH` debe resolver
+primero los binarios Nix; verificarlo con `type -a pi codex opencode`.
 
 El instalador package-local de `gentle-pi` 3.7.0 sólo confía en
 `/usr/bin/tar` o `/bin/tar`; esas rutas no existen en una instalación NixOS

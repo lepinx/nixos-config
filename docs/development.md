@@ -69,12 +69,12 @@ y al salir se descarga.
 
 ## Runtime de agentes
 
-Pi y Codex son los agentes de código soportados por esta configuración. Sus
-**ejecutables** los provee `pkgsUnstable` mediante el perfil de usuario de Nix;
-la revisión queda fijada por `flake.lock`. No instalar ni actualizar esos
-binarios con npm, instaladores upstream, `pi update self` ni el mecanismo de
-autoactualización upstream de Codex: esos flujos no deben reemplazar los
-binarios administrados por Nix. Para actualizarlos, revisar y actualizar el
+Pi, Codex y OpenCode son los agentes de código soportados por esta
+configuración. Sus **ejecutables** los provee `pkgsUnstable` mediante el perfil
+de usuario de Nix; la revisión queda fijada por `flake.lock`. No instalar ni
+actualizar esos binarios con npm, instaladores upstream, `pi update self` ni los
+mecanismos de autoactualización upstream de Codex y OpenCode: esos flujos no
+deben reemplazar los binarios administrados por Nix. Para actualizarlos, revisar y actualizar el
 input bloqueado y luego aplicar la generación de Home Manager.
 
 Node y el prefijo npm aislado continúan siendo dependencias de host declaradas

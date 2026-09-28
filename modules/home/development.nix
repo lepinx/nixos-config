@@ -35,6 +35,7 @@ in
     pkgsUnstable.glab
     pkgsUnstable.pi-coding-agent
     pkgsUnstable.codex
+    pkgsUnstable.opencode
     glab-tui
     just-lsp
     jujutsu
