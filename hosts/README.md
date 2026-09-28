@@ -20,7 +20,9 @@ La regla práctica:
 
 ## Próximo host previsto
 
-- `homelab`: servidor casero documentado, todavía sin definición NixOS.
+- `homelab`: servidor casero con scaffold en `hosts/homelab/` (`default.nix` más
+  README), todavía sin `hardware-configuration.nix` y por lo tanto sin exponerse
+  como `nixosConfigurations`.
 
 No se agregan como `nixosConfigurations` hasta tener su
 `hardware-configuration.nix` real. Así el flake sólo expone máquinas con

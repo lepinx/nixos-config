@@ -10,6 +10,19 @@ Este host usa criterios distintos a una workstation:
 - secretos declarativos con `sops-nix`;
 - backups del servidor definidos en este host.
 
+Estado actual:
+
+El scaffold existe: `hosts/homelab/default.nix` importa `modules/nixos/profiles/server.nix`,
+y el perfil `server` quedó corregido para traer sólo base + mantenimiento (red, boot,
+usuarios y servicios se declaran por host o por módulo de servicio).
+
+Este host todavía NO se expone como `nixosConfigurations`: falta su
+`hardware-configuration.nix` real. Recién ahí el flake va a construir esta máquina.
+
+Próximo paso: escaneo de hardware de la torre vieja con Ubuntu (presencia de TPM2,
+UEFI/BIOS, discos y red). Ese relevamiento define el modelo de desbloqueo LUKS, el
+layout de disko y la IP fija.
+
 Checklist inicial:
 
 1. Auditar servicios del servidor.
@@ -19,7 +32,7 @@ Checklist inicial:
 5. Elegir estrategia de disco: conservar layout, migrar con Disko o reinstalar.
 6. Crear el usuario administrador y habilitar SSH de forma explícita.
 7. Crear módulos por servicio en `modules/nixos/services/`.
-8. Agregar `nixosConfigurations.homelab` junto con el hardware real.
+8. Agregar `nixosConfigurations.homelab` en el flake junto con el hardware real.
    Usar `enableHomeManager = false`, o crear un perfil Home Manager propio de
    servidor si realmente hace falta.
 
