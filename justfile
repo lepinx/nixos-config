@@ -33,8 +33,30 @@ history:
     nix profile history --profile /nix/var/nix/profiles/system
 
 health:
+    #!/usr/bin/env bash
+    set -uo pipefail
     systemctl --failed --no-pager
     systemctl --user --failed --no-pager
+
+    echo
+    echo "Mutable agent components (outside Nix; missing entries are manual installs):"
+    check() {
+        if command -v "$1" >/dev/null 2>&1; then
+            printf '  ok       %s\n' "$1"
+        else
+            printf '  MISSING  %s  (install: %s)\n' "$1" "$2"
+        fi
+    }
+    check pi 'provided by pkgsUnstable; run just switch'
+    check codex 'provided by pkgsUnstable; run just switch'
+    check codegraph 'npm install -g --prefix "$HOME/.local/share/agent-runtime/npm" @colbymchenry/codegraph'
+    check gentle-ai 'curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash'
+    check engram 'installed alongside gentle-ai; run the gentle-ai installer and then gentle-ai sync'
+    if [ -d "$HOME/.pi/agent/npm/node_modules/gentle-pi" ]; then
+        echo '  ok       gentle-pi (Pi extension)'
+    else
+        echo '  MISSING  gentle-pi (Pi extension)  (install: pi install npm:gentle-pi; may fail on NixOS, see docs/development.md)'
+    fi
 
 hotkeys:
     niri msg action show-hotkey-overlay

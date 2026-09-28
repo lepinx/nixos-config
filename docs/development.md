@@ -89,6 +89,10 @@ Home Manager y verificá el orden con:
 type -a pi codex
 ```
 
+`just health` también reporta si falta algún componente mutable fuera de Nix
+(`gentle-ai`, `engram`, la extensión `gentle-pi`) y muestra el comando de
+instalación correspondiente. Es un chequeo manual: no corre con `just switch`.
+
 El prefijo y su caché permanecen deliberadamente mutables y fuera del store:
 
 ```text
