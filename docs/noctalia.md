@@ -33,16 +33,6 @@ Para volver atrás no hace falta rollback del sistema: alcanza con
 manda. No la repitas en `programs.noctalia.settings`, porque el valor declarativo
 queda muerto y un rebuild parecería no hacer nada.
 
-## Detectar claves tapadas
-
-```bash
-just noctalia-diff
-```
-
-Compara las dos capas, lista las claves que existen en ambas y muestra el valor
-de cada lado. Si no hay duplicados, lo dice. Corrélo después de promover claves
-a la capa declarativa.
-
 ## Qué vive en la capa declarativa
 
 Todo lo que la UI no toca, porque necesita cálculo en Nix o simplemente no se
@@ -92,7 +82,6 @@ Reglas:
 - las claves con `_` se mantienen igual.
 
 Después de promover, **borrá la clave del TOML**, o vas a crear un valor muerto.
-`just noctalia-diff` te lo recuerda.
 
 ## Migración (una sola vez)
 

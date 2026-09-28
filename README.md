@@ -200,7 +200,6 @@ desde la configuración global de Git; crear ese archivo localmente usando
 - La interfaz de Noctalia permite probar cambios y los guarda como
   sobrescrituras en `configs/noctalia/settings.toml`, linkeado desde Home
   Manager: lo que toques en la UI queda versionado y aparece en `git diff`.
-  `just noctalia-diff` avisa si una clave quedó duplicada entre las dos capas.
 - Los historiales, plugins y cachés de Noctalia siguen siendo estado local
   deliberado y no se versionan.
 
