@@ -61,6 +61,12 @@ TPM2 + PIN y, si aceptás, corre el mismo comando de `systemd-cryptenroll` sobre
 la partición LUKS detectada. El comando manual de abajo sigue siendo la vía de
 respaldo, por ejemplo para hacerlo después del primer arranque.
 
+El instalador además anuncia un plan de secretos que numera los tres secretos
+(passphrase de LUKS, PIN de TPM2 y contraseña de usuario) e indica cuándo se
+pide cada uno. Durante la instalación, cada prompt queda rotulado con ese
+número (`Secret 1/3`, `Secret 2/3`, `Secret 3/3`) para que no se confundan.
+Conviene mantener la passphrase de LUKS distinta de la contraseña de usuario.
+
 La configuración declarativa ya permite desbloqueo con TPM2:
 
 ```nix

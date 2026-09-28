@@ -193,6 +193,31 @@ show_disk_info() {
   echo
 }
 
+# Number and describe every secret this installer asks for, so each prompt is
+# unambiguous. The script never reads, captures, or stores any of them, and it
+# cannot verify Secret 1 and Secret 3 differ.
+show_secrets_plan() {
+  echo
+  info "Secrets plan: this installer will ask for three secrets."
+  echo
+  info "  Secret 1/3: LUKS disk passphrase"
+  info "    Prompted interactively by Disko during destroy,format,mount."
+  info "    Recommendation: long and unique, stored in a password manager (for example Bitwarden)."
+  info "    It must differ from the user password (Secret 3/3)."
+  echo
+  info "  Secret 2/3 (optional): TPM2 PIN"
+  info "    Only prompted if you accept TPM2 + PIN enrollment at the end."
+  info "    A short but non-trivial PIN typed at every boot; chosen during systemd-cryptenroll."
+  echo
+  info "  Secret 3/3: user password"
+  info "    Prompted after install by 'passwd' for the daily login."
+  info "    Recommendation: different from the LUKS passphrase (Secret 1/3)."
+  echo
+  info "This script never reads or stores these secrets and cannot verify Secret 1 and Secret 3 differ."
+  info "Keeping them different is your responsibility."
+  echo
+}
+
 # The flake declares a default diskDevice; Disko receives the selected disk
 # explicitly (see run_disko), so a different physical disk is supported without
 # editing the flake. Print an informational note when they differ.
@@ -223,7 +248,12 @@ confirm_destroy() {
 
 run_disko() {
   local disk="$1"
-  info "Running Disko (destroy,format,mount) on $disk. Disko will prompt for the LUKS passphrase."
+  echo
+  info "Disko will now prompt for the LUKS passphrase (Secret 1/3)."
+  info "Type it carefully: it is needed at boot and for recovery."
+  info "This script never sees, reads, or stores it."
+  echo
+  info "Running Disko (destroy,format,mount) on $disk."
   # The explicit --argstr overrides make Disko act on the selected disk, not on
   # the flake's default diskDevice. disko.nix requires both arguments.
   (
@@ -241,7 +271,10 @@ install_nixos() {
 }
 
 set_user_password() {
+  echo
+  info "Secret 3/3: user password."
   info "Setting the password for user '$TARGET_USER' (interactive)."
+  info "Recommendation: use a password different from the LUKS passphrase (Secret 1/3)."
   nixos-enter --root /mnt -c "passwd $TARGET_USER"
 }
 
@@ -258,6 +291,11 @@ find_luks_partition() {
 
 maybe_enroll_tpm() {
   local disk="$1" answer luks_part
+  echo
+  info "Secret 2/3 (optional): TPM2 + PIN."
+  info "Enrolling seals the disk unlock to this machine's TPM and asks only a PIN at boot."
+  info "Declining means typing the full LUKS passphrase at every boot."
+  info "The PIN itself is chosen interactively during systemd-cryptenroll."
   read -r -p "Enroll TPM2 + PIN now? [y/N] " answer
   if [[ ! "$answer" =~ ^[Yy]$ ]]; then
     info "Skipping TPM2 + PIN. You can enroll it later; see docs/luks.md."
@@ -291,6 +329,8 @@ main() {
   info "Repository root: $repo_root"
   info "Target host: $host"
 
+  show_secrets_plan
+
   local disk
   disk="$(select_disk)"
   show_disk_info "$disk"
@@ -308,14 +348,15 @@ main() {
   info "Summary:"
   info "  - Target disk: $disk"
   info "  - Host: $host"
-  info "  - Disko formatted and mounted the disk (LUKS passphrase entered by you)."
+  info "  - Disko formatted and mounted the disk (LUKS passphrase, Secret 1/3, entered by you)."
   info "  - nixos-install completed."
-  info "  - Password set for user '$TARGET_USER'."
+  info "  - Password set for user '$TARGET_USER' (Secret 3/3)."
   if [[ "$tpm_enrolled" == "yes" ]]; then
-    info "  - TPM2 + PIN enrolled."
+    info "  - TPM2 + PIN enrolled (Secret 2/3)."
   else
     info "  - TPM2 + PIN not enrolled (run it later per docs/luks.md)."
   fi
+  info "Reminder: keep the LUKS passphrase (Secret 1/3) different from the user password (Secret 3/3)."
 }
 
 main "$@"

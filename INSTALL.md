@@ -30,6 +30,24 @@ serial, y exige tipear la ruta exacta del dispositivo antes de destruir nada.
 La passphrase de LUKS la pide Disko de forma interactiva; el script no la
 guarda. Al final pregunta si querés enrolar TPM2 + PIN ahora (por defecto no).
 
+### Secretos de la instalación
+
+Antes de tocar el disco, el script imprime un "Secrets plan" (en inglés) con
+los tres secretos que va a pedir, para que quede claro qué es cada prompt:
+
+1. **Secret 1/3 — passphrase de LUKS**: la pide Disko durante
+   `destroy,format,mount`. Conviene que sea larga y única, guardada en un
+   gestor de contraseñas (por ejemplo Bitwarden).
+2. **Secret 2/3 (opcional) — PIN de TPM2**: sólo se pide si aceptás enrolar
+   TPM2 + PIN al final. Es un PIN corto pero no trivial que se tipea en cada
+   arranque, elegido durante `systemd-cryptenroll`.
+3. **Secret 3/3 — contraseña de usuario**: la pide `passwd` después de
+   instalar, para el login diario.
+
+El script nunca lee ni guarda estos secretos y no puede verificar que la
+passphrase de LUKS y la contraseña de usuario sean distintas. Conviene que lo
+sean: mantenerlas diferentes es responsabilidad tuya.
+
 El disco seleccionado se le pasa a Disko explícitamente (`--argstr
 diskDevice`), así que para instalar en otro disco no hace falta editar el
 flake: alcanza con `--disk /dev/X`. El sistema instalado monta por partlabel y
