@@ -55,6 +55,12 @@ password de usuario en el login, passphrase larga guardada fuera del repo.
 
 ## Habilitar TPM2 + PIN
 
+El script de instalación puede hacer este paso automáticamente al final de una
+instalación limpia: `scripts/install-workstation.sh` pregunta si querés enrolar
+TPM2 + PIN y, si aceptás, corre el mismo comando de `systemd-cryptenroll` sobre
+la partición LUKS detectada. El comando manual de abajo sigue siendo la vía de
+respaldo, por ejemplo para hacerlo después del primer arranque.
+
 La configuración declarativa ya permite desbloqueo con TPM2:
 
 ```nix

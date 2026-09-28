@@ -133,5 +133,11 @@
           ];
         };
       };
+
+      # Expose the disk layout as a parameterized function so the Disko CLI can
+      # override the target disk at install time with:
+      #   disko --flake .#workstation --argstr diskDevice /dev/X --argstr hostName workstation
+      # The installed system mounts by partlabel, so it stays device-independent.
+      diskoConfigurations.workstation = import ./hosts/workstation/disko.nix;
     };
 }

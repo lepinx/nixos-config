@@ -110,3 +110,7 @@ prune-generations keep="5":
     [[ "{{ keep }}" =~ ^[0-9]+$ ]]
     sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +{{ keep }}
     sudo nix store gc
+
+# Run the guarded fresh-install flow (destructive; from a NixOS ISO)
+install-workstation:
+    sudo bash scripts/install-workstation.sh

@@ -1,7 +1,41 @@
 # Instalación de workstation
 
 Guía corta para reinstalar `workstation` desde una ISO de NixOS. Este flujo
-destruye el disco configurado como `diskDevice` en `flake.nix`.
+destruye el disco seleccionado o autodetectado (por defecto el declarado como
+`diskDevice` en `flake.nix`).
+
+## Instalación automática
+
+Hay un script que hace todo el flujo en un solo comando: detección del disco,
+confirmación tipeada, Disko, `nixos-install`, `passwd` y, opcionalmente, el
+enrolamiento de TPM2 + PIN.
+
+Desde la ISO de NixOS, como root, clonar el repo y ejecutarlo:
+
+```bash
+cd /tmp
+git clone <URL-DE-ESTE-REPO> nixos-config
+cd nixos-config
+sudo ./scripts/install-workstation.sh
+```
+
+Si tenés `just` disponible, la receta hace lo mismo:
+
+```bash
+just install-workstation
+```
+
+El script detecta el disco (o acepta `--disk /dev/X`), muestra modelo, tamaño y
+serial, y exige tipear la ruta exacta del dispositivo antes de destruir nada.
+La passphrase de LUKS la pide Disko de forma interactiva; el script no la
+guarda. Al final pregunta si querés enrolar TPM2 + PIN ahora (por defecto no).
+
+El disco seleccionado se le pasa a Disko explícitamente (`--argstr
+diskDevice`), así que para instalar en otro disco no hace falta editar el
+flake: alcanza con `--disk /dev/X`. El sistema instalado monta por partlabel y
+funciona igual en cualquiera de los dos.
+
+La sección manual de abajo queda como alternativa paso a paso.
 
 ## Desde la ISO
 
