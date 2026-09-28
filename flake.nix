@@ -35,8 +35,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Rolling: tracks the upstream default branch; `just update` picks up every
+    # new herdr commit. Version history: https://github.com/herdrdev/herdr/releases
     herdr = {
-      url = "git+https://github.com/ogulcancelik/herdr?ref=refs/tags/v0.6.5";
+      url = "github:herdrdev/herdr";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
