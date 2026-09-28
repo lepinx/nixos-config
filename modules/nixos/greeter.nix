@@ -1,7 +1,7 @@
 { pkgs, userName, ... }:
 
 {
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
     greeter-args = "--session niri --user ${userName}";
     settings.cursor = {
