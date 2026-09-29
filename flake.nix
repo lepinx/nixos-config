@@ -150,8 +150,8 @@
       # The installed system mounts by partlabel, so it stays device-independent.
       diskoConfigurations.workstation = import ./hosts/workstation/disko.nix;
 
-      # Homelab has two disks; the CLI can override either target at install
-      # time with --argstr diskDeviceBoot /dev/X --argstr diskDeviceData /dev/Y.
+      # Homelab's disko layout manages only the OS SSD; the CLI can override the
+      # target disk at install time with --argstr diskDeviceBoot /dev/X.
       diskoConfigurations.homelab = import ./hosts/homelab/disko.nix;
     };
 }

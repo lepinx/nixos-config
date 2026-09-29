@@ -16,14 +16,25 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # systemd-based initrd is required for tpm2-device=auto. Unlike the
-  # workstation, this host has two LUKS devices, so the unlock configuration is
-  # declared locally instead of the single-device shared module
-  # (modules/nixos/encryption.nix).
+  # systemd-based initrd is required for tpm2-device=auto. The SSD is the only
+  # LUKS device on this host; the data HDD is left unencrypted and is mounted by
+  # filesystem label in the fileSystems block below.
   boot.initrd.systemd.enable = true;
-  boot.initrd.luks.devices = {
-    cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
-    cryptdata.crypttabExtraOpts = [ "tpm2-device=auto" ];
+  boot.initrd.luks.devices.cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
+
+  # Data HDD: staged with plain Btrfs before install and never reformatted by
+  # disko (disko only manages the SSD). The disk is mounted here declaratively by
+  # filesystem label, so the staged data survives the install untouched.
+  # Per-user subvolumes follow the pattern subvol=<user> mounted at
+  # /srv/data/<user>.
+  fileSystems."/srv/data/lucho" = {
+    device = "/dev/disk/by-label/homelab-data";
+    fsType = "btrfs";
+    options = [
+      "compress=zstd"
+      "noatime"
+      "subvol=lucho"
+    ];
   };
 
   networking = {

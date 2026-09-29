@@ -1,6 +1,5 @@
 {
   diskDeviceBoot ? "/dev/sda",
-  diskDeviceData ? "/dev/sdb",
   hostName ? "homelab",
   ...
 }:
@@ -13,14 +12,15 @@ let
     "ssd"
     "discard=async"
   ];
-
-  # Rotational disk: no "ssd" or "discard=async" hints for the HDD.
-  hddBtrfsMountOptions = [
-    "compress=zstd"
-    "noatime"
-  ];
 in
 {
+  # The data HDD is intentionally NOT managed by disko. It is staged with plain
+  # Btrfs from a live boot before install (label `homelab-data`, one subvolume
+  # per user), and mounted declaratively by filesystem label in default.nix, so
+  # the staged data survives the install untouched. Letting disko reference the
+  # data disk would reformat it and destroy that staged data. Encrypting the
+  # data disk with LUKS is a documented future option for the next hardware
+  # generation (with real backups in place).
   disko.devices = {
     disk.boot = {
       type = "disk";
@@ -67,41 +67,6 @@ in
                   "/nix" = {
                     mountpoint = "/nix";
                     mountOptions = btrfsMountOptions;
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-
-    disk.data = {
-      type = "disk";
-      device = diskDeviceData;
-      content = {
-        type = "gpt";
-        partitions = {
-          cryptdata = {
-            size = "100%";
-            content = {
-              type = "luks";
-              name = "cryptdata";
-              content = {
-                type = "btrfs";
-                extraArgs = [
-                  "-f"
-                  "-L"
-                  "homelab-data"
-                ];
-                subvolumes = {
-                  # One subvolume per user. Additional users follow the same
-                  # pattern: add a "/<user>" subvolume mounted at
-                  # "/srv/data/<user>" and a matching Samba share. Btrfs qgroup
-                  # quotas are a documented runtime follow-up.
-                  "/lucho" = {
-                    mountpoint = "/srv/data/lucho";
-                    mountOptions = hddBtrfsMountOptions;
                   };
                 };
               };

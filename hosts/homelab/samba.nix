@@ -30,7 +30,8 @@
 
   # Post-install steps:
   #   1. Create a Samba password per user: sudo smbpasswd -a lucho
-  #   2. Additional users need: (a) a subvolume in disko.nix, (b) a share here,
-  #      (c) an smbpasswd entry.
+  #   2. Additional users need: (a) a Btrfs subvolume created during pre-install
+  #      staging on the data disk (not in disko.nix), (b) a share here, (c) an
+  #      smbpasswd entry.
   #   Btrfs qgroup quotas are a documented runtime follow-up.
 }
