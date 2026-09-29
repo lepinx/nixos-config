@@ -117,10 +117,11 @@ Encriptar el disco de datos con LUKS queda como opción documentada a futuro
 
 ## Pendientes
 
-- Agregar la clave pública SSH del usuario en `hosts/homelab/default.nix` antes
-  de instalar (todavía no existe ninguna en la workstation).
 - Verificar el gateway `192.168.1.1` y los DNS `1.1.1.1` / `9.9.9.9` al momento
   de instalar.
+- SSH con autenticación por contraseña: decisión explícita del usuario
+  (sólo LAN/VPN, nunca expuesto). Si el modelo de exposición cambia,
+  reevaluar claves SSH.
 - Cuotas Btrfs (qgroup) por subvolumen: follow-up en runtime.
 - Usuarios adicionales: subvolumen creado en el disco de datos durante el
   staging, recurso en `samba.nix` y `smbpasswd`.

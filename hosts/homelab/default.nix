@@ -67,7 +67,9 @@
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false;
+      # Password authentication is an explicit user decision: SSH is LAN/VPN-only
+      # and never exposed to the internet. Revisit if the exposure model changes.
+      PasswordAuthentication = true;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
     };
@@ -78,7 +80,5 @@
   users.users.${userName} = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    # TODO: add the user's public SSH key before install; none exists yet.
-    openssh.authorizedKeys.keys = [ ];
   };
 }
