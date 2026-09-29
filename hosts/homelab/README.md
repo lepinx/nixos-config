@@ -1,46 +1,93 @@
 # Host homelab
 
-Notas para un futuro servidor casero en NixOS.
+Servidor casero (torre) en NixOS, en reemplazo de Ubuntu Server.
 
 Este host usa criterios distintos a una workstation:
 
 - sin Niri, Noctalia ni Home Manager de escritorio;
 - servicios declarativos;
 - almacenamiento y red tratados con más cuidado;
-- secretos declarativos con `sops-nix`;
-- backups del servidor definidos en este host.
+- dos discos con LUKS: SSD para el sistema y HDD para datos.
 
-Estado actual:
+## Estado actual
 
-El scaffold existe: `hosts/homelab/default.nix` importa `modules/nixos/profiles/server.nix`,
-y el perfil `server` quedó corregido para traer sólo base + mantenimiento (red, boot,
-usuarios y servicios se declaran por host o por módulo de servicio).
+El host está completamente definido y expuesto como
+`nixosConfigurations.homelab`, con `enableHomeManager = false`. Incluye:
 
-Este host todavía NO se expone como `nixosConfigurations`: falta su
-`hardware-configuration.nix` real. Recién ahí el flake va a construir esta máquina.
+- `hosts/homelab/disko.nix`: layout de dos discos (SSD + HDD) con LUKS y Btrfs;
+- `hosts/homelab/hardware-configuration.nix`: hardware mínimo del servidor;
+- `hosts/homelab/default.nix`: boot UEFI, desbloqueo LUKS con TPM2, red fija,
+  SSH endurecido y firewall;
+- `hosts/homelab/samba.nix`: recurso compartido por usuario.
 
-Próximo paso: escaneo de hardware de la torre vieja con Ubuntu (presencia de TPM2,
-UEFI/BIOS, discos y red). Ese relevamiento define el modelo de desbloqueo LUKS, el
-layout de disko y la IP fija.
+Estado de instalación: **definido pero todavía no instalado** en la torre.
 
-Checklist inicial:
+## Exposición de red
 
-1. Auditar servicios del servidor.
-2. Listar discos, mounts y datos que no pueden perderse.
-3. Definir hostname, IP fija/DHCP reservation y DNS local.
-4. Elegir boot BIOS/UEFI y declarar el bootloader en el host.
-5. Elegir estrategia de disco: conservar layout, migrar con Disko o reinstalar.
-6. Crear el usuario administrador y habilitar SSH de forma explícita.
-7. Crear módulos por servicio en `modules/nixos/services/`.
-8. Agregar `nixosConfigurations.homelab` en el flake junto con el hardware real.
-   Usar `enableHomeManager = false`, o crear un perfil Home Manager propio de
-   servidor si realmente hace falta.
+El firewall abre explícitamente 80/443 TCP y 51820/UDP. SSH queda fuera de la
+lista de puertos permitidos: es accesible únicamente desde la LAN.
 
-Servicios posibles:
+Samba usa `openFirewall = true`, así que agrega 445/139 TCP y 137/138 UDP a la
+allowlist resultante. La torre vive detrás del router de la LAN, por lo que esos
+puertos no son alcanzables desde la WAN.
 
-- SSH endurecido;
-- reverse proxy;
-- Cloudflare Tunnel o WireGuard;
-- contenedores con Podman;
-- almacenamiento compartido;
-- restic/rclone para backups del servidor.
+## Instalación
+
+Requisitos previos:
+
+- UEFI activado y CSM desactivado en la BIOS.
+- SSD (sistema) y HDD (datos) conectados.
+
+1. Partir discos, formatear y montar con disko. Reformatea ambos discos:
+
+   ```bash
+   sudo nix run github:nix-community/disko -- --mode destroy,format,mount \
+     --flake .#homelab \
+     --argstr diskDeviceBoot /dev/sda \
+     --argstr diskDeviceData /dev/sdb
+   ```
+
+   El comando pide **dos passphrases LUKS** (una por disco).
+
+2. Instalar el sistema:
+
+   ```bash
+   sudo nixos-install --flake .#homelab
+   ```
+
+## Post-instalación
+
+1. Definir la contraseña del usuario:
+
+   ```bash
+   passwd lucho
+   ```
+
+2. Registrar la contraseña de Samba:
+
+   ```bash
+   sudo smbpasswd -a lucho
+   ```
+
+3. Enrolar el TPM2 en ambos discos LUKS (verificar las particiones con `lsblk`
+   antes de correr los comandos):
+
+   ```bash
+   sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-with-pin=yes /dev/sda2
+   sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-with-pin=yes /dev/sdb1
+   ```
+
+4. Restaurar los datos desde el staging montado en `/mnt` hacia
+   `/srv/data/lucho`.
+
+## Pendientes
+
+- Agregar la clave pública SSH del usuario en `hosts/homelab/default.nix` antes
+  de instalar (todavía no existe ninguna en la workstation).
+- Verificar el gateway `192.168.1.1` y los DNS `1.1.1.1` / `9.9.9.9` al momento
+  de instalar.
+- Cuotas Btrfs (qgroup) por subvolumen: follow-up en runtime.
+- Usuarios adicionales: subvolumen en `disko.nix`, recurso en `samba.nix` y
+  `smbpasswd`.
+- CrowdSec (fase C).
+- Pangolin (fase 2).

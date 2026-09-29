@@ -132,6 +132,16 @@
             inputs.disko.nixosModules.disko
           ];
         };
+
+        homelab = mkNixos {
+          hostName = "homelab";
+          enableHomeManager = false;
+          diskDevice = "/dev/sda";
+          modules = [
+            ./hosts/homelab
+            inputs.disko.nixosModules.disko
+          ];
+        };
       };
 
       # Expose the disk layout as a parameterized function so the Disko CLI can
@@ -139,5 +149,9 @@
       #   disko --flake .#workstation --argstr diskDevice /dev/X --argstr hostName workstation
       # The installed system mounts by partlabel, so it stays device-independent.
       diskoConfigurations.workstation = import ./hosts/workstation/disko.nix;
+
+      # Homelab has two disks; the CLI can override either target at install
+      # time with --argstr diskDeviceBoot /dev/X --argstr diskDeviceData /dev/Y.
+      diskoConfigurations.homelab = import ./hosts/homelab/disko.nix;
     };
 }

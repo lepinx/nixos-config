@@ -16,17 +16,14 @@ La regla práctica:
 
 ## Hosts activos
 
-- `workstation`: notebook personal.
+- `workstation`: notebook personal, instalado.
+- `homelab`: servidor casero. Expuesto como `nixosConfigurations.homelab`, con
+  layout de discos, red y servicios definidos; todavía no instalado en la torre.
 
 ## Próximo host previsto
 
-- `homelab`: servidor casero con scaffold en `hosts/homelab/` (`default.nix` más
-  README), todavía sin `hardware-configuration.nix` y por lo tanto sin exponerse
-  como `nixosConfigurations`.
-
-No se agregan como `nixosConfigurations` hasta tener su
-`hardware-configuration.nix` real. Así el flake sólo expone máquinas con
-definición construible.
+Por ahora no hay otro host planificado. `homelab` era el próximo host y ya quedó
+definido en el flake; sólo resta la instalación real.
 
 El flake pasa `hostName`, `userName`, `repoName` y `repoPath` a los módulos para
 evitar rutas hardcodeadas. El `justfile` usa el hostname corto de la máquina por
@@ -46,8 +43,8 @@ Los hosts importan un perfil base junto con sus módulos específicos:
   apps de escritorio. Sólo trae base NixOS y mantenimiento; red, boot, usuarios
   y servicios se declaran explícitamente por host o por módulo de servicio.
 
-Cuando exista, `homelab` partirá del perfil `server`; `workstation` parte del
-perfil `workstation`.
+`homelab` parte del perfil `server`; `workstation` parte del perfil
+`workstation`.
 
 Para `homelab`, el output del flake usa `enableHomeManager = false` o un perfil
 Home Manager específico de servidor. El perfil `home/lucho` es de escritorio y
