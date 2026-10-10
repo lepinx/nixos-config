@@ -12,6 +12,11 @@
     ./samba.nix
   ];
 
+  # This host uses the internal stable nixpkgs instance, so unfree packages
+  # are allowed here rather than in the shared core module (the workstation's
+  # external unstable instance already carries this in flake.nix).
+  nixpkgs.config.allowUnfree = true;
+
   # This host targets UEFI; keep CSM disabled in the BIOS.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

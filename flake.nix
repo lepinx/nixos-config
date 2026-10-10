@@ -15,6 +15,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Rolling inputs for the workstation host (mkNixos rolling = true). They
+    # must come from the same nixpkgs generation as the host's module system:
+    # mixing a stable NixOS eval with unstable packages breaks in the
+    # modular-services machinery.
+    home-manager-unstable = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    stylix-unstable = {
+      url = "git+https://github.com/nix-community/stylix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -49,6 +63,7 @@
       nixpkgs,
       nixpkgs-unstable,
       home-manager,
+      home-manager-unstable,
       ...
     }:
     let
@@ -67,8 +82,11 @@
           enableHomeManager ? true,
           homeProfile ? userName,
           diskDevice ? null,
+          # Build the host from nixos-unstable with matching home-manager and
+          # stylix module inputs instead of the stable release.
+          rolling ? false,
         }:
-        nixpkgs.lib.nixosSystem {
+        (if rolling then nixpkgs-unstable else nixpkgs).lib.nixosSystem {
           inherit system;
           specialArgs = {
             inherit
@@ -80,11 +98,13 @@
               repoPath
               diskDevice
               ;
+            stylixModule =
+              if rolling then inputs.stylix-unstable.nixosModules.stylix else inputs.stylix.nixosModules.stylix;
           };
           modules =
             modules
             ++ nixpkgs.lib.optionals enableHomeManager [
-              home-manager.nixosModules.home-manager
+              (if rolling then home-manager-unstable.nixosModules.home-manager else home-manager.nixosModules.home-manager)
               {
                 home-manager = {
                   useGlobalPkgs = true;
@@ -127,6 +147,7 @@
         workstation = mkNixos {
           hostName = "workstation";
           diskDevice = "/dev/nvme0n1";
+          rolling = true;
           modules = [
             ./hosts/workstation
             inputs.disko.nixosModules.disko

@@ -11,11 +11,8 @@
     };
   };
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
+  # allowUnfree lives per host: hosts using an external nixpkgs.pkgs instance
+  # (workstation, unstable) pass it when creating the instance in flake.nix.
 
   programs.nix-ld = {
     enable = true;
@@ -23,6 +20,13 @@
       icu
     ];
   };
+
+  # gentle-pi's npm postinstall only trusts /usr/bin/tar or /bin/tar, which do
+  # not exist on NixOS (Gentleman-Programming/gentle-shell#548).
+  # Bridge it declaratively until upstream extracts archives in-process.
+  systemd.tmpfiles.rules = [
+    "L+ /usr/bin/tar - - - - /run/current-system/sw/bin/tar"
+  ];
 
   time.timeZone = "America/Argentina/Cordoba";
   i18n.defaultLocale = "es_AR.UTF-8";

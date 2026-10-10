@@ -1,9 +1,11 @@
-{ inputs, ... }:
+{ inputs, stylixModule, ... }:
 
 {
   imports = [
     inputs.noctalia-greeter.nixosModules.default
-    inputs.stylix.nixosModules.stylix
+    # Selected per host in flake.nix: stable stylix for stable hosts, master
+    # for the rolling workstation.
+    stylixModule
     ../core.nix
     ../desktop.nix
     ../greeter.nix
