@@ -1,8 +1,5 @@
 config_version = 15
 
-[dock]
-enabled = false
-
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
@@ -15,9 +12,9 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
 
     [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
     box_height = 196.0
-    box_width = 720.0
+    box_width = 810.0
     cx = 565.0
-    cy = 587.0
+    cy = 524.0
     output = "eDP-1"
     placement_height = 706.0
     placement_width = 1129.0
@@ -39,12 +36,3 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_session_buttons = true
         show_unlock_hint = true
         show_weather = true
-
-[wallpaper.default]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
-
-[wallpaper.last]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
-
-[wallpaper.monitors.eDP-1]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
