@@ -44,6 +44,7 @@ in
   home.packages = with pkgs; [
     alacritty
     bitwarden-cli
+    yt-dlp # noctalia yt-music plugin: stream resolution
     bitwardenFieldCopy
     clock-rs
     discord
@@ -56,7 +57,9 @@ in
     libreoffice
     localsend
     loupe
-    mpv
+    (mpv.override {
+      scripts = [ pkgs.mpvScripts.mpris ]; # media keys + noctalia media widget for the yt-music plugin
+    })
     nerd-fonts.hurmit
     nerd-fonts.jetbrains-mono
     networkmanagerapplet
