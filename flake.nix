@@ -24,11 +24,6 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    stylix-unstable = {
-      url = "git+https://github.com/nix-community/stylix";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,11 +37,6 @@
     noctalia-greeter = {
       url = "github:noctalia-dev/noctalia-greeter";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
-    stylix = {
-      url = "git+https://github.com/nix-community/stylix?ref=release-26.05";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Rolling: tracks the upstream default branch; `just update` picks up every
@@ -82,8 +72,8 @@
           enableHomeManager ? true,
           homeProfile ? userName,
           diskDevice ? null,
-          # Build the host from nixos-unstable with matching home-manager and
-          # stylix module inputs instead of the stable release.
+          # Build the host from nixos-unstable with matching home-manager
+          # module inputs instead of the stable release.
           rolling ? false,
         }:
         (if rolling then nixpkgs-unstable else nixpkgs).lib.nixosSystem {
@@ -98,13 +88,16 @@
               repoPath
               diskDevice
               ;
-            stylixModule =
-              if rolling then inputs.stylix-unstable.nixosModules.stylix else inputs.stylix.nixosModules.stylix;
           };
           modules =
             modules
             ++ nixpkgs.lib.optionals enableHomeManager [
-              (if rolling then home-manager-unstable.nixosModules.home-manager else home-manager.nixosModules.home-manager)
+              (
+                if rolling then
+                  home-manager-unstable.nixosModules.home-manager
+                else
+                  home-manager.nixosModules.home-manager
+              )
               {
                 home-manager = {
                   useGlobalPkgs = true;
