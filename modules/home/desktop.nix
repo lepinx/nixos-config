@@ -9,8 +9,6 @@
 }:
 
 let
-  ghosttyConfig = builtins.readFile ../../configs/ghostty/config;
-  ghosttyFontSize = 9;
   niriConfig = builtins.readFile ../../configs/niri/config.kdl.in;
   niriOutputsPath = ../../hosts + "/${hostName}/niri-outputs.kdl";
   niriHostBindsPath = ../../hosts + "/${hostName}/niri-host.kdl";
@@ -78,9 +76,7 @@ in
         Hidden=true
         X-GNOME-Autostart-enabled=false
       '';
-      "ghostty/config".text =
-        builtins.replaceStrings [ "font-size = 9" ] [ "font-size = ${toString ghosttyFontSize}" ]
-          ghosttyConfig;
+      "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
       "niri/config.kdl".text =
         builtins.replaceStrings
           [
@@ -172,7 +168,9 @@ in
       };
       backdrop = {
         enabled = true;
-        blur_intensity = 1.0;
+        # 0.0 keeps the empty-workspace wallpaper sharp; raise for a blurred
+        # backdrop behind windows.
+        blur_intensity = 0.0;
         tint_intensity = 0.0;
       };
       weather = {
