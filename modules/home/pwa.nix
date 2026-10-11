@@ -21,27 +21,38 @@ let
     youtube-music = {
       name = "YouTube Music";
       appId = "cinhimbnkkaeohfgghhklpknlkffjgod";
-      categories = [ "Network" "Audio" ];
+      categories = [
+        "Network"
+        "Audio"
+      ];
       comment = "YouTube Music as an app";
     };
     whatsapp-web = {
       name = "WhatsApp Web";
       appId = "hnpfjngllnobngcgfapefoaidbinmjnm";
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       comment = "WhatsApp Web as an app";
     };
     telegram-web = {
       name = "Telegram Web";
       appId = "ibblmnobmgdmpoeblocemifbpglakpoi";
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       comment = "Telegram Web as an app";
     };
   };
 in
 {
-  xdg.dataFile = lib.mapAttrs' (name: _: lib.nameValuePair
-    "icons/hicolor/256x256/apps/pwa-${name}.png"
-    { source = ../../assets/pwa-icons/pwa-${name}.png; }
+  xdg.dataFile = lib.mapAttrs' (
+    name: _:
+    lib.nameValuePair "icons/hicolor/256x256/apps/pwa-${name}.png" {
+      source = ../../assets/pwa-icons/pwa-${name}.png;
+    }
   ) pwa;
 
   xdg.desktopEntries = lib.mapAttrs (name: cfg: {

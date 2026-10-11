@@ -63,7 +63,10 @@
       enable = true;
       # 80/443 for the future Pangolin edge, 51820/udp for Gerbil WireGuard
       # tunnels.
-      allowedTCPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
       allowedUDPPorts = [ 51820 ];
     };
     nftables.enable = true;
