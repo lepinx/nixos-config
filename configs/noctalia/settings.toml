@@ -1,5 +1,11 @@
 config_version = 15
 
+[backdrop]
+blur_intensity = 0.4999999888241291
+
+[dock]
+launcher_position = "none"
+
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
@@ -36,3 +42,21 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_session_buttons = true
         show_unlock_hint = true
         show_weather = true
+
+[plugins]
+enabled = [ "noctalia/bitwarden" ]
+
+[theme]
+source = "builtin"
+
+    [theme.templates]
+    builtin_ids = [ "ghostty", "niri", "starship" ]
+
+[wallpaper.default]
+path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+
+[wallpaper.last]
+path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+
+[wallpaper.monitors.eDP-1]
+path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"

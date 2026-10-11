@@ -1,4 +1,4 @@
-theme = Ayu
+theme = noctalia
 
 font-size = 9
 font-family = JetBrains Mono Nerd Font
@@ -6,7 +6,7 @@ font-family = JetBrains Mono Nerd Font
 window-decoration = false
 window-padding-x = 12
 window-padding-y = 12
-background-opacity = 0.90
+background-opacity = 1.00
 background-opacity-cells = true
 background-blur = true
 
