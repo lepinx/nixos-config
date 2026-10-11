@@ -467,13 +467,13 @@ in
           sidePanelWidth: 0.23
           mainPanelSplitMode: horizontal
           showNumstatInFilesView: true
-          wrapLinesInStagingView: false
+          wrapLinesInDiffView: false
 
         git:
-          pagers:
+          diffRenderers:
             - name: delta
               colorArg: always
-              pager: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
+              command: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
       '';
     };
   };
