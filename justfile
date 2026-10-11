@@ -1,6 +1,7 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
 host := env("NIXOS_HOST", `hostname -s`)
+repo_root := justfile_directory()
 
 default:
     @just --list
@@ -59,8 +60,13 @@ health:
     if [ -d "$HOME/.pi/agent/npm/node_modules/gentle-pi" ]; then
         echo '  ok       gentle-pi (Pi extension)'
     else
-        echo '  MISSING  gentle-pi (Pi extension)  (install: pi install npm:gentle-pi; may fail on NixOS, see docs/development.md)'
+        echo '  MISSING  gentle-pi (Pi extension)  (install: just bootstrap-agents; may fail on NixOS, see docs/development.md)'
     fi
+
+# Reconstruct the mutable agent tooling a fresh install does not cover:
+# pi extensions, codegraph and the standalone gentle-ai CLI. Idempotent.
+bootstrap-agents:
+    "{{ repo_root }}/scripts/bootstrap-agents.sh"
 
 hotkeys:
     niri msg action show-hotkey-overlay
