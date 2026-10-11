@@ -76,7 +76,6 @@ in
         X-GNOME-Autostart-enabled=false
       '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
-      "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
       # Hot-reload link too, so shader iterations do not need a rebuild.
       "ghostty/shaders/cursor_smear.glsl".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/shaders/cursor_smear.glsl";
       "niri/config.kdl".text =

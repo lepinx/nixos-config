@@ -8,3 +8,6 @@ result-*
 
 # Local Organic Driven Development task state
 odd/
+
+# Noctalia neovim template regenerates this file on every theme change
+configs/nvim/lua/matugen.lua

@@ -50,10 +50,10 @@ enabled = [ "noctalia/bitwarden" ]
 source = "builtin"
 
     [theme.templates]
-    builtin_ids = [ "ghostty", "niri", "starship" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri", "qt", "starship" ]
+    community_ids = [ "neovim", "yazi" ]
     enable_builtin_templates = true
     enable_community_templates = true
-    community_ids = [ "yazi", "zed" ]
 
 [wallpaper.default]
 path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"

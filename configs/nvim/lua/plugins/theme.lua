@@ -1,28 +1,11 @@
 return {
   {
-    "olimorris/onedarkpro.nvim",
-    priority = 1000,
-    opts = {
-      styles = {
-        comments = "italic",
-        keywords = "italic",
-      },
-      highlights = {
-        LspInlayHint = { fg = "#6b7280", italic = true },
-        Cursor = { fg = "#000000", bg = "#61afef" },
-        Visual = { bg = "#303b4a" },
-        FloatBorder = { fg = "#abb2bf" },
-      },
-      plugins = {
-        lsp_semantic_tokens = true,
-        treesitter = true,
-      },
-    },
-  },
-  {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "onedark_dark",
+      -- Noctalia regenerates lua/matugen.lua (base16 palette from the desktop
+      -- wallpaper); lua/colors/matugen.lua wraps it as a first-class
+      -- colorscheme. The base16-nvim loader lives in plugins/base16.lua.
+      colorscheme = "matugen",
     },
   },
 }

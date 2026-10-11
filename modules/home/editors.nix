@@ -9,17 +9,12 @@
     pkgs.lua-language-server
     pkgs.neovim-remote
     pkgs.package-version-server
-    pkgs.zed-editor
   ];
 
   xdg.configFile = {
     "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/lua";
     "nvim/stylua.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/stylua.toml";
-    "zed/settings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/settings.json";
-    "zed/keymap.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zed/keymap.json";
   };
 
   programs = {
