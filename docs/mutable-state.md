@@ -32,6 +32,21 @@ Nix deliberately does not own these directories: pi manages its own
 extension lifecycle, and a second package manager over the same tree is the
 class of conflict the `/usr/bin/tar` bridge exists to avoid.
 
+## Alternative: standalone `gentle-shell` launcher
+
+Upstream also ships a launcher that runs Pi with the Gentle Shell package
+from its own home (`~/.gentle-shell/agent`) or, with `--link`, reusing this
+machine's `~/.pi/agent` (sign-ins, models, chats). Installed with
+`npm i -g gentle-pi`; it never modifies the pi install it finds.
+
+Trade-off for this setup: the in-agent install (current) keeps one pi home
+and one lifecycle; the standalone launcher isolates Gentle Shell from
+`~/.pi/agent` at the cost of a second home and an npm-global launcher that
+`pi update --extensions` does not manage. Neither mode avoids the
+postinstall `/usr/bin/tar` requirement on NixOS. Current choice:
+in-agent via `just bootstrap-agents`; revisit only if isolation from
+`~/.pi/agent` becomes desirable.
+
 ## Manual steps (never automated, never versioned)
 
 These hold secrets or personal data. After a fresh install:
