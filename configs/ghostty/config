@@ -12,6 +12,11 @@ background-blur = true
 
 cursor-style = block
 cursor-style-blink = true
+
+# Animated cursor trail. The shader is copied by home-manager; animation
+# "always" keeps the trail alive when the terminal loses focus.
+custom-shader = ~/.config/ghostty/shaders/cursor_smear.glsl
+custom-shader-animation = always
 scrollback-limit = 3023
 mouse-hide-while-typing = true
 copy-on-select = false

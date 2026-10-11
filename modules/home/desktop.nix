@@ -77,6 +77,8 @@ in
         X-GNOME-Autostart-enabled=false
       '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
+      "ghostty/shaders/cursor_smear.glsl".source =
+        ../../configs/ghostty/shaders/cursor_smear.glsl;
       "niri/config.kdl".text =
         builtins.replaceStrings
           [
