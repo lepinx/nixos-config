@@ -113,8 +113,8 @@ in
     wofi
     wtype
     zoxide
-    pkgsUnstable.fzf
-    pkgsUnstable.terminal-rain-lightning
+    pkgs.fzf
+    pkgs.terminal-rain-lightning
   ];
 
   programs.fish = {
@@ -203,7 +203,7 @@ in
 
   programs.nushell = {
     enable = true;
-    package = pkgsUnstable.nushell;
+    package = pkgs.nushell;
     settings = {
       show_banner = false;
       edit_mode = "vi";
@@ -219,7 +219,7 @@ in
       la = "ls --all";
     };
     extraConfig = ''
-      source ${pkgsUnstable.fzf}/share/fzf/completion.nu
+      source ${pkgs.fzf}/share/fzf/completion.nu
 
       def --env mkcd [directory: path] {
         mkdir $directory
