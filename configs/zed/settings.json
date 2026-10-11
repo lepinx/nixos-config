@@ -1,5 +1,5 @@
 {
-  "icon_theme": "Catppuccin Latte",
+  "icon_theme": "Catppuccin Mocha",
   "cli_default_open_behavior": "existing_window",
   "base_keymap": "VSCode",
   "vim_mode": true,
