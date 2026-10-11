@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   nix = {
@@ -13,13 +13,6 @@
 
   # allowUnfree lives per host: hosts using an external nixpkgs.pkgs instance
   # (workstation, unstable) pass it when creating the instance in flake.nix.
-
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      icu
-    ];
-  };
 
   # gentle-pi's npm postinstall only trusts /usr/bin/tar or /bin/tar, which do
   # not exist on NixOS (Gentleman-Programming/gentle-shell#548).

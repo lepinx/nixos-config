@@ -3,7 +3,6 @@
   hostName,
   lib,
   pkgs,
-  pkgsUnstable,
   repoPath,
   ...
 }:
@@ -61,8 +60,8 @@ in
     nerd-fonts.hurmit
     nerd-fonts.jetbrains-mono
     networkmanagerapplet
-    pkgsUnstable.bruno
-    pkgsUnstable.dbeaver-bin
+    pkgs.bruno
+    pkgs.dbeaver-bin
     seahorse
     thunderbird
   ];
@@ -159,7 +158,7 @@ in
           user.niri = {
             input_path = "${repoPath}/configs/noctalia/templates/niri.kdl";
             output_path = "~/.config/niri/noctalia.kdl";
-            post_hook = "${lib.getExe pkgsUnstable.niri} msg action load-config-file || true";
+            post_hook = "${lib.getExe pkgs.niri} msg action load-config-file || true";
           };
         };
       };

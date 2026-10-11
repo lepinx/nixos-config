@@ -1,4 +1,4 @@
-{ pkgsUnstable, ... }:
+{ ... }:
 
 {
   # Rolling workstation: the whole host is built from nixos-unstable by

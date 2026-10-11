@@ -1,6 +1,5 @@
 {
   pkgs,
-  pkgsUnstable,
   ...
 }:
 
@@ -38,7 +37,7 @@
 
   programs.niri = {
     enable = true;
-    package = pkgsUnstable.niri;
+    package = pkgs.niri;
   };
 
   xdg.portal.enable = true;

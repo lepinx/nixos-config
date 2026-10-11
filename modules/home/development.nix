@@ -1,7 +1,6 @@
 {
   inputs,
   pkgs,
-  pkgsUnstable,
   ...
 }:
 
@@ -31,11 +30,11 @@ in
   home.packages = with pkgs; [
     direnv
     gh
-    pkgsUnstable.gh-dash
-    pkgsUnstable.glab
-    pkgsUnstable.pi-coding-agent
-    pkgsUnstable.codex
-    pkgsUnstable.opencode
+    pkgs.gh-dash
+    pkgs.glab
+    pkgs.pi-coding-agent
+    pkgs.codex
+    pkgs.opencode
     glab-tui
     just-lsp
     jujutsu
@@ -49,7 +48,7 @@ in
     nixfmt
     shellcheck
     sql-formatter
-    pkgsUnstable.tuicr
+    pkgs.tuicr
   ];
 
   programs.direnv = {
