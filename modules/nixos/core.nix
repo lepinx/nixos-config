@@ -1,4 +1,4 @@
-_:
+{ pkgs, ... }:
 
 {
   nix = {
@@ -13,6 +13,20 @@ _:
 
   # allowUnfree lives per host: hosts using an external nixpkgs.pkgs instance
   # (workstation, unstable) pass it when creating the instance in flake.nix.
+
+  # NixOS ships a stub dynamic linker by default, so prebuilt glibc binaries
+  # (codegraph's bundled Node, other npm-native tools) die at startup with
+  # "NixOS cannot run dynamically linked executables". nix-ld provides a real
+  # loader plus the libraries such binaries commonly expect (libstdc++, zlib,
+  # openssl).
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+      openssl
+    ];
+  };
 
   # gentle-pi's npm postinstall only trusts /usr/bin/tar or /bin/tar, which do
   # not exist on NixOS (Gentleman-Programming/gentle-shell#548).

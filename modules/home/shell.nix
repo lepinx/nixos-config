@@ -402,8 +402,6 @@ in
     "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
     "lazydocker/config.yml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
-    # User fish functions (mkcd, nixcfg, pi, y) — hand-written, versioned.
-    "fish/functions".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/fish/functions";
     # Noctalia's starship template injects its palette block into this file on
     # every theme change (out-of-store so the hook can write through the link).
     "starship.toml".source =
