@@ -7,7 +7,7 @@
     TERMINAL = "ghostty";
     BROWSER = "firefox";
     XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "24";
+    XCURSOR_SIZE = "32";
     NIXOS_OZONE_WL = "1";
   };
 

@@ -28,6 +28,12 @@ numlock_toggle = true
 tap = true
 natural_scroll = true
 
+[input.cursor]
+# Empty theme follows XCURSOR_THEME (Adwaita); explicit size instead of the
+# 24-px default so the pointer is readable on this scaled display.
+theme = ""
+size = 32
+
 # ------------------------------------------------------------------------------
 # General
 
@@ -106,6 +112,11 @@ curve = "spring:0.8,523"
 
 [animation.overview]
 curve = "spring:0.85,800"
+
+[overview]
+# Hide the per-window number badges (keyboard focus shortcuts); Noctalia's
+# type-to-launch is disabled too, so the digits carry no function here.
+shortcuts = false
 
 # The Noctalia builtin umbriel template writes a heavy overview tint (~53% alpha)
 # into noctalia.toml. Includes are applied before the including file, and the

@@ -6,7 +6,7 @@
     greeter-args = "--session umbriel --user ${userName}";
     settings.cursor = {
       theme = "Adwaita";
-      size = 24;
+      size = 32;
       package = pkgs.adwaita-icon-theme;
     };
   };

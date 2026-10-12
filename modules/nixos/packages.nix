@@ -6,16 +6,16 @@ let
     url = "https://github.com/imputnet/helium-linux/releases/download/${heliumVersion}/helium-${heliumVersion}-x86_64.AppImage";
     hash = "sha256-qz3w+nnvBgkpHT3E34dv4DvFuYlyzTAyg9tPYJFWs3o=";
   };
-  heliumContents = pkgs.appimageTools.extractType2 {
+  heliumContents = pkgs.appimageTools.extract {
     pname = "helium";
     version = heliumVersion;
     src = heliumSrc;
   };
-  helium = pkgs.appimageTools.wrapType2 {
+  helium = pkgs.appimageTools.wrapAppImage {
     pname = "helium";
     version = heliumVersion;
 
-    src = heliumSrc;
+    src = heliumContents;
 
     extraInstallCommands = ''
       install -Dm444 ${heliumContents}/helium.desktop $out/share/applications/helium.desktop
