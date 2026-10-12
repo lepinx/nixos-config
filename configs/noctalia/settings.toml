@@ -65,6 +65,9 @@ hide_actions_when_searching = true
 [plugins]
 enabled = [ "noctalia/bitwarden", "noctalia/translator", "noctalia/umbriel-companion" ]
 
+[shell]
+umbriel_overview_type_to_launch_enabled = false
+
 [theme]
 source = "wallpaper"
 
@@ -75,13 +78,13 @@ source = "wallpaper"
     enable_community_templates = true
 
 [wallpaper.default]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
 [wallpaper.last]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
 [wallpaper.monitors.eDP-1]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
 [widget.control-center]
 glyph = "brand-qq"
