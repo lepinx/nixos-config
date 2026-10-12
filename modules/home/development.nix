@@ -1,6 +1,7 @@
 {
-  inputs,
+  config,
   pkgs,
+  repoPath,
   ...
 }:
 
@@ -17,6 +18,14 @@ let
 in
 {
   home = {
+    # Versioned copy of the gentle-ai agent-model profiles store, linked
+    # out-of-store so edits (and gentle-ai's import) land in the repo. The
+    # live file was identical to the tracked copy at adoption time.
+    file.".pi/gentle-ai/profiles.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/profiles.json";
+    };
+
     sessionVariables = {
       NPM_CONFIG_PREFIX = "$HOME/.local/share/agent-runtime/npm";
       NPM_CONFIG_CACHE = "$HOME/.cache/agent-runtime/npm";

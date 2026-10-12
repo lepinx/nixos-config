@@ -84,7 +84,7 @@ in
         font_family = "JetBrainsMono Nerd Font";
         telemetry_enabled = false;
         polkit_agent = true;
-        umbriel_overview_type_to_launch_enabled = false;
+        umbriel_overview_type_to_launch_enabled = true;
         launch_apps_as_systemd_services = true;
       };
       lockscreen.enabled = true;
