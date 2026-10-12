@@ -5,6 +5,7 @@
     DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
     EDITOR = "nvim";
     TERMINAL = "ghostty";
+    BROWSER = "firefox";
     XCURSOR_THEME = "Adwaita";
     XCURSOR_SIZE = "24";
     NIXOS_OZONE_WL = "1";
@@ -19,14 +20,14 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "text/html" = [ "helium.desktop" ];
-        "x-scheme-handler/http" = [ "helium.desktop" ];
-        "x-scheme-handler/https" = [ "helium.desktop" ];
+        "text/html" = [ "firefox.desktop" ];
+        "x-scheme-handler/http" = [ "firefox.desktop" ];
+        "x-scheme-handler/https" = [ "firefox.desktop" ];
         "x-scheme-handler/mailto" = [ "thunderbird.desktop" ];
         "message/rfc822" = [ "thunderbird.desktop" ];
         "application/x-extension-eml" = [ "thunderbird.desktop" ];
-        "application/pdf" = [ "helium.desktop" ];
-        "application/x-pdf" = [ "helium.desktop" ];
+        "application/pdf" = [ "firefox.desktop" ];
+        "application/x-pdf" = [ "firefox.desktop" ];
         "image/avif" = [ "org.gnome.Loupe.desktop" ];
         "image/bmp" = [ "org.gnome.Loupe.desktop" ];
         "image/gif" = [ "org.gnome.Loupe.desktop" ];
