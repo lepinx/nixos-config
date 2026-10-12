@@ -44,7 +44,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "noctalia/bitwarden", "aabidk20/yt-music", "noctalia/translator" ]
+enabled = [ "noctalia/bitwarden", "noctalia/translator" ]
 
 [theme]
 source = "builtin"

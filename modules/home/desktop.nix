@@ -44,7 +44,10 @@ in
   home.packages = with pkgs; [
     alacritty
     bitwarden-cli
-    yt-dlp # noctalia yt-music plugin: stream resolution
+    yt-dlp # stream resolution / downloads
+    pear-desktop # YouTube Music desktop client (MPRIS for the shell media widget)
+    telegram-desktop # official Telegram client
+    karere # WhatsApp desktop client (GTK4 wrapper of WhatsApp Web; no official Linux app exists)
     bitwardenFieldCopy
     clock-rs
     discord
