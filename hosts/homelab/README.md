@@ -4,7 +4,7 @@ Servidor casero (torre) en NixOS, en reemplazo de Ubuntu Server.
 
 Este host usa criterios distintos a una workstation:
 
-- sin Niri, Noctalia ni Home Manager de escritorio;
+- sin stack de escritorio (Noctalia/Umbriel);
 - servicios declarativos;
 - almacenamiento y red tratados con más cuidado;
 - LUKS en el SSD para el sistema y un HDD de datos en Btrfs plano, montado por

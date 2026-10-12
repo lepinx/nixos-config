@@ -38,8 +38,8 @@ just build
 Los hosts importan un perfil base junto con sus módulos específicos:
 
 - `modules/nixos/profiles/workstation.nix`: escritorio personal o laboral con
-  Niri, Noctalia, greeter, apps gráficas y Home Manager.
-- `modules/nixos/profiles/server.nix`: servidor/headless sin Niri, Noctalia ni
+  Umbriel, Noctalia, greeter, apps gráficas y Home Manager.
+- `modules/nixos/profiles/server.nix`: servidor/headless sin stack de escritorio (Noctalia/Umbriel) ni
   apps de escritorio. Sólo trae base NixOS y mantenimiento; red, boot, usuarios
   y servicios se declaran explícitamente por host o por módulo de servicio.
 
@@ -48,7 +48,7 @@ Los hosts importan un perfil base junto con sus módulos específicos:
 
 Para `homelab`, el output del flake usa `enableHomeManager = false` o un perfil
 Home Manager específico de servidor. El perfil `home/lucho` es de escritorio y
-trae Noctalia, Niri y aplicaciones gráficas.
+trae Noctalia, Umbriel y aplicaciones gráficas.
 
 ## Umbriel por host
 
