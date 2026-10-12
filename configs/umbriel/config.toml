@@ -52,7 +52,9 @@ VISUAL = "nvim"
 [hot_corners.top_left]
 enabled = true
 delay_ms = 150
-action = "overview-open"
+# Toggle, not just open: crossing the corner again while the overview is
+# open closes it.
+action = "overview-toggle"
 
 # ------------------------------------------------------------------------------
 # Layout
