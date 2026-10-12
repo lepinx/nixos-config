@@ -1,6 +1,6 @@
 # Bluetooth troubleshooting
 
-Notas para esta máquina NixOS/Niri cuando Bluetooth o auriculares emparejados
+Notas para esta máquina NixOS/Umbriel cuando Bluetooth o auriculares emparejados
 vuelvan a comportarse raro.
 
 ## Síntomas vistos

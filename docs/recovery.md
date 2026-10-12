@@ -44,7 +44,7 @@ Esto activa la generación anterior.
 
 ## Rollback desde TTY
 
-Si Niri o Noctalia fallan:
+Si Umbriel o Noctalia fallan:
 
 1. Cambiar a TTY con `Ctrl+Alt+F2`.
 2. Iniciar sesión.

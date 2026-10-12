@@ -138,7 +138,7 @@ Criterios esperados:
   (`/dev/nvme0n1p2` en esta máquina).
 - `/`, `/home` y `/nix` montan desde Btrfs dentro de `cryptroot`.
 - `/boot` monta desde la partición EFI sin cifrar.
-- Noctalia Greeter inicia Niri.
+- Noctalia Greeter inicia Umbriel.
 - Red, audio, Bluetooth, Firefox, terminal y editores abren normalmente.
 
 ## Si `just switch` falla por `/boot`

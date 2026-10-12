@@ -6,6 +6,20 @@ blur_intensity = 0.4999999888241291
 [dock]
 enabled = true
 launcher_position = "none"
+pinned = [
+    "org.gnome.Nautilus",
+    "thunderbird",
+    "discord",
+    "com.github.th-ch.youtube-music",
+    "helium",
+    "firefox",
+    "com.mitchellh.ghostty",
+    "io.ente.auth",
+    "bruno",
+    "dbeaver",
+    "io.github.tobagin.karere",
+    "org.telegram.desktop"
+]
 
 [lockscreen_widgets]
 enabled = false
@@ -48,7 +62,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
 hide_actions_when_searching = true
 
 [plugins]
-enabled = [ "noctalia/bitwarden", "noctalia/translator" ]
+enabled = [ "noctalia/bitwarden", "noctalia/translator", "noctalia/umbriel-companion" ]
 
 [theme]
 source = "builtin"

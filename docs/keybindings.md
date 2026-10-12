@@ -35,5 +35,5 @@ aplicación viven en su propia config para evitar duplicación.
 workspace principal.
 
 Para mantener esta documentación fresca, no se duplica toda la tabla de binds
-acá. El resumen vivo es el overlay de Niri y los archivos anteriores son la
+acá. El resumen vivo es el overlay de Umbriel y los archivos anteriores son la
 referencia versionada.

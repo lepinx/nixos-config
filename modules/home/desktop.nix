@@ -191,6 +191,7 @@ in
         start = [
           "launcher"
           "workspaces"
+          "umbriel_companion"
         ];
         center = [ "clock" ];
         end = [
@@ -203,6 +204,12 @@ in
         ];
       };
       widget = {
+        # Umbriel layout per focused workspace / active submap (official
+        # noctalia/umbriel-companion plugin; hides itself outside Umbriel
+        # sessions).
+        umbriel_companion = {
+          type = "noctalia/umbriel-companion:bar";
+        };
         workspaces = {
           type = "workspaces";
           show_labels = false;

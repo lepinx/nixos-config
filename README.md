@@ -1,7 +1,7 @@
 # nixos-config
 
 Configuración personal y reproducible para NixOS 26.05, Home Manager,
-Niri y Noctalia v5. Noctalia Greeter inicia la sesión Niri.
+Umbriel y Noctalia v5. Noctalia Greeter inicia la sesión Umbriel.
 
 ## Uso diario
 
@@ -90,20 +90,20 @@ journalctl -u nix-gc --since '7 days ago'
 
 ## Recuperación
 
-Si la sesión Niri falla, cambiar a una TTY con `Ctrl+Alt+F2`, iniciar sesión y
+Si la sesión Umbriel falla, cambiar a una TTY con `Ctrl+Alt+F2`, iniciar sesión y
 ejecutar `just rollback`. Si falla todo el sistema, elegir una generación
 anterior en el menú de systemd-boot. La recuperación principal es TTY +
 rollback.
 
 ## Política de versiones
 
-El sistema sigue `nixos-26.05`. Niri proviene selectivamente de
+El sistema sigue `nixos-26.05`. Umbriel proviene selectivamente de
 `nixos-unstable`; Noctalia sigue su rama v5. Esto mantiene estable la base sin
 congelar las aplicaciones que evolucionan rápido.
 
 ## Login, secretos y Bluetooth
 
-Noctalia Greeter lanza Niri directamente. `gnome-keyring` está disponible y PAM
+Noctalia Greeter lanza Umbriel directamente. `gnome-keyring` está disponible y PAM
 de greetd lo desbloquea para que las aplicaciones puedan usar `gnome-libsecret`
 sin caer en almacenamiento inseguro.
 
@@ -124,7 +124,8 @@ bluetoothctl power on
 Firefox es el navegador predeterminado para HTTP/HTTPS y HTML. Helium queda
 instalado como alternativa Chromium para pruebas puntuales de motor. Se evita
 Google Chrome en el perfil diario para no depender de su manejo de sesión bajo
-Niri/Noctalia. El repositorio no contiene perfiles, sesiones, cookies,
+Umbriel/Noctalia.
+Umbriel/Noctalia. El repositorio no contiene perfiles, sesiones, cookies,
 contraseñas ni datos de wallets.
 
 ## Dónde agregar paquetes
