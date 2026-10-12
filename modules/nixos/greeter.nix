@@ -5,9 +5,9 @@
     enable = true;
     greeter-args = "--session umbriel --user ${userName}";
     settings.cursor = {
-      theme = "Adwaita";
+      theme = "Bibata-Modern-Classic";
       size = 32;
-      package = pkgs.adwaita-icon-theme;
+      package = pkgs.bibata-cursors;
     };
   };
 

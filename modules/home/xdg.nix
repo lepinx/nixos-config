@@ -6,8 +6,8 @@
     EDITOR = "nvim";
     TERMINAL = "ghostty";
     BROWSER = "firefox";
-    XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "32";
+    XCURSOR_THEME = "Bibata-Modern-Classic";
+    XCURSOR_SIZE = "48";
     NIXOS_OZONE_WL = "1";
   };
 
@@ -55,6 +55,10 @@
 
   gtk = {
     enable = true;
+    cursorTheme = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+    };
     theme = {
       name = lib.mkDefault "Adwaita-dark";
       package = lib.mkDefault pkgs.gnome-themes-extra;
