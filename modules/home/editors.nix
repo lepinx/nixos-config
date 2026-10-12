@@ -13,6 +13,7 @@
 
   xdg.configFile = {
     "nvim/lua".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/lua";
+    "nvim/colors".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/colors";
     "nvim/stylua.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/nvim/stylua.toml";
   };
