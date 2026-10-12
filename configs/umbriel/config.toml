@@ -29,10 +29,12 @@ tap = true
 natural_scroll = true
 
 [input.cursor]
-# Empty theme follows XCURSOR_THEME (Adwaita); explicit size instead of the
-# 24-px default so the pointer is readable on this scaled display.
+# Empty theme follows XCURSOR_THEME (Adwaita). wlroots requests a theme
+# variant of size * output_scale (1.7 here); Adwaita ships discrete variants
+# (24/32/48/64/96). 24 and 32 both snapped to the 48px image at this scale,
+# so 40 (40 * 1.7 = 68) is the first step that visibly jumps to 64.
 theme = ""
-size = 32
+size = 40
 
 # ------------------------------------------------------------------------------
 # General
