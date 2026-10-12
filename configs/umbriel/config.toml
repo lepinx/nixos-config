@@ -51,7 +51,7 @@ VISUAL = "nvim"
 # niri gestures hot-corners: top-left opens the overview after the pointer rests.
 [hot_corners.top_left]
 enabled = true
-delay_ms = 150
+delay_ms = 0
 # Toggle, not just open: crossing the corner again while the overview is
 # open closes it.
 action = "overview-toggle"
