@@ -43,6 +43,9 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_unlock_hint = true
         show_weather = true
 
+[plugin_settings."noctalia/bitwarden"]
+hide_actions_when_searching = true
+
 [plugins]
 enabled = [ "noctalia/bitwarden", "noctalia/translator" ]
 
@@ -63,3 +66,6 @@ path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
 
 [wallpaper.monitors.eDP-1]
 path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
+
+[widget.control-center]
+glyph = "brand-qq"
