@@ -33,14 +33,14 @@ natural_scroll = true
 # 24/30/36 device px embedded, so no size setting ever changes it (see
 # umbriel#441 for the reload side). 48 at scale 1.7 -> 80px image.
 theme = "Bibata-Modern-Classic"
-size = 48
+size = 36
 hardware_cursor = true
 
 # ------------------------------------------------------------------------------
 # General
 
 [general]
-# niri hotkey-overlay skip-at-startup: never show the cheatsheet on login.
+# Never show the cheatsheet on login.
 show_cheatsheet = false
 
 [environment]
@@ -50,7 +50,7 @@ TERMINAL = "ghostty"
 EDITOR = "nvim"
 VISUAL = "nvim"
 
-# niri gestures hot-corners: top-left opens the overview after the pointer rests.
+# Top-left corner opens the overview after the pointer rests.
 [hot_corners.top_left]
 enabled = true
 delay_ms = 0
@@ -74,9 +74,9 @@ center_focused = "never"
 
 [appearance]
 prefer_no_csd = true
-# niri border off + focus-ring width 2 map onto Umbriel's single 2px border.
+# Single 2px border (matches the previous look).
 border_width = 2
-# niri geometry-corner-radius 12 / clip-to-geometry.
+# Rounded corners with clipping.
 corner_radius = 12
 
 [appearance.shadow]
@@ -96,9 +96,8 @@ saturation = 1.25
 # ------------------------------------------------------------------------------
 # Animations
 #
-# niri springs map directly to Umbriel's spring:<damping>,<stiffness> syntax.
-# niri's horizontal-view-movement and window-resize springs have no dedicated
-# Umbriel event and fold into windows_move.
+# Spring animations.
+# horizontal-view-movement and window-resize springs fold into windows_move.
 
 [animation.windows_in]
 duration_ms = 150
@@ -155,8 +154,7 @@ default_floating = true
 # Keybinds
 #
 # Defining this table replaces Umbriel's built-in bind set, so every active bind
-# is listed here. niri's hotkey-overlay-title metadata has no Umbriel equivalent
-# and is intentionally dropped.
+# is listed here.
 
 [keybinds]
 
