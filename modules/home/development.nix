@@ -27,6 +27,15 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/profiles.json";
     };
 
+    # Versioned copy of the Pi keybindings. Rebinds prompt navigation to
+    # alt+up/alt+down so it no longer collides with gentle-pi's gentle-todo
+    # ctrl+shift+up/down panel scroll (extension wins the conflict, and the
+    # override silences the startup shortcut-conflict warnings).
+    file.".pi/agent/keybindings.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";
+    };
+
     sessionVariables = {
       NPM_CONFIG_PREFIX = "$HOME/.local/share/agent-runtime/npm";
       NPM_CONFIG_CACHE = "$HOME/.cache/agent-runtime/npm";
