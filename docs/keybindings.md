@@ -1,6 +1,6 @@
 # Atajos
 
-La fuente principal para los atajos globales es el overlay de Niri:
+La fuente principal para los atajos globales es la cheatsheet de Umbriel:
 
 ```bash
 just hotkeys
@@ -16,7 +16,7 @@ También se puede abrir directamente con `Mod+Shift+/`.
 
 ## Fuentes vivas
 
-- Sistema y ventanas: `configs/niri/config.kdl.in`
+- Sistema y ventanas: `configs/umbriel/config.toml`
 - Terminal Ghostty: `configs/ghostty/config`
 - Multiplexer Herdr: `~/.config/herdr/config.toml`
 - Neovim: `configs/nvim/lua/config/keymaps.lua`
@@ -25,7 +25,7 @@ También se puede abrir directamente con `Mod+Shift+/`.
 
 ## Criterio
 
-Niri cubre los atajos globales del escritorio: lanzar apps, mover ventanas,
+Umbriel cubre los atajos globales del escritorio: lanzar apps, mover ventanas,
 cambiar workspaces, screenshots, media y brillo. Los atajos internos de cada
 aplicación viven en su propia config para evitar duplicación.
 

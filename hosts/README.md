@@ -50,13 +50,13 @@ Para `homelab`, el output del flake usa `enableHomeManager = false` o un perfil
 Home Manager específico de servidor. El perfil `home/lucho` es de escritorio y
 trae Noctalia, Niri y aplicaciones gráficas.
 
-## Niri por host
+## Umbriel por host
 
-`configs/niri/config.kdl.in` es una plantilla compartida. Home Manager genera el
-archivo final `~/.config/niri/config.kdl` y apunta el include de outputs a
-`~/.config/niri/outputs.kdl`.
+`configs/umbriel/config.toml` es una plantilla compartida. Home Manager genera el
+archivo final `~/.config/umbriel/config.toml` y apunta el include de outputs a
+`~/.config/umbriel/outputs.toml`.
 
-Ese `outputs.kdl` sale de `hosts/${hostName}/niri-outputs.kdl`, por lo que cada
+Ese `outputs.toml` sale de `hosts/${hostName}/umbriel-outputs.toml`, por lo que cada
 workstation puede tener monitores, escalas y posiciones propias sin contaminar
 otras máquinas.
 

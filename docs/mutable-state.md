@@ -9,7 +9,7 @@ both layers and how to reconstruct a fresh machine completely.
 
 | Piece | Where |
 | --- | --- |
-| System packages, desktop, niri, noctalia base | `modules/nixos/`, `flake.nix` |
+| System packages, desktop, umbriel, noctalia base | `modules/nixos/`, `flake.nix` |
 | Home environment, fish, git, nvim, zed, yazi | `modules/home/` |
 | Ghostty config (hot-reload symlink) | `configs/ghostty/config` |
 | Noctalia UI overrides (hot-reload symlink) | `configs/noctalia/settings.toml` |

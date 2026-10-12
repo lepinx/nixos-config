@@ -42,8 +42,7 @@ ajusta desde la interfaz:
   servicios systemd;
 - idle, bloqueo y umbral de batería;
 - keybinds de la UI;
-- `theme.templates.user.niri`, que necesita el store path de `niri` en el
-  `post_hook`;
+- `theme.templates.builtin_ids`, que habilita el template builtin `umbriel`;
 - `wallpaper.directory`, clima y ubicación;
 - plugins.
 
