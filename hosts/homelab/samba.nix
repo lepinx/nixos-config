@@ -1,4 +1,4 @@
-{ ... }:
+_:
 
 {
   # SMB is LAN-only. `openFirewall` adds ports 445/139 (TCP) and 137/138 (UDP)

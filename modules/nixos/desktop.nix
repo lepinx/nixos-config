@@ -6,8 +6,10 @@
 {
   security.rtkit.enable = true;
 
-  services.upower.enable = true;
-  services.power-profiles-daemon.enable = true;
+  services = {
+    upower.enable = true;
+    power-profiles-daemon.enable = true;
+  };
 
   systemd.services.power-profile-auto = {
     description = "Set the power profile according to AC power";

@@ -18,14 +18,20 @@
   nixpkgs.config.allowUnfree = true;
 
   # This host targets UEFI; keep CSM disabled in the BIOS.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
 
-  # systemd-based initrd is required for tpm2-device=auto. The SSD is the only
-  # LUKS device on this host; the data HDD is left unencrypted and is mounted by
-  # filesystem label in the fileSystems block below.
-  boot.initrd.systemd.enable = true;
-  boot.initrd.luks.devices.cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
+    # systemd-based initrd is required for tpm2-device=auto. The SSD is the only
+    # LUKS device on this host; the data HDD is left unencrypted and is mounted by
+    # filesystem label in the fileSystems block below.
+    initrd = {
+      systemd.enable = true;
+      luks.devices.cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
+    };
+  };
 
   # Data HDD: staged with plain Btrfs before install and never reformatted by
   # disko (disko only manages the SSD). The disk is mounted here declaratively by

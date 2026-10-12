@@ -115,340 +115,343 @@ in
     pkgs.terminal-rain-lightning
   ];
 
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = ''
-      set -gx PATH \
-        "/etc/profiles/per-user/$USER/bin" \
-        (string match -v -- \
+  programs = {
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        set -gx PATH \
           "/etc/profiles/per-user/$USER/bin" \
           (string match -v -- \
-            "$HOME/.local/share/agent-runtime/npm/bin" \
-            (string match -v -- "$HOME/.local/bin" $PATH))) \
-        "$HOME/.local/share/agent-runtime/npm/bin" \
-        "$HOME/.local/bin"
-      fish_vi_key_bindings
-      set fish_greeting
+            "/etc/profiles/per-user/$USER/bin" \
+            (string match -v -- \
+              "$HOME/.local/share/agent-runtime/npm/bin" \
+              (string match -v -- "$HOME/.local/bin" $PATH))) \
+          "$HOME/.local/share/agent-runtime/npm/bin" \
+          "$HOME/.local/bin"
+        fish_vi_key_bindings
+        set fish_greeting
 
-      # Change cursor shapes in different modes
-      set -g fish_cursor_default block
-      set -g fish_cursor_insert line
-      set -g fish_cursor_replace_one underscore
-      set -g fish_cursor_visual block
+        # Change cursor shapes in different modes
+        set -g fish_cursor_default block
+        set -g fish_cursor_insert line
+        set -g fish_cursor_replace_one underscore
+        set -g fish_cursor_visual block
 
-    '';
-    shellAliases = {
-      cat = "bat";
-      ls = "eza --icons";
-      ll = "eza -lah --git --icons";
-      la = "eza -a --icons";
-      lt = "eza --tree --icons";
-    };
-    shellAbbrs = shellShortcuts;
-    functions = {
-      mkcd = {
-        description = "Create a directory and enter it";
-        body = ''
-          if test (count $argv) -ne 1
-            echo "usage: mkcd <directory>" >&2
-            return 2
-          end
-
-          mkdir -p -- $argv[1]
-          cd -- $argv[1]
-        '';
+      '';
+      shellAliases = {
+        cat = "bat";
+        ls = "eza --icons";
+        ll = "eza -lah --git --icons";
+        la = "eza -a --icons";
+        lt = "eza --tree --icons";
       };
+      shellAbbrs = shellShortcuts;
+      functions = {
+        mkcd = {
+          description = "Create a directory and enter it";
+          body = ''
+            if test (count $argv) -ne 1
+              echo "usage: mkcd <directory>" >&2
+              return 2
+            end
 
-      pi = {
-        description = "Run Pi outside the home directory (maintenance commands pass through)";
-        body = ''
+            mkdir -p -- $argv[1]
+            cd -- $argv[1]
+          '';
+        };
+
+        pi = {
+          description = "Run Pi outside the home directory (maintenance commands pass through)";
+          body = ''
+            # Commands that manage global state under ~/.pi/agent never bind a
+            # project directory, so they always pass through. Everything else
+            # (i.e. starting a session) is guarded below.
+            set -l passthrough update install uninstall --version --help -h help
+            if set -q argv[1]; and contains -- $argv[1] $passthrough
+              command pi $argv
+              return
+            end
+
+            set -l cwd (pwd -P)
+
+            if test "$cwd" = "$HOME"; and test "$PI_ALLOW_HOME" != "1"
+              echo "pi: refusing to start a session in \$HOME to avoid creating project files there." >&2
+              echo "pi: cd into a project directory, or run 'env PI_ALLOW_HOME=1 pi' to override once." >&2
+              return 64
+            end
+
+            command pi $argv
+          '';
+        };
+
+        nixcfg = {
+          description = "Run this NixOS config justfile from any directory";
+          body = ''
+            set -l repo "${repoPath}"
+
+            if not test -f "$repo/justfile"
+              echo "nixcfg: $repo/justfile not found" >&2
+              return 1
+            end
+
+            command just --justfile "$repo/justfile" --working-directory "$repo" $argv
+          '';
+        };
+      };
+    };
+
+    nushell = {
+      enable = true;
+      package = pkgs.nushell;
+      settings = {
+        show_banner = false;
+        edit_mode = "vi";
+        abbreviations = nushellShortcuts;
+        completions.external = {
+          enable = true;
+          max_results = 200;
+        };
+      };
+      shellAliases = {
+        kill = "^kill";
+        ll = "ls --long --all";
+        la = "ls --all";
+      };
+      extraConfig = ''
+        source ${pkgs.fzf}/share/fzf/completion.nu
+
+        def --env mkcd [directory: path] {
+          mkdir $directory
+          cd $directory
+        }
+
+        def pi [...args: string] {
           # Commands that manage global state under ~/.pi/agent never bind a
           # project directory, so they always pass through. Everything else
           # (i.e. starting a session) is guarded below.
-          set -l passthrough update install uninstall --version --help -h help
-          if set -q argv[1]; and contains -- $argv[1] $passthrough
-            command pi $argv
+          let passthrough = [update install uninstall "--version" "--help" "-h" help]
+          if (not ($args | is-empty)) and ($args.0 in $passthrough) {
+            ^pi ...$args
             return
-          end
-
-          set -l cwd (pwd -P)
-
-          if test "$cwd" = "$HOME"; and test "$PI_ALLOW_HOME" != "1"
-            echo "pi: refusing to start a session in \$HOME to avoid creating project files there." >&2
-            echo "pi: cd into a project directory, or run 'env PI_ALLOW_HOME=1 pi' to override once." >&2
-            return 64
-          end
-
-          command pi $argv
-        '';
-      };
-
-      nixcfg = {
-        description = "Run this NixOS config justfile from any directory";
-        body = ''
-          set -l repo "${repoPath}"
-
-          if not test -f "$repo/justfile"
-            echo "nixcfg: $repo/justfile not found" >&2
-            return 1
-          end
-
-          command just --justfile "$repo/justfile" --working-directory "$repo" $argv
-        '';
-      };
-    };
-  };
-
-  programs.nushell = {
-    enable = true;
-    package = pkgs.nushell;
-    settings = {
-      show_banner = false;
-      edit_mode = "vi";
-      abbreviations = nushellShortcuts;
-      completions.external = {
-        enable = true;
-        max_results = 200;
-      };
-    };
-    shellAliases = {
-      kill = "^kill";
-      ll = "ls --long --all";
-      la = "ls --all";
-    };
-    extraConfig = ''
-      source ${pkgs.fzf}/share/fzf/completion.nu
-
-      def --env mkcd [directory: path] {
-        mkdir $directory
-        cd $directory
-      }
-
-      def pi [...args: string] {
-        # Commands that manage global state under ~/.pi/agent never bind a
-        # project directory, so they always pass through. Everything else
-        # (i.e. starting a session) is guarded below.
-        let passthrough = [update install uninstall "--version" "--help" "-h" help]
-        if (not ($args | is-empty)) and ($args.0 in $passthrough) {
-          ^pi ...$args
-          return
-        }
-
-        let cwd = (pwd)
-
-        if ($cwd == $env.HOME) and (($env.PI_ALLOW_HOME? | default "") != "1") {
-          error make {
-            msg: $"pi: refusing to start a session in ($env.HOME) to avoid creating project files there.\ncd into a project directory, or run 'env PI_ALLOW_HOME=1 pi' to override once."
           }
+
+          let cwd = (pwd)
+
+          if ($cwd == $env.HOME) and (($env.PI_ALLOW_HOME? | default "") != "1") {
+            error make {
+              msg: $"pi: refusing to start a session in ($env.HOME) to avoid creating project files there.\ncd into a project directory, or run 'env PI_ALLOW_HOME=1 pi' to override once."
+            }
+          }
+
+          ^pi ...$args
         }
 
-        ^pi ...$args
-      }
+        def nixcfg [...args: string] {
+          let repo = "${repoPath}"
 
-      def nixcfg [...args: string] {
-        let repo = "${repoPath}"
+          if not ($repo | path join "justfile" | path exists) {
+            print --stderr $"nixcfg: ($repo)/justfile not found"
+            return
+          }
 
-        if not ($repo | path join "justfile" | path exists) {
-          print --stderr $"nixcfg: ($repo)/justfile not found"
-          return
+          just --justfile ($repo | path join "justfile") --working-directory $repo ...$args
         }
-
-        just --justfile ($repo | path join "justfile") --working-directory $repo ...$args
-      }
-    '';
-  };
-
-  programs.atuin = {
-    enable = true;
-    enableFishIntegration = true;
-    enableNushellIntegration = true;
-    forceOverwriteSettings = true;
-    flags = [ "--disable-up-arrow" ];
-    settings = {
-      auto_sync = false;
-      enter_accept = true;
-      filter_mode = "global";
-      search_mode = "fuzzy";
-      style = "compact";
-      update_check = false;
+      '';
     };
+
+    atuin = {
+      enable = true;
+      enableFishIntegration = true;
+      enableNushellIntegration = true;
+      forceOverwriteSettings = true;
+      flags = [ "--disable-up-arrow" ];
+      settings = {
+        auto_sync = false;
+        enter_accept = true;
+        filter_mode = "global";
+        search_mode = "fuzzy";
+        style = "compact";
+        update_check = false;
+      };
+    };
+
+    starship = {
+      enable = true;
+      enableFishIntegration = true;
+      settings = {
+        add_newline = true;
+        aws.symbol = " ";
+        buf.symbol = " ";
+        bun.symbol = " ";
+        c.symbol = " ";
+        cmake.symbol = " ";
+        conda.symbol = " ";
+        cpp.symbol = " ";
+        crystal.symbol = " ";
+        dart.symbol = " ";
+        deno.symbol = " ";
+        directory.read_only = " 󰌾";
+        docker_context.symbol = " ";
+        elixir.symbol = " ";
+        elm.symbol = " ";
+        fennel.symbol = " ";
+        fortran.symbol = " ";
+        fossil_branch.symbol = " ";
+        gcloud.symbol = " ";
+        git_branch.symbol = " ";
+        git_commit.tag_symbol = "  ";
+        golang.symbol = " ";
+        gradle.symbol = " ";
+        guix_shell.symbol = " ";
+        haskell.symbol = " ";
+        haxe.symbol = " ";
+        hg_branch.symbol = " ";
+        hostname.ssh_symbol = " ";
+        java.symbol = " ";
+        julia.symbol = " ";
+        kotlin.symbol = " ";
+        lua.symbol = " ";
+        memory_usage.symbol = "󰍛 ";
+        meson.symbol = "󰔷 ";
+        nim.symbol = "󰆥 ";
+        nix_shell.symbol = " ";
+        nodejs.symbol = " ";
+        package.symbol = "󰏗 ";
+        perl.symbol = " ";
+        php.symbol = " ";
+        pijul_channel.symbol = " ";
+        pixi.symbol = "󰏗 ";
+        python.symbol = " ";
+        rlang.symbol = "󰟔 ";
+        ruby.symbol = " ";
+        rust.symbol = "󱘗 ";
+        scala.symbol = " ";
+        status.symbol = " ";
+        swift.symbol = " ";
+        xmake.symbol = " ";
+        zig.symbol = " ";
+        os.symbols = {
+          Alpine = " ";
+          Arch = " ";
+          Debian = " ";
+          Fedora = " ";
+          Linux = " ";
+          Macos = " ";
+          NixOS = " ";
+          Ubuntu = " ";
+          Windows = "󰍲 ";
+        };
+      };
+    };
+
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+
+    wofi = {
+      enable = true;
+      settings = {
+        insensitive = true;
+        allow_images = true;
+        width = "620";
+        height = "420";
+        prompt = "Bitwarden";
+        key_down = "Down,Ctrl-j,Ctrl-n";
+        key_up = "Up,Ctrl-k,Ctrl-p";
+      };
+      style = with colors; ''
+        * {
+          font-family: "JetBrainsMono Nerd Font";
+          font-size: 14px;
+        }
+
+        window {
+          margin: 0;
+          border: 1px solid ${base03};
+          border-radius: 12px;
+          background-color: ${base00};
+          color: ${base05};
+        }
+
+        #outer-box {
+          margin: 12px;
+          background-color: transparent;
+        }
+
+        #input {
+          min-height: 42px;
+          margin: 0 0 10px 0;
+          padding: 0 14px;
+          border: 1px solid ${base03};
+          border-radius: 8px;
+          background-color: ${base01};
+          color: ${base05};
+        }
+
+        #input:focus {
+          border-color: ${base0A};
+        }
+
+        #scroll {
+          margin: 0;
+          border-radius: 8px;
+          background-color: transparent;
+        }
+
+        #entry {
+          min-height: 36px;
+          padding: 7px 10px;
+          border-radius: 7px;
+          background-color: transparent;
+        }
+
+        #entry:selected {
+          background-color: ${base02};
+        }
+
+        #entry:selected #text {
+          color: ${base06};
+        }
+
+        #text {
+          color: ${base05};
+        }
+
+        #img {
+          margin-right: 10px;
+        }
+      '';
+    };
+
+    git = {
+      enable = true;
+      settings = {
+        core = {
+          editor = "zeditor";
+          excludesfile = "~/.config/git/ignore";
+        };
+        fetch.prune = true;
+        init.defaultBranch = "main";
+        pull.rebase = true;
+        rebase.autoStash = true;
+        push.autoSetupRemote = true;
+        include.path = "~/.gitconfig.local";
+      };
+    };
+
+    delta = {
+      enable = true;
+      enableGitIntegration = false;
+      options = {
+        features = "line-numbers decorations";
+        syntax-theme = "OneHalfDark";
+      };
+    };
+
   };
 
   home.file."${config.xdg.configHome}/nushell/config.nu".force = true;
-
-  programs.starship = {
-    enable = true;
-    enableFishIntegration = true;
-    settings = {
-      add_newline = true;
-      aws.symbol = " ";
-      buf.symbol = " ";
-      bun.symbol = " ";
-      c.symbol = " ";
-      cmake.symbol = " ";
-      conda.symbol = " ";
-      cpp.symbol = " ";
-      crystal.symbol = " ";
-      dart.symbol = " ";
-      deno.symbol = " ";
-      directory.read_only = " 󰌾";
-      docker_context.symbol = " ";
-      elixir.symbol = " ";
-      elm.symbol = " ";
-      fennel.symbol = " ";
-      fortran.symbol = " ";
-      fossil_branch.symbol = " ";
-      gcloud.symbol = " ";
-      git_branch.symbol = " ";
-      git_commit.tag_symbol = "  ";
-      golang.symbol = " ";
-      gradle.symbol = " ";
-      guix_shell.symbol = " ";
-      haskell.symbol = " ";
-      haxe.symbol = " ";
-      hg_branch.symbol = " ";
-      hostname.ssh_symbol = " ";
-      java.symbol = " ";
-      julia.symbol = " ";
-      kotlin.symbol = " ";
-      lua.symbol = " ";
-      memory_usage.symbol = "󰍛 ";
-      meson.symbol = "󰔷 ";
-      nim.symbol = "󰆥 ";
-      nix_shell.symbol = " ";
-      nodejs.symbol = " ";
-      package.symbol = "󰏗 ";
-      perl.symbol = " ";
-      php.symbol = " ";
-      pijul_channel.symbol = " ";
-      pixi.symbol = "󰏗 ";
-      python.symbol = " ";
-      rlang.symbol = "󰟔 ";
-      ruby.symbol = " ";
-      rust.symbol = "󱘗 ";
-      scala.symbol = " ";
-      status.symbol = " ";
-      swift.symbol = " ";
-      xmake.symbol = " ";
-      zig.symbol = " ";
-      os.symbols = {
-        Alpine = " ";
-        Arch = " ";
-        Debian = " ";
-        Fedora = " ";
-        Linux = " ";
-        Macos = " ";
-        NixOS = " ";
-        Ubuntu = " ";
-        Windows = "󰍲 ";
-      };
-    };
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
-  programs.wofi = {
-    enable = true;
-    settings = {
-      insensitive = true;
-      allow_images = true;
-      width = "620";
-      height = "420";
-      prompt = "Bitwarden";
-      key_down = "Down,Ctrl-j,Ctrl-n";
-      key_up = "Up,Ctrl-k,Ctrl-p";
-    };
-    style = with colors; ''
-      * {
-        font-family: "JetBrainsMono Nerd Font";
-        font-size: 14px;
-      }
-
-      window {
-        margin: 0;
-        border: 1px solid ${base03};
-        border-radius: 12px;
-        background-color: ${base00};
-        color: ${base05};
-      }
-
-      #outer-box {
-        margin: 12px;
-        background-color: transparent;
-      }
-
-      #input {
-        min-height: 42px;
-        margin: 0 0 10px 0;
-        padding: 0 14px;
-        border: 1px solid ${base03};
-        border-radius: 8px;
-        background-color: ${base01};
-        color: ${base05};
-      }
-
-      #input:focus {
-        border-color: ${base0A};
-      }
-
-      #scroll {
-        margin: 0;
-        border-radius: 8px;
-        background-color: transparent;
-      }
-
-      #entry {
-        min-height: 36px;
-        padding: 7px 10px;
-        border-radius: 7px;
-        background-color: transparent;
-      }
-
-      #entry:selected {
-        background-color: ${base02};
-      }
-
-      #entry:selected #text {
-        color: ${base06};
-      }
-
-      #text {
-        color: ${base05};
-      }
-
-      #img {
-        margin-right: 10px;
-      }
-    '';
-  };
-
-  programs.git = {
-    enable = true;
-    settings = {
-      core = {
-        editor = "zeditor";
-        excludesfile = "~/.config/git/ignore";
-      };
-      fetch.prune = true;
-      init.defaultBranch = "main";
-      pull.rebase = true;
-      rebase.autoStash = true;
-      push.autoSetupRemote = true;
-      include.path = "~/.gitconfig.local";
-    };
-  };
-
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = false;
-    options = {
-      features = "line-numbers decorations";
-      syntax-theme = "OneHalfDark";
-    };
-  };
 
   xdg.configFile = {
     "herdr/config.toml" = {
@@ -458,9 +461,11 @@ in
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/herdr/config.toml";
     };
-    "gh-dash/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh-dash/config.yml";
+    "gh-dash/config.yml".source =
+      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh-dash/config.yml";
     "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
-    "lazydocker/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
+    "lazydocker/config.yml".source =
+      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
     "git/ignore".source = ../../configs/git/ignore;
     "lazygit/config.yml" = {
       force = true;
