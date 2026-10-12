@@ -44,14 +44,14 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "noctalia/bitwarden" ]
+enabled = [ "noctalia/bitwarden", "aabidk20/yt-music", "noctalia/translator" ]
 
 [theme]
 source = "builtin"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri", "qt", "starship" ]
-    community_ids = [ "neovim", "yazi" ]
+    community_ids = [ "neovim", "herdr", "yazi" ]
     enable_builtin_templates = true
     enable_community_templates = true
 
