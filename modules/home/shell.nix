@@ -463,8 +463,6 @@ in
     "gh-dash/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh-dash/config.yml";
     "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
     "lazydocker/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
-    "lazysql/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazysql/config.toml";
-    "zellij/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zellij/config.kdl";
     "git/ignore".source = ../../configs/git/ignore;
     "lazygit/config.yml" = {
       force = true;
