@@ -46,6 +46,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Hermes Agent (NousResearch): Desktop app on the workstation via its Home
+    # Manager module. Upstream marks Nix support Tier 2 (best-effort) and pins
+    # its own nixpkgs — do not add follows, the uv2nix eval depends on them.
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+
   };
 
   outputs =

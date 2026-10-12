@@ -5,6 +5,7 @@ _:
     ./desktop.nix
     ./development.nix
     ./editors.nix
+    ./hermes-desktop.nix
     ./shell.nix
     ./update-check.nix
     ./xdg.nix
