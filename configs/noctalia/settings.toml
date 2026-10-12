@@ -1,71 +1,39 @@
 config_version = 15
 
-[backdrop]
-blur_intensity = 0.4999999888241291
-
-[dock]
-launcher_position = "none"
-
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
-widget_order = [ "lockscreen-login-box@eDP-1" ]
+widget_order = ["lockscreen-login-box@eDP-1"]
 
-    [lockscreen_widgets.grid]
-    cell_size = 16
-    major_interval = 4
-    visible = true
+[lockscreen_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
 
-    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-    box_height = 196.0
-    box_width = 810.0
-    cx = 565.0
-    cy = 524.0
-    output = "eDP-1"
-    placement_height = 706.0
-    placement_width = 1129.0
-    rotation = 0.0
-    type = "login_box"
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+box_height = 196.0
+box_width = 810.0
+cx = 565.0
+cy = 524.0
+output = "eDP-1"
+placement_height = 706.0
+placement_width = 1129.0
+rotation = 0.0
+type = "login_box"
 
-        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
-        background_opacity = 0.88
-        background_radius = 12.0
-        center_password_text = false
-        input_opacity = 1.0
-        input_radius = 6.0
-        layout = "regular"
-        show_caps_lock = true
-        show_keyboard_layout = true
-        show_login_button = true
-        show_media = true
-        show_session_buttons = true
-        show_unlock_hint = true
-        show_weather = true
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+background_color = "surface_variant"
+background_opacity = 0.88
+background_radius = 12.0
+center_password_text = false
+input_opacity = 1.0
+input_radius = 6.0
+layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
 
-[plugin_settings."noctalia/bitwarden"]
-hide_actions_when_searching = true
-
-[plugins]
-enabled = [ "noctalia/bitwarden", "noctalia/translator" ]
-
-[theme]
-source = "builtin"
-
-    [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri", "qt", "starship" ]
-    community_ids = [ "neovim", "herdr", "yazi" ]
-    enable_builtin_templates = true
-    enable_community_templates = true
-
-[wallpaper.default]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
-
-[wallpaper.last]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
-
-[wallpaper.monitors.eDP-1]
-path = "/home/lucho/Pictures/wallpapers/1_3Xy2Yefq_wallhaven-49p2gk.jpg"
-
-[widget.control-center]
-glyph = "brand-qq"

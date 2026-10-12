@@ -1,0 +1,4 @@
+[output.eDP-1]
+mode = "1920x1200@60.003"
+scale = 1.7
+position = [0, 0]

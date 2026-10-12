@@ -1,32 +1,15 @@
 {
   config,
   hostName,
-  lib,
   pkgs,
   repoPath,
   ...
 }:
 
 let
-  niriConfig = builtins.readFile ../../configs/niri/config.kdl.in;
-  niriOutputsPath = ../../hosts + "/${hostName}/niri-outputs.kdl";
-  niriHostBindsPath = ../../hosts + "/${hostName}/niri-host.kdl";
-  niriHostBinds =
-    if builtins.pathExists niriHostBindsPath then builtins.readFile niriHostBindsPath else "";
+  umbrielConfig = builtins.readFile ../../configs/umbriel/config.toml;
+  umbrielOutputsPath = ../../hosts + "/${hostName}/umbriel-outputs.toml";
   noctaliaUiScale = 0.8;
-  niriNoctaliaFallback = pkgs.writeText "noctalia-niri-fallback.kdl" ''
-    layout {
-        focus-ring {
-            active-color "#8f8f8f"
-            inactive-color "#3f3f3f"
-            urgent-color "#cc4444"
-        }
-
-        shadow {
-            color "#0007"
-        }
-    }
-  '';
 in
 {
   home.packages = with pkgs; [
@@ -71,18 +54,12 @@ in
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
       # Hot-reload link too, so shader iterations do not need a rebuild.
       "ghostty/shaders/cursor_smear.glsl".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/shaders/cursor_smear.glsl";
-      "niri/config.kdl".text =
+      "umbriel/config.toml".text =
         builtins.replaceStrings
-          [
-            "@niri_outputs_path@"
-            "@niri_host_binds@"
-          ]
-          [
-            "${config.xdg.configHome}/niri/outputs.kdl"
-            niriHostBinds
-          ]
-          niriConfig;
-      "niri/outputs.kdl".source = niriOutputsPath;
+          [ "@umbriel_outputs_path@" ]
+          [ "${config.xdg.configHome}/umbriel/outputs.toml" ]
+          umbrielConfig;
+      "umbriel/outputs.toml".source = umbrielOutputsPath;
     };
 
     # Noctalia reads every file in the config dir and then overlays the state-dir
@@ -95,14 +72,6 @@ in
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/noctalia/settings.toml";
   };
 
-  home.activation.ensureNoctaliaThemeTargets = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    niri_theme="${config.xdg.configHome}/niri/noctalia.kdl"
-
-    if [ ! -e "$niri_theme" ]; then
-      $DRY_RUN_CMD install -Dm0644 ${niriNoctaliaFallback} "$niri_theme"
-    fi
-  '';
-
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
@@ -114,7 +83,7 @@ in
         font_family = "JetBrainsMono Nerd Font";
         telemetry_enabled = false;
         polkit_agent = true;
-        niri_overview_type_to_launch_enabled = true;
+        umbriel_overview_type_to_launch_enabled = true;
         launch_apps_as_systemd_services = true;
       };
       lockscreen.enabled = true;
@@ -146,14 +115,9 @@ in
         wallpaper_scheme = "m3-content";
         templates = {
           enable_builtin_templates = true;
-          builtin_ids = [ ];
+          builtin_ids = [ "umbriel" ];
           enable_community_templates = true;
           community_ids = [ ];
-          user.niri = {
-            input_path = "${repoPath}/configs/noctalia/templates/niri.kdl";
-            output_path = "~/.config/niri/noctalia.kdl";
-            post_hook = "${lib.getExe pkgs.niri} msg action load-config-file || true";
-          };
         };
       };
       wallpaper = {
