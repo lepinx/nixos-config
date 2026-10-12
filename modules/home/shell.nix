@@ -111,6 +111,7 @@ in
     wofi
     wtype
     zoxide
+    starship
     pkgs.fzf
     pkgs.terminal-rain-lightning
   ];
@@ -119,6 +120,10 @@ in
     fish = {
       enable = true;
       interactiveShellInit = ''
+        # Noctalia owns ~/.config/starship.toml (palette injection via its
+        # starship template); the integration line is added here because
+        # programs.starship is no longer used.
+        starship init fish | source
         set -gx PATH \
           "/etc/profiles/per-user/$USER/bin" \
           (string match -v -- \
@@ -275,75 +280,6 @@ in
       };
     };
 
-    starship = {
-      enable = true;
-      enableFishIntegration = true;
-      settings = {
-        add_newline = true;
-        aws.symbol = " ";
-        buf.symbol = " ";
-        bun.symbol = " ";
-        c.symbol = " ";
-        cmake.symbol = " ";
-        conda.symbol = " ";
-        cpp.symbol = " ";
-        crystal.symbol = " ";
-        dart.symbol = " ";
-        deno.symbol = " ";
-        directory.read_only = " 󰌾";
-        docker_context.symbol = " ";
-        elixir.symbol = " ";
-        elm.symbol = " ";
-        fennel.symbol = " ";
-        fortran.symbol = " ";
-        fossil_branch.symbol = " ";
-        gcloud.symbol = " ";
-        git_branch.symbol = " ";
-        git_commit.tag_symbol = "  ";
-        golang.symbol = " ";
-        gradle.symbol = " ";
-        guix_shell.symbol = " ";
-        haskell.symbol = " ";
-        haxe.symbol = " ";
-        hg_branch.symbol = " ";
-        hostname.ssh_symbol = " ";
-        java.symbol = " ";
-        julia.symbol = " ";
-        kotlin.symbol = " ";
-        lua.symbol = " ";
-        memory_usage.symbol = "󰍛 ";
-        meson.symbol = "󰔷 ";
-        nim.symbol = "󰆥 ";
-        nix_shell.symbol = " ";
-        nodejs.symbol = " ";
-        package.symbol = "󰏗 ";
-        perl.symbol = " ";
-        php.symbol = " ";
-        pijul_channel.symbol = " ";
-        pixi.symbol = "󰏗 ";
-        python.symbol = " ";
-        rlang.symbol = "󰟔 ";
-        ruby.symbol = " ";
-        rust.symbol = "󱘗 ";
-        scala.symbol = " ";
-        status.symbol = " ";
-        swift.symbol = " ";
-        xmake.symbol = " ";
-        zig.symbol = " ";
-        os.symbols = {
-          Alpine = " ";
-          Arch = " ";
-          Debian = " ";
-          Fedora = " ";
-          Linux = " ";
-          Macos = " ";
-          NixOS = " ";
-          Ubuntu = " ";
-          Windows = "󰍲 ";
-        };
-      };
-    };
-
     zoxide = {
       enable = true;
       enableFishIntegration = true;
@@ -466,6 +402,10 @@ in
     "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
     "lazydocker/config.yml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
+    # Noctalia's starship template injects its palette block into this file on
+    # every theme change (out-of-store so the hook can write through the link).
+    "starship.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/starship/starship.toml";
     "git/ignore".source = ../../configs/git/ignore;
     "lazygit/config.yml" = {
       force = true;

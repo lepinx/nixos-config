@@ -17,6 +17,7 @@ pinned = [
     "io.ente.auth",
     "bruno",
     "dbeaver",
+    "com.nousresearch.hermes",
     "io.github.tobagin.karere",
     "org.telegram.desktop"
 ]
@@ -65,7 +66,7 @@ hide_actions_when_searching = true
 enabled = [ "noctalia/bitwarden", "noctalia/translator", "noctalia/umbriel-companion" ]
 
 [theme]
-source = "builtin"
+source = "wallpaper"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "umbriel", "qt", "starship" ]
