@@ -14,18 +14,6 @@ let
   niriHostBinds =
     if builtins.pathExists niriHostBindsPath then builtins.readFile niriHostBindsPath else "";
   noctaliaUiScale = 0.8;
-  bitwardenFieldCopy = pkgs.writeShellApplication {
-    name = "bitwarden-field-copy";
-    runtimeInputs = with pkgs; [
-      config.programs.noctalia.package
-      coreutils
-      jq
-      libnotify
-      rbw
-      wl-clipboard
-    ];
-    text = builtins.readFile ../../configs/scripts/bitwarden-field-copy.sh;
-  };
   niriNoctaliaFallback = pkgs.writeText "noctalia-niri-fallback.kdl" ''
     layout {
         focus-ring {
@@ -48,7 +36,6 @@ in
     pear-desktop # YouTube Music desktop client (MPRIS for the shell media widget)
     telegram-desktop # official Telegram client
     karere # WhatsApp desktop client (GTK4 wrapper of WhatsApp Web; no official Linux app exists)
-    bitwardenFieldCopy
     clock-rs
     discord
     ente-auth

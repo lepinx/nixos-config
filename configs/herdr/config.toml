@@ -19,9 +19,6 @@ agent_panel_scope = "all"
 # would keep them as silent in-app toasts.
 delivery = "system"
 
-[theme]
-name = "one-dark"
-
 [theme.custom]
 accent = "#e6b450"
 panel_bg = "reset"

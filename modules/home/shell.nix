@@ -103,9 +103,7 @@ in
     pinentry-gnome3
     pipes
     procps
-    rbw
     ripgrep
-    rofi-rbw
     tree
     unzip
     wget
