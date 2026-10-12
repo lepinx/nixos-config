@@ -9,6 +9,25 @@ default:
 check:
     nix flake check
 
+# umbriel#360: the overview type-to-launch exclusive keyboard layer blocks hot
+# corners while the overview is open. Until upstream ships a fix, the toggle
+# priority is off; once fixed, `just type-to-launch on` enables it in both
+# places (follow with `just switch` and a re-login).
+[no-cd]
+type-to-launch mode:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    case "{{ mode }}" in
+        on)  value="true" ;;
+        off) value="false" ;;
+        *) echo "usage: just type-to-launch <on|off>" >&2; exit 1 ;;
+    esac
+    cd "{{ repo_root }}"
+    sed -i -E "s/(umbriel_overview_type_to_launch_enabled = )[a-z]+/\\1$value/" \
+        modules/home/desktop.nix configs/noctalia/settings.toml
+    grep -H "umbriel_overview_type_to_launch_enabled" modules/home/desktop.nix configs/noctalia/settings.toml
+    echo "done. run 'just switch' (and re-login) to apply."
+
 build:
     nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel --no-link
 
