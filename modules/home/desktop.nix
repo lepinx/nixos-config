@@ -53,7 +53,8 @@ in
       '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
       # Hot-reload link too, so shader iterations do not need a rebuild.
-      "ghostty/shaders/cursor_smear.glsl".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/shaders/cursor_smear.glsl";
+      "ghostty/shaders/cursor_smear.glsl".source =
+        config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/shaders/cursor_smear.glsl";
       "umbriel/config.toml".text =
         builtins.replaceStrings
           [ "@umbriel_outputs_path@" ]
@@ -83,7 +84,7 @@ in
         font_family = "JetBrainsMono Nerd Font";
         telemetry_enabled = false;
         polkit_agent = true;
-        umbriel_overview_type_to_launch_enabled = true;
+        umbriel_overview_type_to_launch_enabled = false;
         launch_apps_as_systemd_services = true;
       };
       lockscreen.enabled = true;
@@ -115,7 +116,10 @@ in
         wallpaper_scheme = "m3-content";
         templates = {
           enable_builtin_templates = true;
-          builtin_ids = [ "umbriel" ];
+          builtin_ids = [
+            "ghostty"
+            "umbriel"
+          ];
           enable_community_templates = true;
           community_ids = [ ];
         };

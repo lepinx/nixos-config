@@ -107,6 +107,14 @@ curve = "spring:0.8,523"
 [animation.overview]
 curve = "spring:0.85,800"
 
+# The Noctalia builtin umbriel template writes a heavy overview tint (~53% alpha)
+# into noctalia.toml. Includes are applied before the including file, and the
+# including file wins for scalars, so declaring the overview colors here keeps a
+# much lighter veil over the desktop behind the overview while the rest of the
+# template palette (borders, scratchpad colors, ...) still merges through.
+[colors.overview]
+background_tint = "#1d100e30"
+
 # ------------------------------------------------------------------------------
 # Window rules
 
