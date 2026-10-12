@@ -35,10 +35,7 @@
     ACTION=="change", SUBSYSTEM=="power_supply", ATTR{type}=="Mains", TAG+="systemd", ENV{SYSTEMD_WANTS}+="power-profile-auto.service"
   '';
 
-  programs.niri = {
-    enable = true;
-    package = pkgs.niri;
-  };
+  programs.umbriel.enable = true;
 
   xdg.portal.enable = true;
   security.polkit.enable = true;
@@ -88,6 +85,5 @@
     brightnessctl
     libnotify
     wl-clipboard
-    xwayland-satellite
   ];
 }

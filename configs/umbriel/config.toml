@@ -1,0 +1,311 @@
+# Umbriel base configuration.
+#
+# Home Manager substitutes the @umbriel_outputs_path@ placeholder below with the
+# absolute path of the active host's output file (for example
+# ~/.config/umbriel/outputs.toml). Umbriel expands absolute include paths.
+#
+# Noctalia's builtin "umbriel" template writes ~/.config/umbriel/noctalia.toml
+# on every theme refresh and its apply.sh tries to add that file to
+# [include.optional]. Because Home Manager generates config.toml as a read-only
+# store symlink, the hook cannot edit this file, so the include is declared
+# here instead; an optional include tolerates a not-yet-existing noctalia.toml.
+
+[include]
+files = [ "@umbriel_outputs_path@" ]
+
+[include.optional]
+files = [ "noctalia.toml" ]
+
+# ------------------------------------------------------------------------------
+# Input
+
+[input.keyboard]
+layout = "us,es"
+options = "grp:alt_space_toggle"
+numlock_toggle = true
+
+[input.touchpad]
+tap = true
+natural_scroll = true
+
+# ------------------------------------------------------------------------------
+# General
+
+[general]
+# niri hotkey-overlay skip-at-startup: never show the cheatsheet on login.
+show_cheatsheet = false
+
+[environment]
+QT_QPA_PLATFORM = "wayland"
+ELECTRON_OZONE_PLATFORM_HINT = "auto"
+TERMINAL = "ghostty"
+EDITOR = "nvim"
+VISUAL = "nvim"
+
+# niri gestures hot-corners: top-left opens the overview after the pointer rests.
+[hot_corners.top_left]
+enabled = true
+delay_ms = 500
+action = "overview-open"
+
+# ------------------------------------------------------------------------------
+# Layout
+
+[layout]
+gap = 12
+extent_presets = [ 0.33333, 0.5, 0.66667 ]
+
+[layout.scrolling]
+default_extent_fraction = 0.5
+center_focused = "never"
+
+# ------------------------------------------------------------------------------
+# Appearance
+
+[appearance]
+prefer_no_csd = true
+# niri border off + focus-ring width 2 map onto Umbriel's single 2px border.
+border_width = 2
+# niri geometry-corner-radius 12 / clip-to-geometry.
+corner_radius = 12
+
+[appearance.shadow]
+enabled = true
+softness = 30
+offset_x = 0
+offset_y = 5
+
+[appearance.blur]
+enabled = true
+optimized = true
+passes = 4
+radius = 3
+noise = 0.032
+saturation = 1.25
+
+# ------------------------------------------------------------------------------
+# Animations
+#
+# niri springs map directly to Umbriel's spring:<damping>,<stiffness> syntax.
+# niri's horizontal-view-movement and window-resize springs have no dedicated
+# Umbriel event and fold into windows_move.
+
+[animation.windows_in]
+duration_ms = 150
+curve = "0.16,1,0.3,1"
+
+[animation.windows_out]
+duration_ms = 150
+curve = "0.25,0.46,0.45,0.94"
+
+[animation.windows_move]
+curve = "spring:0.75,323"
+
+[animation.workspaces]
+curve = "spring:0.8,523"
+
+[animation.overview]
+curve = "spring:0.85,800"
+
+# The Noctalia builtin umbriel template writes a heavy overview tint (~53% alpha)
+# into noctalia.toml. Includes are applied before the including file, and the
+# including file wins for scalars, so declaring the overview colors here keeps a
+# much lighter veil over the desktop behind the overview while the rest of the
+# template palette (borders, scratchpad colors, ...) still merges through.
+[colors.overview]
+background_tint = "#1d100e30"
+
+# ------------------------------------------------------------------------------
+# Window rules
+
+# Ghostty draws no decoration and blurs its translucent background.
+[[window_rule]]
+match.app_id = '^(com\.mitchellh\.ghostty|ghostty)$'
+border_width = 0
+blur = true
+
+# Noctalia settings window: floating, 1080x920.
+[[window_rule]]
+match.app_id = '^dev\.noctalia\.Noctalia\.Settings$'
+default_floating = true
+default_floating_size_px = { width = 1080, height = 920 }
+
+# Firefox Picture-in-Picture: floating.
+[[window_rule]]
+match.app_id = 'firefox$'
+match.title = '^Picture-in-Picture$'
+default_floating = true
+
+# ------------------------------------------------------------------------------
+# Keybinds
+#
+# Defining this table replaces Umbriel's built-in bind set, so every active bind
+# is listed here. niri's hotkey-overlay-title metadata has no Umbriel equivalent
+# and is intentionally dropped.
+
+[keybinds]
+
+# Applications and session
+"Mod+Shift+Slash" = { action = "cheatsheet-toggle", repeat = false }
+"Mod+Return" = "spawn:ghostty"
+"Mod+Shift+Return" = "spawn:ghostty -e herdr --session alternative-workspace"
+"Mod+Space" = "spawn:noctalia msg panel-toggle launcher"
+"Mod+S" = "spawn:noctalia msg panel-toggle control-center"
+"Mod+Comma" = "spawn:noctalia msg settings-toggle"
+"Mod+V" = "spawn:noctalia msg panel-toggle clipboard"
+"Mod+P" = "spawn:noctalia msg panel-toggle session"
+"Mod+Y" = "spawn:noctalia msg panel-toggle wallpaper"
+"Mod+N" = "spawn:noctalia msg panel-toggle control-center notifications"
+"Mod+M" = "spawn:noctalia msg panel-toggle control-center system"
+"Mod+Alt+L" = "spawn:noctalia msg session lock"
+"Ctrl+Alt+Delete" = { action = "spawn:ghostty -e btop", repeat = false }
+"Mod+F" = "spawn:ghostty -e yazi"
+"Mod+E" = "spawn:zeditor"
+"Mod+B" = "spawn:firefox"
+"Mod+Alt+B" = { action = "spawn:noctalia msg panel-open launcher /bw", repeat = false }
+
+# Volume, brightness and media keys work while the session is locked.
+"XF86AudioRaiseVolume" = { action = "spawn:noctalia msg volume-up", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true }
+"XF86AudioMicMute" = { action = "spawn:noctalia msg mic-mute", allow_when_locked = true }
+"XF86MonBrightnessUp" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn:noctalia msg brightness-down", allow_when_locked = true }
+"XF86AudioPlay" = { action = "spawn:noctalia msg media toggle", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn:noctalia msg media previous", allow_when_locked = true }
+"XF86AudioNext" = { action = "spawn:noctalia msg media next", allow_when_locked = true }
+"Mod+Alt+J" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
+"Mod+Alt+K" = { action = "spawn:noctalia msg volume-up", allow_when_locked = true }
+"Mod+Alt+M" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true }
+"Mod+Alt+P" = { action = "spawn:noctalia msg media toggle", allow_when_locked = true }
+"Mod+Alt+Comma" = { action = "spawn:noctalia msg media previous", allow_when_locked = true }
+"Mod+Alt+Period" = { action = "spawn:noctalia msg media next", allow_when_locked = true }
+"Mod+Alt+Minus" = { action = "spawn:noctalia msg brightness-down", allow_when_locked = true }
+"Mod+Alt+Equal" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
+
+# Overview and window focus
+"Mod+O" = { action = "overview-toggle", repeat = false }
+"Mod+Tab" = { action = "overview-toggle", repeat = false }
+"Mod+Q" = { action = "window-close", repeat = false }
+"Mod+H" = "window-focus-left"
+"Mod+J" = "window-focus-down"
+"Mod+K" = "window-focus-up"
+"Mod+L" = "window-focus-right"
+"Mod+Left" = "window-focus-left"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+"Mod+Right" = "window-focus-right"
+
+# Move window / column
+"Mod+Ctrl+H" = "column-move-left"
+"Mod+Ctrl+J" = "window-move-down"
+"Mod+Ctrl+K" = "window-move-up"
+"Mod+Ctrl+L" = "column-move-right"
+"Mod+Shift+Left" = "column-move-left"
+"Mod+Shift+Down" = "window-move-down"
+"Mod+Shift+Up" = "window-move-up"
+"Mod+Shift+Right" = "column-move-right"
+
+# Monitor focus and move
+"Mod+Shift+H" = "output-focus-left"
+"Mod+Shift+J" = "output-focus-down"
+"Mod+Shift+K" = "output-focus-up"
+"Mod+Shift+L" = "output-focus-right"
+"Mod+Ctrl+Left" = "output-focus-left"
+"Mod+Ctrl+Down" = "output-focus-down"
+"Mod+Ctrl+Up" = "output-focus-up"
+"Mod+Ctrl+Right" = "output-focus-right"
+"Mod+Ctrl+Shift+Left" = "column-move-to-output-left"
+"Mod+Ctrl+Shift+Down" = "column-move-to-output-down"
+"Mod+Ctrl+Shift+Up" = "column-move-to-output-up"
+"Mod+Ctrl+Shift+Right" = "column-move-to-output-right"
+"Mod+Ctrl+Shift+H" = "column-move-to-output-left"
+"Mod+Ctrl+Shift+J" = "column-move-to-output-down"
+"Mod+Ctrl+Shift+K" = "column-move-to-output-up"
+"Mod+Ctrl+Shift+L" = "column-move-to-output-right"
+
+# Workspaces
+"Mod+U" = "workspace-next"
+"Mod+I" = "workspace-previous"
+"Mod+Page_Down" = "workspace-next"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+Ctrl+U" = "column-move-to-workspace-next"
+"Mod+Ctrl+I" = "column-move-to-workspace-previous"
+"Mod+Shift+Page_Down" = "workspace-move-down"
+"Mod+Shift+Page_Up" = "workspace-move-up"
+"Mod+Shift+U" = "workspace-move-down"
+"Mod+Shift+I" = "workspace-move-up"
+
+# Wheel navigation
+"Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
+"Mod+Ctrl+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
+"Mod+Ctrl+WheelUp" = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
+"Mod+Shift+WheelDown" = "window-focus-right"
+"Mod+Shift+WheelUp" = "window-focus-left"
+"Mod+Ctrl+Shift+WheelDown" = "column-move-right"
+"Mod+Ctrl+Shift+WheelUp" = "column-move-left"
+
+# Column order
+"Mod+Home" = "column-focus-first"
+"Mod+End" = "column-focus-last"
+"Mod+Ctrl+Home" = "column-move-to-first"
+"Mod+Ctrl+End" = "column-move-to-last"
+
+# Tiling, tabs, sizing
+"Mod+W" = "column-toggle-tabbed"
+"Mod+BracketLeft" = "window-consume-or-expel-left"
+"Mod+BracketRight" = "window-consume-or-expel-right"
+"Mod+Period" = "window-consume-or-expel-right"
+"Mod+R" = "window-cycle-primary-extent"
+"Mod+Shift+R" = "window-cycle-secondary-extent"
+"Mod+Ctrl+R" = "window-set-secondary-extent:1.0"
+"Mod+Ctrl+F" = "window-set-primary-extent:1.0"
+"Mod+C" = "column-center"
+"Mod+Ctrl+C" = "column-center"
+"Mod+Backspace" = "window-toggle-maximize"
+"Mod+Shift+F" = "window-toggle-fullscreen"
+"Mod+Minus" = "window-modify-primary-extent:-0.1"
+"Mod+Equal" = "window-modify-primary-extent:0.1"
+"Mod+Shift+Minus" = "window-modify-secondary-extent:-0.1"
+"Mod+Shift+Equal" = "window-modify-secondary-extent:0.1"
+"Mod+Shift+V" = "window-toggle-floating"
+
+# Numbered workspaces
+"Mod+1" = "workspace-switch:1"
+"Mod+2" = "workspace-switch:2"
+"Mod+3" = "workspace-switch:3"
+"Mod+4" = "workspace-switch:4"
+"Mod+5" = "workspace-switch:5"
+"Mod+6" = "workspace-switch:6"
+"Mod+7" = "workspace-switch:7"
+"Mod+8" = "workspace-switch:8"
+"Mod+9" = "workspace-switch:9"
+"Mod+Ctrl+1" = "column-move-to-workspace:1"
+"Mod+Ctrl+2" = "column-move-to-workspace:2"
+"Mod+Ctrl+3" = "column-move-to-workspace:3"
+"Mod+Ctrl+4" = "column-move-to-workspace:4"
+"Mod+Ctrl+5" = "column-move-to-workspace:5"
+"Mod+Ctrl+6" = "column-move-to-workspace:6"
+"Mod+Ctrl+7" = "column-move-to-workspace:7"
+"Mod+Ctrl+8" = "column-move-to-workspace:8"
+"Mod+Ctrl+9" = "column-move-to-workspace:9"
+"Mod+Shift+1" = "column-move-to-workspace:1"
+"Mod+Shift+2" = "column-move-to-workspace:2"
+"Mod+Shift+3" = "column-move-to-workspace:3"
+"Mod+Shift+4" = "column-move-to-workspace:4"
+"Mod+Shift+5" = "column-move-to-workspace:5"
+"Mod+Shift+6" = "column-move-to-workspace:6"
+"Mod+Shift+7" = "column-move-to-workspace:7"
+"Mod+Shift+8" = "column-move-to-workspace:8"
+"Mod+Shift+9" = "column-move-to-workspace:9"
+
+# Screenshots
+"Print" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
+"Mod+Shift+S" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
+"Ctrl+Print" = { action = "spawn:noctalia msg screenshot-fullscreen pick", repeat = false }
+
+# Session
+"Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
+"Mod+Shift+E" = { action = "session-quit:skip-confirmation", repeat = false }
+"Mod+Shift+P" = "dpms-off"

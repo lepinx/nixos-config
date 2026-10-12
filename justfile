@@ -69,7 +69,7 @@ bootstrap-agents:
     "{{ repo_root }}/scripts/bootstrap-agents.sh"
 
 hotkeys:
-    niri msg action show-hotkey-overlay
+    umbriel msg cheatsheet-open
 
 warnings lines="120":
     journalctl -p warning..alert -b --no-pager -n {{ lines }}

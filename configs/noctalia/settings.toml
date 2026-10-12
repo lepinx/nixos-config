@@ -54,7 +54,7 @@ enabled = [ "noctalia/bitwarden", "noctalia/translator" ]
 source = "builtin"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri", "qt", "starship" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "umbriel", "qt", "starship" ]
     community_ids = [ "neovim", "herdr", "yazi" ]
     enable_builtin_templates = true
     enable_community_templates = true

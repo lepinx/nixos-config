@@ -3,7 +3,7 @@
 {
   services.displayManager.noctalia-greeter = {
     enable = true;
-    greeter-args = "--session niri --user ${userName}";
+    greeter-args = "--session umbriel --user ${userName}";
     settings.cursor = {
       theme = "Adwaita";
       size = 24;

@@ -191,8 +191,8 @@ desde la configuración global de Git; crear ese archivo localmente usando
 
 ## Configuración visual
 
-- Niri se configura en la plantilla `configs/niri/config.kdl.in`; Home Manager
-  genera el archivo final `~/.config/niri/config.kdl`.
+- Umbriel se configura en la plantilla `configs/umbriel/config.toml`; Home Manager
+  genera el archivo final `~/.config/umbriel/config.toml`.
 - La capa declarativa de Noctalia (barra, tema, escala, idle, keybinds) se
   declara en `modules/home/desktop.nix`.
 - La barra ocupa todo el ancho, mantiene el reloj centrado y oculta multimedia,
@@ -214,9 +214,9 @@ El perfil de energía se ajusta automáticamente para notebook: `performance`
 cuando está enchufada y `balanced` cuando está en batería. Esto conserva la
 respuesta rápida al abrir aplicaciones sin castigar autonomía/calor todo el día.
 
-## Atajos de Niri
+## Atajos de Umbriel
 
-Los bindings se versionan en `configs/niri/config.kdl.in`. El resumen vivo se
+Los bindings se versionan en `configs/umbriel/config.toml`. El resumen vivo se
 abre con `Mod+Shift+/`, `just hotkeys` o `nixcfg hotkeys`. La documentación corta
 queda en [Atajos](docs/keybindings.md).
 
@@ -226,7 +226,7 @@ ventanas, `Ctrl` navega monitores y `Ctrl+Shift` mueve columnas entre monitores.
 `Win+C` centra la columna. `Win+[` y `Win+]` incorporan o expulsan la ventana
 enfocada de la columna vecina, permitiendo apilar ventanas verticalmente. Llevar
 el puntero a una esquina superior abre el overview mediante los hot corners de
-Niri.
+Umbriel.
 
 ## Post-instalación
 
