@@ -4,6 +4,7 @@ config_version = 15
 blur_intensity = 0.4999999888241291
 
 [dock]
+enabled = true
 launcher_position = "none"
 
 [lockscreen_widgets]
@@ -20,9 +21,9 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     box_height = 196.0
     box_width = 810.0
     cx = 565.0
-    cy = 524.0
+    cy = 523.2578125
     output = "eDP-1"
-    placement_height = 706.0
+    placement_height = 705.0
     placement_width = 1129.0
     rotation = 0.0
     type = "login_box"
