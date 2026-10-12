@@ -454,45 +454,21 @@ in
 
   xdg.configFile = {
     "herdr/config.toml" = {
-      # Adopt the existing file on the first activation. Its contents are
-      # declared below, so subsequent rebuilds remain fully reproducible.
+      # Out-of-store symlink: the file is versioned in the repo AND Noctalia's
+      # herdr template hook needs to rewrite [theme.custom] on theme changes,
+      # which a read-only store symlink cannot do.
       force = true;
-      text = ''
-        onboarding = false
-
-        [ui]
-        agent_panel_scope = "all"
-
-        [ui.toast]
-        delivery = "herdr"
-
-        [theme]
-        name = "one-dark"
-
-        [terminal]
-        default_shell = "${pkgs.fish}/bin/fish"
-
-        [keys]
-        # Focus agent rows 1–9 with Ctrl+B, then Ctrl+<number>.
-        focus_agent = "prefix+ctrl+1..9"
-      '';
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/herdr/config.toml";
     };
+    "gh-dash/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh-dash/config.yml";
+    "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
+    "lazydocker/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
+    "lazysql/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazysql/config.toml";
+    "zellij/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/zellij/config.kdl";
     "git/ignore".source = ../../configs/git/ignore;
     "lazygit/config.yml" = {
       force = true;
-      text = ''
-        gui:
-          sidePanelWidth: 0.23
-          mainPanelSplitMode: horizontal
-          showNumstatInFilesView: true
-          wrapLinesInDiffView: false
-
-        git:
-          diffRenderers:
-            - name: delta
-              colorArg: always
-              command: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
-      '';
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazygit/config.yml";
     };
   };
 }

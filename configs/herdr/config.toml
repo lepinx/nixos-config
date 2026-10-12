@@ -1,0 +1,51 @@
+# herdr — terminal workspace manager for AI coding agents.
+#
+# Linked into ~/.config/herdr/config.toml as an out-of-store symlink so that
+# (a) the file is versioned here and (b) Noctalia's herdr community template
+# can rewrite the [theme.custom] section on theme changes (a store symlink is
+# read-only and its apply.sh hook fails with "read-only filesystem").
+#
+# [theme.custom] colors are managed by Noctalia (single theme source of truth);
+# [theme] name = "one-dark" stays as the base/fallback palette.
+
+onboarding = false
+
+[ui]
+agent_panel_scope = "all"
+
+[ui.toast]
+# system = hand background-workspace popups to the OS notification daemon
+# (Noctalia), which renders them and plays the notification sound. "herdr"
+# would keep them as silent in-app toasts.
+delivery = "system"
+
+[theme]
+name = "one-dark"
+
+[theme.custom]
+accent = "#e6b450"
+panel_bg = "reset"
+sidebar_bg = "reset"
+active_row_bg = "#272c36"
+selection_bg = "#2f3542"
+surface0 = "#272c36"
+surface1 = "#2f3542"
+surface_dim = "#040507"
+overlay0 = "#595f6a"
+overlay1 = "#8e959e"
+text = "#d1d1c7"
+subtext0 = "#8e959e"
+mauve = "#cda1fa"
+green = "#7fd962"
+yellow = "#f9af4f"
+red = "#ea6c73"
+blue = "#53bdfa"
+teal = "#90e1c6"
+peach = "#eaa46c"
+
+[terminal]
+default_shell = "/etc/profiles/per-user/lucho/bin/fish"
+
+[keys]
+# Focus agent rows 1–9 with Ctrl+B, then Ctrl+<number>.
+focus_agent = "prefix+ctrl+1..9"

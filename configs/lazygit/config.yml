@@ -1,0 +1,11 @@
+gui:
+  sidePanelWidth: 0.23
+  mainPanelSplitMode: horizontal
+  showNumstatInFilesView: true
+  wrapLinesInDiffView: false
+
+git:
+  diffRenderers:
+    - name: delta
+      colorArg: always
+      command: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'

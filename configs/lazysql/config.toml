@@ -1,0 +1,17 @@
+ConfigFile = '/home/lucho/.config/lazysql/config.toml'
+LocalConfigFile = ''
+
+[application]
+DefaultPageSize = 300
+DisableSidebar = false
+SidebarOverlay = false
+MaxQueryHistoryPerConnection = 100
+TreeWidth = 30
+JSONViewerWordWrap = false
+EnterOpensJSONViewer = false
+ConfirmOnQuit = true
+
+[[database]]
+Name = 'SQL'
+URL = 'sqlserver://sa:Password.123@localhost:1433'
+Provider = 'sqlserver'
