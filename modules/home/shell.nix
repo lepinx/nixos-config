@@ -93,12 +93,12 @@ in
     bat
     btop
     cava
-    cmatrix
     curl
     eza
     fastfetch
     fd
     jq
+    unimatrix # replaces cmatrix: real Unicode charset, renders without missing-glyph blocks
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     pinentry-gnome3
     pipes
@@ -153,9 +153,13 @@ in
       shellAbbrs = shellShortcuts;
       functions = {
         saver = {
-          description = "Terminal screensaver: run a random decorative TUI (cmatrix, pipes, clock-rs, terminal-rain-lightning)";
+          description = "Terminal screensaver: run a random decorative TUI (unimatrix, pipes.sh, clock-rs, terminal-rain)";
           body = ''
-            set -l savers cmatrix pipes clock-rs terminal-rain-lightning
+            # Binary names differ from package names: pipes -> pipes.sh,
+            # terminal-rain-lightning -> terminal-rain. cmatrix was replaced by
+            # unimatrix: its random charset includes non-printable bytes that
+            # render as gray blocks in ghostty.
+            set -l savers unimatrix pipes.sh clock-rs terminal-rain
             set -l pick $savers[(random 1 (count $savers))]
             command $pick
           '';
