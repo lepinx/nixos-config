@@ -9,6 +9,9 @@
     XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "32";
     NIXOS_OZONE_WL = "1";
+    # Noctalia regenerates ~/.config/qt{5,6}ct/colors/noctalia.conf on theme
+    # changes; without qtct no Qt app ever reads them (only Qt app: krita, Qt6).
+    QT_QPA_PLATFORMTHEME = "qt6ct";
   };
 
   xdg = {

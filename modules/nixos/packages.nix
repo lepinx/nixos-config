@@ -1,5 +1,13 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
+# TEMPORARY — remove after nixpkgs-unstable fixes typescript-language-server.
+# 6.0.2 fails with "hash mismatch in fixed-output derivation ...-pnpm-deps.drv"
+# (stale pnpm lockfile hash upstream). Override it with the hash nix reports at
+# build time until the fix lands. Delete the overlay and restore the plain
+# module header once it is fixed upstream.
 let
   heliumVersion = "0.15.1.1";
   heliumSrc = pkgs.fetchurl {
@@ -26,6 +34,23 @@ let
   };
 in
 {
+  nixpkgs.overlays = [
+    (final: prev: {
+      typescript-language-server = prev.typescript-language-server.overrideAttrs (old: {
+        pnpmDeps = prev.fetchPnpmDeps {
+          inherit (old)
+            pname
+            version
+            src
+            ;
+          pnpm = prev.pnpm_12;
+          fetcherVersion = 4;
+          hash = "sha256-xR/EF60lVBsITKgH7wCM2wHM46PFQevD51KfCENSUH4=";
+        };
+      });
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     helium
     nautilus

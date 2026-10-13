@@ -67,7 +67,6 @@ in
       nixfmt
       shellcheck
       sql-formatter
-      pkgs.tuicr
     ];
   };
 

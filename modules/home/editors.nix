@@ -7,7 +7,6 @@
 {
   home.packages = [
     pkgs.lua-language-server
-    pkgs.neovim-remote
     pkgs.package-version-server
   ];
 
