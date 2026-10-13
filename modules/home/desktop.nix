@@ -25,7 +25,6 @@ in
     gnome-disk-utility
     ghostty
     file-roller
-    qt6Packages.qt6ct # loads Noctalia's regenerated ~/.config/qt6ct/colors/noctalia.conf palette (kept for future Qt6 apps; krita/inkscape removed)
     libreoffice
     localsend
     loupe
