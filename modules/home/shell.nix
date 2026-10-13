@@ -152,6 +152,15 @@ in
       };
       shellAbbrs = shellShortcuts;
       functions = {
+        saver = {
+          description = "Terminal screensaver: run a random decorative TUI (cmatrix, pipes, clock-rs, terminal-rain-lightning)";
+          body = ''
+            set -l savers cmatrix pipes clock-rs terminal-rain-lightning
+            set -l pick $savers[(random 1 (count $savers))]
+            command $pick
+          '';
+        };
+
         mkcd = {
           description = "Create a directory and enter it";
           body = ''
