@@ -54,7 +54,6 @@ in
       pkgs.glab
       pkgs.pi-coding-agent
       pkgs.codex
-      pkgs.opencode
       glab-tui
       just-lsp
       jujutsu
