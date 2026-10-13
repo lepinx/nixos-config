@@ -50,6 +50,10 @@ in
         X-GNOME-Autostart-enabled=false
       '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
+      # Noctalia's alacritty template updates the theme import through this
+      # link on theme changes; font and the rest stay user-owned in the repo.
+      "alacritty/alacritty.toml".source =
+        config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/alacritty/alacritty.toml";
       # Hot-reload link too, so shader iterations do not need a rebuild.
       "ghostty/shaders/cursor_smear.glsl".source =
         config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/shaders/cursor_smear.glsl";
