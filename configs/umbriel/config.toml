@@ -11,10 +11,10 @@
 # here instead; an optional include tolerates a not-yet-existing noctalia.toml.
 
 [include]
-files = [ "@umbriel_outputs_path@" ]
+files = ["@umbriel_outputs_path@"]
 
 [include.optional]
-files = [ "noctalia.toml" ]
+files = ["noctalia.toml"]
 
 # ------------------------------------------------------------------------------
 # Input
@@ -31,9 +31,10 @@ natural_scroll = true
 [input.cursor]
 # Bibata ships real per-variant images (16..96 every 8px); Adwaita 50 only has
 # 24/30/36 device px embedded, so no size setting ever changes it (see
-# umbriel#441 for the reload side). 48 at scale 1.7 -> 80px image.
+# umbriel#441 for the reload side). Bibata rounds size*scale to its nearest
+# 8px-grid variant: 32 at scale 1.7 -> 56px image, 36 -> 64px, 48 -> 80px.
 theme = "Bibata-Modern-Classic"
-size = 36
+size = 32
 hardware_cursor = true
 
 # ------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ action = "overview-toggle"
 
 [layout]
 gap = 12
-extent_presets = [ 0.33333, 0.5, 0.66667 ]
+extent_presets = [0.33333, 0.5, 0.66667]
 
 [layout.scrolling]
 default_extent_fraction = 0.5
