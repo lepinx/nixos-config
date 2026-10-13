@@ -22,7 +22,7 @@
     helix = {
       enable = true;
       settings = {
-        theme = "onedarker";
+        theme = "noctalia";
         editor = {
           line-number = "relative";
           mouse = false;
