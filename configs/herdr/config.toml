@@ -14,10 +14,10 @@ onboarding = false
 agent_panel_scope = "all"
 
 [ui.toast]
-# system = hand background-workspace popups to the OS notification daemon
-# (Noctalia), which renders them and plays the notification sound. "herdr"
-# would keep them as silent in-app toasts.
-delivery = "system"
+# herdr = toasts stay inside the herdr client (no OS notifications); the
+# completion sound still plays because ui.sound.enabled defaults to true and
+# is independent of delivery.
+delivery = "herdr"
 
 [theme.custom]
 accent = "#d9b9ff"
