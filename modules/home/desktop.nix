@@ -89,7 +89,7 @@ in
         # Toggle-priority until upstream fixes the exclusive-keyboard-layer
         # interaction (noctalia-dev/umbriel#360): with this on, the type-to-launch
         # layer blocks hot corners while the overview is open.
-        umbriel_overview_type_to_launch_enabled = false;
+        umbriel_overview_type_to_launch_enabled = true;
         launch_apps_as_systemd_services = true;
       };
       lockscreen.enabled = true;
