@@ -11,6 +11,12 @@
     power-profiles-daemon.enable = true;
   };
 
+  # Applies powertop --auto-tune at boot and after every resume:
+  # USB autosuspend (incl. 2.4 GHz dongles), BT controller runtime PM,
+  # PCIe ASPM, SATA ALPM, HDA codec power saving.
+  # Revert by removing this line if a peripheral wakes too slowly.
+  powerManagement.powertop.enable = true;
+
   systemd.services.power-profile-auto = {
     description = "Set the power profile according to AC power";
     after = [ "power-profiles-daemon.service" ];
@@ -85,7 +91,9 @@
 
   environment.systemPackages = with pkgs; [
     brightnessctl
+    e2fsprogs # chattr/lsattr, needed for NOCOW swapfile on btrfs
     libnotify
+    powertop
     wl-clipboard
   ];
 }
