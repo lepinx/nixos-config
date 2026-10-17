@@ -6,7 +6,7 @@
 # read-only and its apply.sh hook fails with "read-only filesystem").
 #
 # [theme.custom] colors are managed by Noctalia (single theme source of truth);
-# [theme] name = "one-dark" stays as the base/fallback palette.
+# Noctalia's herdr template rewrites them on every wallpaper change.
 
 onboarding = false
 

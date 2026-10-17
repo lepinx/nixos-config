@@ -37,12 +37,6 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_unlock_hint = true
         show_weather = true
 
-[plugin_settings."noctalia/bitwarden"]
-hide_actions_when_searching = true
-
-[plugins]
-enabled = [ "noctalia/translator", "noctalia/bitwarden" ]
-
 [wallpaper.default]
 path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 

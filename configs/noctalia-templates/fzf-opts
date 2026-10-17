@@ -1,4 +1,6 @@
-# Rendered by Noctalia's user template "fzf_nu" (configs/noctalia/settings.toml).
+# Rendered by Noctalia's user template "fzf_nu"
+# (programs.noctalia.settings.theme.templates.user.fzf_nu in
+# modules/home/desktop.nix).
 # Loaded at shell startup by nushell config.nu into $env.FZF_DEFAULT_OPTS.
 # Palette mapping mirrors the community fzf template.
 --color=bg+:{{colors.surface_variant.default.hex}}

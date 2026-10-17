@@ -31,8 +31,7 @@ return {
       },
       hooks = {
         diff_buf_win_enter = function()
-          -- Wrapped diff lines so long changes read at a glance. (nvim-scrollbar
-          -- was removed, so there is nothing to hide for wrapped lines anymore.)
+          -- Wrapped diff lines so long changes read at a glance.
           vim.opt_local.wrap = true
           vim.opt_local.linebreak = true
           vim.opt_local.breakindent = true
