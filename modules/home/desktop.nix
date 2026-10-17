@@ -114,6 +114,10 @@ in
         };
       };
       battery.warning_threshold = 20;
+      # Dock pins, restored after the v4 -> v5 migration dropped them: v5 does
+      # not migrate v4 settings, and the Settings UI rewrote the old state file
+      # without [dock]. Declared here so it survives UI rewrites; pin/unpin
+      # changes made in the UI still override this.
       theme = {
         mode = "dark";
         source = "wallpaper";
@@ -122,11 +126,36 @@ in
         templates = {
           enable_builtin_templates = true;
           builtin_ids = [
+            "alacritty"
+            "btop"
+            "cava"
             "ghostty"
+            "gtk3"
+            "gtk4"
+            "helix"
+            "qt"
+            "starship"
             "umbriel"
           ];
           enable_community_templates = true;
-          community_ids = [ ];
+          community_ids = [
+            "bat"
+            "herdr"
+            "lazygit"
+            "neovim"
+            "pi-agent"
+            "yazi"
+          ];
+          # User templates: the community fzf template only ships bash/fish
+          # outputs, which nushell cannot source. This renders the same palette
+          # mapping to a plain opts file that nushell's config.nu loads at
+          # startup when present.
+          user = {
+            fzf_nu = {
+              input_path = "${repoPath}/configs/noctalia-templates/fzf-opts";
+              output_path = "$XDG_CONFIG_HOME/fzf/themes/noctalia.opts";
+            };
+          };
         };
       };
       wallpaper = {
@@ -135,9 +164,9 @@ in
       };
       backdrop = {
         enabled = true;
-        # 0.0 keeps the empty-workspace wallpaper sharp; raise for a blurred
-        # backdrop behind windows.
-        blur_intensity = 0.0;
+        # 0.5 blurred backdrop behind windows (was set via the Settings UI and
+        # silently reverted to 0.0 when the v5 migration rewrote the state file).
+        blur_intensity = 0.5;
         tint_intensity = 0.0;
       };
       weather = {
@@ -209,6 +238,11 @@ in
         ];
       };
       widget = {
+        # Control-center bar glyph (Tabler icon); v4 setting lost in the v5
+        # migration, defaulting back to the noctalia logo.
+        control-center = {
+          glyph = "brand-qq";
+        };
         # Umbriel layout per focused workspace / active submap (official
         # noctalia/umbriel-companion plugin; hides itself outside Umbriel
         # sessions).
@@ -243,8 +277,9 @@ in
         };
       };
       dock = {
+        enabled = true;
         position = "bottom";
-        icon_size = 44;
+        icon_size = 32;
         auto_hide = false;
         smart_auto_hide = true;
         reserve_space = false;
@@ -252,9 +287,30 @@ in
         show_dots = true;
         show_instance_count = true;
         launcher_position = "start";
+        pinned = [
+          "org.gnome.Nautilus"
+          "thunderbird"
+          "discord"
+          "com.github.th-ch.youtube-music"
+          "helium"
+          "firefox"
+          "com.mitchellh.ghostty"
+          "io.ente.auth"
+          "bruno"
+          "dbeaver"
+          "com.nousresearch.hermes"
+          "io.github.tobagin.karere"
+          "org.telegram.desktop"
+        ];
       };
       plugins = {
-        enabled = [ "noctalia/translator" ];
+        # umbriel-companion and bitwarden were enabled via the v4 state file and
+        # dropped by the v5 migration; declared here so they survive UI rewrites.
+        enabled = [
+          "noctalia/bitwarden"
+          "noctalia/translator"
+          "noctalia/umbriel-companion"
+        ];
       };
     };
   };

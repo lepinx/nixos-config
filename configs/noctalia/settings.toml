@@ -1,28 +1,5 @@
 config_version = 15
 
-[backdrop]
-blur_intensity = 0.4999999888241291
-
-[dock]
-enabled = true
-icon_size = 35
-launcher_position = "none"
-pinned = [
-    "org.gnome.Nautilus",
-    "thunderbird",
-    "discord",
-    "com.github.th-ch.youtube-music",
-    "helium",
-    "firefox",
-    "com.mitchellh.ghostty",
-    "io.ente.auth",
-    "bruno",
-    "dbeaver",
-    "com.nousresearch.hermes",
-    "io.github.tobagin.karere",
-    "org.telegram.desktop"
-]
-
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
@@ -37,7 +14,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     box_height = 196.0
     box_width = 810.0
     cx = 565.0
-    cy = 523.2578125
+    cy = 523.0
     output = "eDP-1"
     placement_height = 705.0
     placement_width = 1129.0
@@ -64,28 +41,13 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
 hide_actions_when_searching = true
 
 [plugins]
-enabled = [ "noctalia/bitwarden", "noctalia/translator", "noctalia/umbriel-companion" ]
-
-[shell]
-umbriel_overview_type_to_launch_enabled = false
-
-[theme]
-source = "wallpaper"
-
-    [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "umbriel", "qt", "starship" ]
-    community_ids = [ "neovim", "herdr", "yazi" ]
-    enable_builtin_templates = true
-    enable_community_templates = true
+enabled = [ "noctalia/translator", "noctalia/bitwarden" ]
 
 [wallpaper.default]
-path = "/home/lucho/Pictures/wallpapers/1_DSqOVuJj_japan-fantasy-landscape.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
 [wallpaper.last]
-path = "/home/lucho/Pictures/wallpapers/1_DSqOVuJj_japan-fantasy-landscape.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
 [wallpaper.monitors.eDP-1]
-path = "/home/lucho/Pictures/wallpapers/1_DSqOVuJj_japan-fantasy-landscape.jpg"
-
-[widget.control-center]
-glyph = "brand-qq"
+path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
