@@ -39,7 +39,7 @@
   # Pauses < 45 min wake instantly; overnight or longer hibernates (zero drain).
   # If a btrfs balance ever relocates the swapfile, recompute resume_offset
   # with: btrfs inspect-internal map-swapfile -r /swap/swapfile
-  services.logind.lidSwitch = "suspend-then-hibernate";
+  services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
   systemd.sleep.settings.Sleep.HibernateDelaySec = "45min";
   zramSwap.enable = true;
 
