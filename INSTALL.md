@@ -1,8 +1,9 @@
 # Instalación de workstation
 
 Guía corta para reinstalar `workstation` desde una ISO de NixOS. Este flujo
-destruye el disco seleccionado o autodetectado (por defecto el declarado como
-`diskDevice` en `flake.nix`).
+destruye el disco seleccionado o autodetectado. `hosts/workstation/disko.nix`
+no tiene valores por defecto: el disco y el host se pasan explícitamente con
+`--argstr`.
 
 ## Instalación automática
 
@@ -93,7 +94,9 @@ La sección manual de abajo queda como alternativa paso a paso.
    ```bash
    nix run github:nix-community/disko -- \
      --mode destroy,format,mount \
-     --flake .#workstation
+     --flake .#workstation \
+     --argstr diskDevice /dev/nvme0n1 \
+     --argstr hostName workstation
    ```
 
 6. Instalar NixOS:

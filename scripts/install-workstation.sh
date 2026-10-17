@@ -6,10 +6,11 @@
 # It wipes the target disk, so every destructive step is gated behind a typed
 # confirmation of the exact device path. Nothing here touches the repository.
 #
-# Disko note: the target disk is always passed explicitly to Disko via
-# `--argstr diskDevice`, so auto-detection decides which disk is wiped. The
-# flake's `diskDevice` is only a default; the installed system mounts by
-# partlabel and stays device-independent.
+# Disko note: the target disk is always passed explicitly to Disko, so the
+# interactively chosen disk is the one wiped (auto-detection only picks the
+# candidate). Each host's disko.nix names its disk argument differently:
+# workstation takes diskDevice, homelab takes diskDeviceBoot. The installed
+# system mounts by partlabel and stays device-independent.
 #
 # LUKS note: this script never reads, captures, or stores the LUKS passphrase.
 # Disko prompts for it interactively during the `destroy,format,mount` run.
@@ -48,7 +49,9 @@ sets the user password, and can optionally enroll TPM2 + PIN.
 Options:
   --disk DEV   Target block device (for example /dev/nvme0n1).
                If omitted, a single eligible disk is auto-detected.
-  --host HOST  NixOS host to install (default: workstation).
+  --host HOST  NixOS host to install (default: workstation). Each host's
+               disko.nix names its disk argument differently: workstation
+               takes diskDevice, homelab takes diskDeviceBoot.
   -h, --help   Show this help and exit.
 
 The selected disk is passed to Disko explicitly (--argstr diskDevice), so the
@@ -254,14 +257,21 @@ run_disko() {
   info "This script never sees, reads, or stores it."
   echo
   info "Running Disko (destroy,format,mount) on $disk."
-  # The explicit --argstr overrides make Disko act on the selected disk, not on
-  # the flake's default diskDevice. disko.nix requires both arguments.
+  # The explicit --argstr override makes Disko act on the selected disk, not on
+  # the host's default. Each host's disko.nix names its disk argument
+  # differently: workstation requires diskDevice+hostName; homelab takes
+  # diskDeviceBoot and must never fall back to its /dev/sda default.
+  local -a disko_args=()
+  if [[ "$host" == "homelab" ]]; then
+    disko_args=(--argstr diskDeviceBoot "$disk")
+  else
+    disko_args=(--argstr diskDevice "$disk" --argstr hostName "$host")
+  fi
   (
     cd "$repo_root" && nix run github:nix-community/disko -- \
       --mode destroy,format,mount \
       --flake ".#$host" \
-      --argstr diskDevice "$disk" \
-      --argstr hostName "$host"
+      "${disko_args[@]}"
   )
 }
 
