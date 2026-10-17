@@ -1,0 +1,3 @@
+# bat preview settings. Out-of-store symlinked from ~/.config/bat/config so
+# Noctalia's bat template hook can rewrite the theme line on wallpaper changes.
+--theme=noctalia

@@ -336,6 +336,15 @@ in
   home.file."${config.xdg.configHome}/nushell/config.nu".force = true;
 
   xdg.configFile = {
+    # Out-of-store symlink: versioned in the repo AND Noctalia's bat template
+    # hook rewrites the --theme line on wallpaper changes, which a read-only
+    # store symlink cannot do.
+    "bat/config" = {
+      # The bat template hook created this as a regular file before we versioned
+      # it; force replaces it with the symlink.
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/bat/config";
+    };
     "herdr/config.toml" = {
       # Out-of-store symlink: the file is versioned in the repo AND Noctalia's
       # herdr template hook needs to rewrite [theme.custom] on theme changes,
@@ -343,9 +352,16 @@ in
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/herdr/config.toml";
     };
-    "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
-    "lazydocker/config.yml".source =
-      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
+    "gh/config.yml" = {
+      # force: gh occasionally replaces this symlink with a regular file when it
+      # writes its own config; the next switch restores the versioned symlink.
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
+    };
+    "lazydocker/config.yml" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
+    };
     # Noctalia's starship template injects its palette block into this file on
     # every theme change (out-of-store so the hook can write through the link).
     "starship.toml".source =
