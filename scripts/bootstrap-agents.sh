@@ -1,17 +1,7 @@
 #!/usr/bin/env bash
-#
-# Bootstrap the mutable agent tooling that the declarative NixOS config
-# intentionally does not own: pi extensions (pi is their package manager),
-# the npm-global codegraph helper, and optionally the standalone gentle-ai
-# binary.
-#
-# Idempotent: every step checks before acting, so this is safe to re-run
-# after any `pi update --extensions` to re-sync, or on a fresh install.
-#
-# Prerequisites: the NixOS configuration already switched at least once
-# (pi, node, npm and the /usr/bin/tar tmpfiles rule come from the flake).
-# Secrets (auth.json, API keys) are never installed or stored here; the
-# final summary lists what needs manual attention.
+# Bootstrap the mutable agent tooling Nix does not own (pi extensions, codegraph,
+# optional gentle-ai CLI). Idempotent; safe to re-run. Requires one prior
+# `just switch` (provides pi, node, /usr/bin/tar). Never handles secrets.
 
 set -euo pipefail
 
@@ -37,8 +27,6 @@ manual() { printf '  MANUAL   %s\n' "$1"; }
 
 command_exists() { command -v "$1" >/dev/null 2>&1; }
 
-# --- prerequisites ---------------------------------------------------------
-
 info "Prerequisites:"
 command_exists pi || die "pi not found. The NixOS config provides it: just switch, then retry."
 command_exists npm || die "npm not found. The NixOS config provides nodejs: just switch, then retry."
@@ -47,8 +35,6 @@ if [ ! -e /usr/bin/tar ]; then
   die "/usr/bin/tar is missing. gentle-pi's postinstall needs it: run 'just switch' first (the tmpfiles rule creates it), then retry."
 fi
 ok "pi, npm and /usr/bin/tar are available"
-
-# --- pi extensions ---------------------------------------------------------
 
 info ""
 info "Pi extensions (managed by pi, not Nix):"
@@ -62,8 +48,6 @@ for source in "${PI_EXTENSIONS[@]}"; do
   fi
 done
 
-# --- npm-global helpers ----------------------------------------------------
-
 info ""
 info "npm-global helpers (prefix: $NPM_PREFIX):"
 if command_exists codegraph; then
@@ -72,8 +56,6 @@ else
   npm install -g --prefix "$NPM_PREFIX" @colbymchenry/codegraph
   ok "codegraph"
 fi
-
-# --- standalone gentle-ai (optional) ---------------------------------------
 
 info ""
 if [ -x "$HOME/.local/bin/gentle-ai" ]; then
@@ -88,8 +70,6 @@ else
     skip "gentle-ai standalone (skipped; package-local binary inside gentle-pi is what pi uses)"
   fi
 fi
-
-# --- what still needs a human ----------------------------------------------
 
 info ""
 info "Remaining manual steps (intentionally never automated):"

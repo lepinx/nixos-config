@@ -1,4 +1,3 @@
-# Machine-specific hardware configuration.
 {
   config,
   lib,
@@ -35,10 +34,8 @@
     { device = "/swap/swapfile"; }
   ];
 
-  # Lid: suspend, then hibernate after the delay (RTC wake alarm).
-  # Pauses < 45 min wake instantly; overnight or longer hibernates (zero drain).
-  # If a btrfs balance ever relocates the swapfile, recompute resume_offset
-  # with: btrfs inspect-internal map-swapfile -r /swap/swapfile
+  # Lid: suspend then hibernate after 45 min (RTC wake): short pauses wake
+  # instantly, long ones cost no drain.
   services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
   systemd.sleep.settings.Sleep.HibernateDelaySec = "45min";
   zramSwap.enable = true;

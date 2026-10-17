@@ -1,6 +1,4 @@
-# Noctalia owns the colors: its alacritty template only fixes the import path
-# below on theme changes (writes through the out-of-store symlink); the rest of
-# this file is user-owned. The theme file itself is regenerated at
+# Noctalia's alacritty template rewrites the import below; the rest is user-owned.
 [general]
 import = [
     "~/.config/alacritty/themes/noctalia.toml",

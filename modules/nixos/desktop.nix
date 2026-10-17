@@ -11,10 +11,8 @@
     power-profiles-daemon.enable = true;
   };
 
-  # Applies powertop --auto-tune at boot and after every resume:
-  # USB autosuspend (incl. 2.4 GHz dongles), BT controller runtime PM,
-  # PCIe ASPM, SATA ALPM, HDA codec power saving.
-  # Revert by removing this line if a peripheral wakes too slowly.
+  # powertop --auto-tune at boot and resume (USB autosuspend, BT/PCIe/SATA/HDA
+  # power saving). Remove it if a peripheral wakes too slowly.
   powerManagement.powertop.enable = true;
 
   systemd.services.power-profile-auto = {

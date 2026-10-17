@@ -1,23 +1,12 @@
-# Umbriel base configuration.
-#
-# Home Manager substitutes the @umbriel_outputs_path@ placeholder below with the
-# absolute path of the active host's output file (for example
-# ~/.config/umbriel/outputs.toml). Umbriel expands absolute include paths.
-#
-# Noctalia's builtin "umbriel" template writes ~/.config/umbriel/noctalia.toml
-# on every theme refresh and its apply.sh tries to add that file to
-# [include.optional]. Because Home Manager generates config.toml as a read-only
-# store symlink, the hook cannot edit this file, so the include is declared
-# here instead; an optional include tolerates a not-yet-existing noctalia.toml.
+# Home Manager substitutes @umbriel_outputs_path@ with the active host's output
+# file. noctalia.toml is declared as an optional include here because Noctalia's
+# template hook cannot edit this read-only store symlink.
 
 [include]
 files = ["@umbriel_outputs_path@"]
 
 [include.optional]
 files = ["noctalia.toml"]
-
-# ------------------------------------------------------------------------------
-# Input
 
 [input.keyboard]
 layout = "us,es"
@@ -29,19 +18,13 @@ tap = true
 natural_scroll = true
 
 [input.cursor]
-# Bibata ships real per-variant images (16..96 every 8px); Adwaita 50 only has
-# 24/30/36 device px embedded, so no size setting ever changes it (see
-# umbriel#441 for the reload side). Bibata rounds size*scale to its nearest
-# 8px-grid variant: 32 at scale 1.7 -> 56px image, 36 -> 64px, 48 -> 80px.
+# Bibata ships real 8px-grid variants; Adwaita 50 only embeds 24/30/36px, so
+# size never changes it (umbriel#441). 32 at scale 1.7 -> nearest variant (56px).
 theme = "Bibata-Modern-Classic"
 size = 32
 hardware_cursor = true
 
-# ------------------------------------------------------------------------------
-# General
-
 [general]
-# Never show the cheatsheet on login.
 show_cheatsheet = false
 
 [environment]
@@ -51,16 +34,12 @@ TERMINAL = "ghostty"
 EDITOR = "nvim"
 VISUAL = "nvim"
 
-# Top-left corner opens the overview after the pointer rests.
 [hot_corners.top_left]
 enabled = true
 delay_ms = 0
 # Toggle, not just open: crossing the corner again while the overview is
 # open closes it.
 action = "overview-toggle"
-
-# ------------------------------------------------------------------------------
-# Layout
 
 [layout]
 gap = 12
@@ -70,14 +49,9 @@ extent_presets = [0.33333, 0.5, 0.66667]
 default_extent_fraction = 0.5
 center_focused = "never"
 
-# ------------------------------------------------------------------------------
-# Appearance
-
 [appearance]
 prefer_no_csd = true
-# Single 2px border (matches the previous look).
 border_width = 2
-# Rounded corners with clipping.
 corner_radius = 12
 
 [appearance.shadow]
@@ -94,10 +68,6 @@ radius = 3
 noise = 0.032
 saturation = 1.25
 
-# ------------------------------------------------------------------------------
-# Animations
-#
-# Spring animations.
 # horizontal-view-movement and window-resize springs fold into windows_move.
 
 [animation.windows_in]
@@ -118,20 +88,13 @@ curve = "spring:0.8,523"
 curve = "spring:0.85,800"
 
 [overview]
-# Hide the per-window number badges (keyboard focus shortcuts); Noctalia's
-# type-to-launch is disabled too, so the digits carry no function here.
+# No number badges: type-to-launch is off, so the digits do nothing.
 shortcuts = false
 
-# The Noctalia builtin umbriel template writes a heavy overview tint (~53% alpha)
-# into noctalia.toml. Includes are applied before the including file, and the
-# including file wins for scalars, so declaring the overview colors here keeps a
-# much lighter veil over the desktop behind the overview while the rest of the
-# template palette (borders, scratchpad colors, ...) still merges through.
+# Noctalia's template writes a ~53% alpha overview tint into an earlier-included
+# file; scalars here win, so this keeps a lighter veil while the rest merges.
 [colors.overview]
 background_tint = "#1d100e30"
-
-# ------------------------------------------------------------------------------
-# Window rules
 
 # Ghostty draws no decoration and blurs its translucent background.
 [[window_rule]]
@@ -139,27 +102,21 @@ match.app_id = '^(com\.mitchellh\.ghostty|ghostty)$'
 border_width = 0
 blur = true
 
-# Noctalia settings window: floating, 1080x920.
 [[window_rule]]
 match.app_id = '^dev\.noctalia\.Noctalia\.Settings$'
 default_floating = true
 default_floating_size_px = { width = 1080, height = 920 }
 
-# Firefox Picture-in-Picture: floating.
 [[window_rule]]
 match.app_id = 'firefox$'
 match.title = '^Picture-in-Picture$'
 default_floating = true
 
-# ------------------------------------------------------------------------------
-# Keybinds
-#
 # Defining this table replaces Umbriel's built-in bind set, so every active bind
 # is listed here.
 
 [keybinds]
 
-# Applications and session
 "Mod+Shift+Slash" = { action = "cheatsheet-toggle", repeat = false }
 "Mod+Return" = "spawn:ghostty"
 "Mod+Shift+Return" = "spawn:ghostty -e herdr --session alternative-workspace"
@@ -197,7 +154,6 @@ default_floating = true
 "Mod+Alt+Minus" = { action = "spawn:noctalia msg brightness-down", allow_when_locked = true }
 "Mod+Alt+Equal" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
 
-# Overview and window focus
 "Mod+O" = { action = "overview-toggle", repeat = false }
 "Mod+Tab" = { action = "overview-toggle", repeat = false }
 "Mod+Q" = { action = "window-close", repeat = false }
@@ -210,7 +166,6 @@ default_floating = true
 "Mod+Up" = "window-focus-up"
 "Mod+Right" = "window-focus-right"
 
-# Move window / column
 "Mod+Ctrl+H" = "column-move-left"
 "Mod+Ctrl+J" = "window-move-down"
 "Mod+Ctrl+K" = "window-move-up"
@@ -220,7 +175,6 @@ default_floating = true
 "Mod+Shift+Up" = "window-move-up"
 "Mod+Shift+Right" = "column-move-right"
 
-# Monitor focus and move
 "Mod+Shift+H" = "output-focus-left"
 "Mod+Shift+J" = "output-focus-down"
 "Mod+Shift+K" = "output-focus-up"
@@ -238,7 +192,6 @@ default_floating = true
 "Mod+Ctrl+Shift+K" = "column-move-to-output-up"
 "Mod+Ctrl+Shift+L" = "column-move-to-output-right"
 
-# Workspaces
 "Mod+U" = "workspace-next"
 "Mod+I" = "workspace-previous"
 "Mod+Page_Down" = "workspace-next"
@@ -250,7 +203,6 @@ default_floating = true
 "Mod+Shift+U" = "workspace-move-down"
 "Mod+Shift+I" = "workspace-move-up"
 
-# Wheel navigation
 "Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
 "Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
 "Mod+Ctrl+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
@@ -260,13 +212,11 @@ default_floating = true
 "Mod+Ctrl+Shift+WheelDown" = "column-move-right"
 "Mod+Ctrl+Shift+WheelUp" = "column-move-left"
 
-# Column order
 "Mod+Home" = "column-focus-first"
 "Mod+End" = "column-focus-last"
 "Mod+Ctrl+Home" = "column-move-to-first"
 "Mod+Ctrl+End" = "column-move-to-last"
 
-# Tiling, tabs, sizing
 "Mod+W" = "column-toggle-tabbed"
 "Mod+BracketLeft" = "window-consume-or-expel-left"
 "Mod+BracketRight" = "window-consume-or-expel-right"
@@ -285,7 +235,6 @@ default_floating = true
 "Mod+Shift+Equal" = "window-modify-secondary-extent:0.1"
 "Mod+Shift+V" = "window-toggle-floating"
 
-# Numbered workspaces
 "Mod+1" = "workspace-switch:1"
 "Mod+2" = "workspace-switch:2"
 "Mod+3" = "workspace-switch:3"
@@ -314,12 +263,10 @@ default_floating = true
 "Mod+Shift+8" = "column-move-to-workspace:8"
 "Mod+Shift+9" = "column-move-to-workspace:9"
 
-# Screenshots
 "Print" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
 "Mod+Shift+S" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
 "Ctrl+Print" = { action = "spawn:noctalia msg screenshot-fullscreen pick", repeat = false }
 
-# Session
 "Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
 "Mod+Shift+E" = { action = "session-quit:skip-confirmation", repeat = false }
 "Mod+Shift+P" = "dpms-off"

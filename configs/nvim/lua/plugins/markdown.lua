@@ -15,9 +15,7 @@ return {
       { "<leader>um", "<cmd>RenderMarkdown buf_toggle<CR>", ft = "markdown", desc = "Toggle Markdown render" },
     },
     opts = {
-      -- Snacks renders picker previews in temporary buffers. Depending on
-      -- the previewer they are either `nofile` or unlisted, but neither is a
-      -- document render-markdown should attach to.
+      -- Snacks previews are nofile or unlisted buffers; render-markdown must not attach.
       ignore = function(buf)
         return vim.bo[buf].buftype == "nofile" or not vim.bo[buf].buflisted
       end,

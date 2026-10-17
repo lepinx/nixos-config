@@ -1,12 +1,5 @@
-# herdr — terminal workspace manager for AI coding agents.
-#
-# Linked into ~/.config/herdr/config.toml as an out-of-store symlink so that
-# (a) the file is versioned here and (b) Noctalia's herdr community template
-# can rewrite the [theme.custom] section on theme changes (a store symlink is
-# read-only and its apply.sh hook fails with "read-only filesystem").
-#
-# [theme.custom] colors are managed by Noctalia (single theme source of truth);
-# Noctalia's herdr template rewrites them on every wallpaper change.
+# herdr — terminal workspace manager for AI agents. Out-of-store so Noctalia's
+# herdr template can rewrite [theme.custom] (store symlinks are read-only).
 
 onboarding = false
 
@@ -14,9 +7,7 @@ onboarding = false
 agent_panel_scope = "all"
 
 [ui.toast]
-# herdr = toasts stay inside the herdr client (no OS notifications); the
-# completion sound still plays because ui.sound.enabled defaults to true and
-# is independent of delivery.
+# No OS notifications; the completion sound still plays (ui.sound is separate).
 delivery = "herdr"
 
 [theme.custom]
@@ -44,5 +35,4 @@ peach = "#ffdeab"
 default_shell = "/etc/profiles/per-user/lucho/bin/fish"
 
 [keys]
-# Focus agent rows 1–9 with Ctrl+B, then Ctrl+<number>.
 focus_agent = "prefix+ctrl+1..9"

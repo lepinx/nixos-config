@@ -1,27 +1,15 @@
 #!/usr/bin/env bash
-#
-# Guarded one-command fresh install for the `workstation` NixOS flake.
-#
-# Run this from a NixOS ISO, as root, from anywhere inside the cloned repo.
-# It wipes the target disk, so every destructive step is gated behind a typed
-# confirmation of the exact device path. Nothing here touches the repository.
-#
-# Disko note: the target disk is always passed explicitly to Disko, so the
-# interactively chosen disk is the one wiped (auto-detection only picks the
-# candidate). Each host's disko.nix names its disk argument differently:
-# workstation takes diskDevice, homelab takes diskDeviceBoot. The installed
-# system mounts by partlabel and stays device-independent.
-#
-# LUKS note: this script never reads, captures, or stores the LUKS passphrase.
-# Disko prompts for it interactively during the `destroy,format,mount` run.
-#
+# Guarded fresh install for the workstation flake. Run from a NixOS ISO, as root.
+# Wipes the target disk; every destructive step is gated by a typed device-path
+# confirmation. The chosen disk is always passed to Disko explicitly
+# (workstation: diskDevice, homelab: diskDeviceBoot), so the flake needs no edit.
+# The LUKS passphrase is never read, captured or stored by this script.
 set -euo pipefail
 
 readonly DECLARED_DISK="/dev/nvme0n1"
 readonly TARGET_USER="lucho"
 readonly MIN_DISK_BYTES=$((100 * 1024 * 1024 * 1024)) # 100 GiB
 
-# Set by parse_args().
 explicit_disk=""
 host="workstation"
 
@@ -105,7 +93,6 @@ preflight() {
     die "Missing required tools: ${missing[*]}. On the ISO try: nix-shell -p git curl"
   fi
 
-  # Enable flakes for this session so `nix run` and `nixos-install --flake` work.
   export NIX_CONFIG="experimental-features = nix-command flakes"
 
   check_network
@@ -131,14 +118,12 @@ detect_repo_root() {
   fi
 }
 
-# True when the disk or any of its partitions currently has a mountpoint.
 is_disk_mounted() {
   local disk="$1"
   lsblk -n -r -o MOUNTPOINTS "$disk" | grep -q '[^[:space:]]'
 }
 
-# Print auto-detected candidate disks: non-removable, non-partitioned block
-# devices >= 100 GiB, without zram/loop devices, and without mounted partitions.
+# Candidates: non-removable, unmounted disks >= 100 GiB, excluding zram/loop.
 detect_disks() {
   local -a result=()
   local name type rm size
@@ -196,9 +181,6 @@ show_disk_info() {
   echo
 }
 
-# Number and describe every secret this installer asks for, so each prompt is
-# unambiguous. The script never reads, captures, or stores any of them, and it
-# cannot verify Secret 1 and Secret 3 differ.
 show_secrets_plan() {
   echo
   info "Secrets plan: this installer will ask for three secrets."
@@ -221,9 +203,7 @@ show_secrets_plan() {
   echo
 }
 
-# The flake declares a default diskDevice; Disko receives the selected disk
-# explicitly (see run_disko), so a different physical disk is supported without
-# editing the flake. Print an informational note when they differ.
+# Warn when the selection differs from the flake default (safe: see run_disko).
 note_disk_matches_flake() {
   local disk="$1"
 
@@ -233,7 +213,6 @@ note_disk_matches_flake() {
   warn "The installed system mounts by partlabel and works on either disk."
 }
 
-# Typed destructive confirmation plus a fresh mount re-check.
 confirm_destroy() {
   local disk="$1" typed
 
@@ -257,10 +236,8 @@ run_disko() {
   info "This script never sees, reads, or stores it."
   echo
   info "Running Disko (destroy,format,mount) on $disk."
-  # The explicit --argstr override makes Disko act on the selected disk, not on
-  # the host's default. Each host's disko.nix names its disk argument
-  # differently: workstation requires diskDevice+hostName; homelab takes
-  # diskDeviceBoot and must never fall back to its /dev/sda default.
+  # Point Disko at the selected disk; arg names differ per host, and homelab must
+  # not fall back to its /dev/sda default.
   local -a disko_args=()
   if [[ "$host" == "homelab" ]]; then
     disko_args=(--argstr diskDeviceBoot "$disk")
@@ -288,7 +265,6 @@ set_user_password() {
   nixos-enter --root /mnt -c "passwd $TARGET_USER"
 }
 
-# Locate the LUKS partition on the target disk; fall back to /dev/<disk>p2.
 find_luks_partition() {
   local disk="$1" part
   part="$(lsblk -n -r -p -o NAME,FSTYPE "$disk" | awk '$2 == "crypto_LUKS" { print $1; exit }')"

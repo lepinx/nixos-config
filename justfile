@@ -24,8 +24,7 @@ test:
 update:
     nix flake update
 
-# Fedora-style daily update: refresh the flake lock and switch immediately.
-# If the new generation misbehaves, `just rollback` restores the previous one.
+# Update the lock and switch in one step; recover with `just rollback`.
 up: update switch
 
 update-input input:

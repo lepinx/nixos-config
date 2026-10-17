@@ -44,8 +44,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
-    # Rolling: tracks the upstream default branch; `just update` picks up every
-    # new herdr commit. Version history: https://github.com/herdrdev/herdr/releases
+    # Rolling: tracks upstream default branch, so `just update` moves it.
     herdr = {
       url = "github:herdrdev/herdr";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -77,8 +76,6 @@
           enableHomeManager ? true,
           homeProfile ? userName,
           diskDevice ? null,
-          # Build the host from nixos-unstable with matching home-manager
-          # module inputs instead of the stable release.
           rolling ? false,
         }:
         (if rolling then nixpkgs-unstable else nixpkgs).lib.nixosSystem {
@@ -159,14 +156,11 @@
         };
       };
 
-      # Expose the disk layout as a parameterized function so the Disko CLI can
-      # override the target disk at install time with:
+      # Exposed so the Disko CLI can override the disk at install time:
       #   disko --flake .#workstation --argstr diskDevice /dev/X --argstr hostName workstation
-      # The installed system mounts by partlabel, so it stays device-independent.
       diskoConfigurations.workstation = import ./hosts/workstation/disko.nix;
 
-      # Homelab's disko layout manages only the OS SSD; the CLI can override the
-      # target disk at install time with --argstr diskDeviceBoot /dev/X.
+      # Only the OS SSD; override at install time with --argstr diskDeviceBoot /dev/X.
       diskoConfigurations.homelab = import ./hosts/homelab/disko.nix;
     };
 }

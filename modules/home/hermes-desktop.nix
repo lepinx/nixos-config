@@ -1,7 +1,5 @@
-# Hermes Desktop (Electron client) — the agent runtime lives on the homelab.
-# The app connects to it via Settings → Gateways once the homelab backend
-# exists (deferred work, see odd/tasks and Engram `hermes-agent-homelab`).
-# No local gateway/backend on purpose: programs.* installs without services.*.
+# Electron client only: the agent runtime lives on the homelab and no local
+# gateway/backend is configured on purpose.
 {
   inputs,
   ...

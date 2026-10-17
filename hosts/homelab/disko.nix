@@ -5,7 +5,6 @@
 }:
 
 let
-  # SSD (OS disk) mount options: same as the workstation layout.
   btrfsMountOptions = [
     "compress=zstd"
     "noatime"
@@ -14,13 +13,9 @@ let
   ];
 in
 {
-  # The data HDD is intentionally NOT managed by disko. It is staged with plain
-  # Btrfs from a live boot before install (label `homelab-data`, one subvolume
-  # per user), and mounted declaratively by filesystem label in default.nix, so
-  # the staged data survives the install untouched. Letting disko reference the
-  # data disk would reformat it and destroy that staged data. Encrypting the
-  # data disk with LUKS is a documented future option for the next hardware
-  # generation (with real backups in place).
+  # The data HDD is intentionally NOT managed by disko: it is staged with plain
+  # Btrfs before install, and having disko reference it would reformat and
+  # destroy that data. It is mounted by label in default.nix instead.
   disko.devices = {
     disk.boot = {
       type = "disk";

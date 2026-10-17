@@ -1,10 +1,7 @@
 local hover_win
 
--- Single source of truth for diagnostic presentation, referenced from both the
--- init hook and the lazy spec opts below. Colors come from the active
--- colorscheme (matugen, driven by the Noctalia wallpaper palette) — no
--- hardcoded hexes here: virtual text, signs and undercurls all follow the
--- theme's Diagnostic* groups.
+-- Shared by the init hook and the spec opts: colors come from the colorscheme's
+-- Diagnostic* groups, so no hardcoded hexes here.
 local diagnostics_config = {
   severity_sort = true,
   underline = true,

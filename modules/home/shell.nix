@@ -8,16 +8,13 @@
 
 let
   shellShortcuts = {
-    # Editors and helpers
     vim = "nvim";
     hd = "herdr";
 
-    # Desktop and file management
     nmc = "nm-connection-editor";
     yd = "yazi-devices";
     yt = "yazi-trash";
 
-    # Git
     g = "git";
     gs = "git status --short --branch";
     ga = "git add";
@@ -34,7 +31,6 @@ let
     gds = "git diff --staged";
     lg = "lazygit";
 
-    # Nix and this repo workflow
     n = "nix";
     nr = "nix run";
     ns = "nix shell";
@@ -54,7 +50,7 @@ let
     njs = "nixcfg switch";
     nju = "nixcfg update";
 
-    # Containers: Docker-compatible CLI backed by Podman.
+    # docker -> Podman CLI (dockerCompat).
     d = "docker";
     dc = "docker compose";
     dcu = "docker compose up -d";
@@ -77,7 +73,7 @@ in
     fastfetch
     fd
     jq
-    unimatrix # replaces cmatrix: real Unicode charset, renders without missing-glyph blocks
+    unimatrix
     inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     pinentry-gnome3
     pipes
@@ -98,9 +94,7 @@ in
     fish = {
       enable = true;
       interactiveShellInit = ''
-        # Noctalia owns ~/.config/starship.toml (palette injection via its
-        # starship template); the integration line is added here because
-        # programs.starship is no longer used.
+        # Noctalia owns ~/.config/starship.toml, so the starship module is unused and init is manual.
         starship init fish | source
         set -gx PATH \
           "/etc/profiles/per-user/$USER/bin" \
@@ -114,7 +108,6 @@ in
         fish_vi_key_bindings
         set fish_greeting
 
-        # Change cursor shapes in different modes
         set -g fish_cursor_default block
         set -g fish_cursor_insert line
         set -g fish_cursor_replace_one underscore
@@ -133,10 +126,8 @@ in
         saver = {
           description = "Terminal screensaver: run a random decorative TUI (unimatrix, pipes.sh, clock-rs, terminal-rain)";
           body = ''
-            # Binary names differ from package names: pipes -> pipes.sh,
-            # terminal-rain-lightning -> terminal-rain. cmatrix was replaced by
-            # unimatrix: its random charset includes non-printable bytes that
-            # render as gray blocks in ghostty.
+            # Binary names differ from packages: pipes -> pipes.sh, terminal-rain-lightning ->
+            # terminal-rain. (cmatrix renders non-printables as gray blocks in ghostty.)
             set -l savers unimatrix pipes.sh clock-rs terminal-rain
             set -l pick $savers[(random 1 (count $savers))]
             command $pick
@@ -290,10 +281,8 @@ in
           editor = "nvim";
           excludesfile = "~/.config/git/ignore";
         };
-        # Subtle palette-driven styles for terminal git (syntax note in the
-        # delta options above):
-        # grammar is "[attributes] [fg] [bg]" — a background color requires an
-        # explicit foreground, and 'normal' is a special color, not an attribute.
+        # delta grammar is "[attributes] [fg] [bg]": a bg needs an explicit fg, and
+        # "normal" is a special color, not an attribute.
         delta."noctalia-ansi" = {
           minus-style = "normal";
           minus-emph-style = "bold red";
@@ -320,13 +309,9 @@ in
       enableGitIntegration = true;
       options = {
         features = "line-numbers decorations noctalia-ansi";
-        # delta only knows its bundled syntax themes (no template can inject
-        # palette hexes), so "ansi" is used: syntax colors resolve through the
-        # terminal's 16-color palette, which ghostty derives from the Noctalia
-        # wallpaper palette. Inside lazygit this looked heavy (solid 16-color
-        # blocks), so lazygit uses its native renderer and this subtle variant
-        # only styles terminal git: dimmed removed lines, changed tokens in
-        # bold red/green, no backgrounds. Verified: zero 24-bit escape codes.
+        # No template can inject hexes into delta's bundled themes, so "ansi" resolves
+        # through ghostty's 16-color palette. lazygit uses its native renderer instead;
+        # this variant only styles terminal git (no backgrounds, no 24-bit codes).
         syntax-theme = "ansi";
       };
     };
@@ -336,19 +321,13 @@ in
   home.file."${config.xdg.configHome}/nushell/config.nu".force = true;
 
   xdg.configFile = {
-    # Out-of-store symlink: versioned in the repo AND Noctalia's bat template
-    # hook rewrites the --theme line on wallpaper changes, which a read-only
-    # store symlink cannot do.
+    # Out-of-store: Noctalia's bat hook rewrites the --theme line.
     "bat/config" = {
-      # The bat template hook created this as a regular file before we versioned
-      # it; force replaces it with the symlink.
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/bat/config";
     };
     "herdr/config.toml" = {
-      # Out-of-store symlink: the file is versioned in the repo AND Noctalia's
-      # herdr template hook needs to rewrite [theme.custom] on theme changes,
-      # which a read-only store symlink cannot do.
+      # Out-of-store: Noctalia's herdr hook rewrites [theme.custom].
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/herdr/config.toml";
     };
@@ -362,8 +341,7 @@ in
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
     };
-    # Noctalia's starship template injects its palette block into this file on
-    # every theme change (out-of-store so the hook can write through the link).
+    # Out-of-store: Noctalia's starship hook injects the palette block.
     "starship.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/starship/starship.toml";
     "git/ignore".source = ../../configs/git/ignore;

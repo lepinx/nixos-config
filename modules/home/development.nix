@@ -19,18 +19,14 @@ let
 in
 {
   home = {
-    # Versioned copy of the gentle-ai agent-model profiles store, linked
-    # out-of-store so edits (and gentle-ai's import) land in the repo. The
-    # live file was identical to the tracked copy at adoption time.
+    # Out-of-store so gentle-ai's imports and edits land back in the repo.
     file.".pi/gentle-ai/profiles.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/profiles.json";
     };
 
-    # Versioned copy of the Pi keybindings. Rebinds prompt navigation to
-    # alt+up/alt+down so it no longer collides with gentle-pi's gentle-todo
-    # ctrl+shift+up/down panel scroll (extension wins the conflict, and the
-    # override silences the startup shortcut-conflict warnings).
+    # alt+up/down for prompt navigation: gentle-pi's todo panel owns
+    # ctrl+shift+up/down, and this override also silences the conflict warnings.
     file.".pi/agent/keybindings.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";

@@ -12,32 +12,23 @@
     ./samba.nix
   ];
 
-  # This host uses the internal stable nixpkgs instance, so unfree packages
-  # are allowed here rather than in the shared core module (the workstation's
-  # external unstable instance already carries this in flake.nix).
   nixpkgs.config.allowUnfree = true;
 
-  # This host targets UEFI; keep CSM disabled in the BIOS.
   boot = {
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
 
-    # systemd-based initrd is required for tpm2-device=auto. The SSD is the only
-    # LUKS device on this host; the data HDD is left unencrypted and is mounted by
-    # filesystem label in the fileSystems block below.
+    # systemd initrd is required for tpm2-device=auto.
     initrd = {
       systemd.enable = true;
       luks.devices.cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
     };
   };
 
-  # Data HDD: staged with plain Btrfs before install and never reformatted by
-  # disko (disko only manages the SSD). The disk is mounted here declaratively by
-  # filesystem label, so the staged data survives the install untouched.
-  # Per-user subvolumes follow the pattern subvol=<user> mounted at
-  # /srv/data/<user>.
+  # Data HDD: never managed by disko (see disko.nix); mounted by label so the
+  # pre-staged Btrfs data survives reinstalls.
   fileSystems."/srv/data/lucho" = {
     device = "/dev/disk/by-label/homelab-data";
     fsType = "btrfs";
@@ -51,8 +42,7 @@
   networking = {
     inherit hostName;
 
-    # Static LAN address. Gateway and DNS are assumptions to review at install
-    # time. Plain NixOS networking (systemd-networkd stays disabled by default).
+    # Static LAN address; gateway/DNS are assumptions to verify at install time.
     interfaces.eno1.ipv4.addresses = [
       {
         address = "192.168.1.50";
@@ -87,7 +77,6 @@
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
     };
-    # Intentionally not in the firewall allowlist: SSH is LAN-only.
     openFirewall = false;
   };
 

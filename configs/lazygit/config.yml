@@ -31,9 +31,5 @@ gui:
   showNumstatInFilesView: true
   wrapLinesInDiffView: false
 
-# Diff renderers: lazygit's native renderer, permanently — delta restricted to
-# the terminal's 16-color palette reads as flat monochrome inside lazygit
-# (no backgrounds, no line numbers contrast), so it lost the A/B comparison.
-# The gui.theme block is owned by Noctalia's community "lazygit" template: it
-# rewrites this file on every wallpaper/theme change (same out-of-store
-# pattern as starship.toml).
+# gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
+# Native renderer, not delta: delta's ansi theme reads flat inside lazygit.

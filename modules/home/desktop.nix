@@ -15,10 +15,10 @@ in
   home.packages = with pkgs; [
     alacritty
     bitwarden-cli
-    yt-dlp # stream resolution / downloads
-    pear-desktop # YouTube Music desktop client (MPRIS for the shell media widget)
-    telegram-desktop # official Telegram client
-    karere # WhatsApp desktop client (GTK4 wrapper of WhatsApp Web; no official Linux app exists)
+    yt-dlp
+    pear-desktop
+    telegram-desktop
+    karere # WhatsApp (no official Linux app; GTK4 wrapper of WhatsApp Web).
     clock-rs
     discord
     ente-auth
@@ -49,8 +49,7 @@ in
         X-GNOME-Autostart-enabled=false
       '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
-      # Noctalia's alacritty template updates the theme import through this
-      # link on theme changes; font and the rest stay user-owned in the repo.
+      # Out-of-store: Noctalia's alacritty template rewrites the theme import here.
       "alacritty/alacritty.toml".source =
         config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/alacritty/alacritty.toml";
       # Hot-reload link too, so shader iterations do not need a rebuild.
@@ -64,12 +63,8 @@ in
       "umbriel/outputs.toml".source = umbrielOutputsPath;
     };
 
-    # Noctalia reads every file in the config dir and then overlays the state-dir
-    # settings.toml, which the Settings UI writes and which always wins. That
-    # path must stay writable and outside the Nix store, so it is linked to the
-    # tracked file below; a plain source would resolve into the store and the UI
-    # would fail to save. Noctalia writes through the symlink and watches the
-    # target directory, so UI edits land here and external edits reload live.
+    # The Settings UI writes the state-dir settings.toml and it always wins; it
+    # must stay writable, so the tracked file is symlinked out of the store.
     stateFile."noctalia/settings.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/noctalia/settings.toml";
   };
@@ -113,10 +108,6 @@ in
         };
       };
       battery.warning_threshold = 20;
-      # Dock pins, restored after the v4 -> v5 migration dropped them: v5 does
-      # not migrate v4 settings, and the Settings UI rewrote the old state file
-      # without [dock]. Declared here so it survives UI rewrites; pin/unpin
-      # changes made in the UI still override this.
       theme = {
         mode = "dark";
         source = "wallpaper";
@@ -145,10 +136,8 @@ in
             "pi-agent"
             "yazi"
           ];
-          # User templates: the community fzf template only ships bash/fish
-          # outputs, which nushell cannot source. This renders the same palette
-          # mapping to a plain opts file that nushell's config.nu loads at
-          # startup when present.
+          # Community fzf template ships bash/fish outputs only; this renders the same
+          # palette mapping to an opts file that nushell loads at startup.
           user = {
             fzf_nu = {
               input_path = "${repoPath}/configs/noctalia-templates/fzf-opts";
@@ -163,8 +152,6 @@ in
       };
       backdrop = {
         enabled = true;
-        # 0.5 blurred backdrop behind windows (was set via the Settings UI and
-        # silently reverted to 0.0 when the v5 migration rewrote the state file).
         blur_intensity = 0.5;
         tint_intensity = 0.0;
       };
@@ -237,14 +224,10 @@ in
         ];
       };
       widget = {
-        # Control-center bar glyph (Tabler icon); v4 setting lost in the v5
-        # migration, defaulting back to the noctalia logo.
         control-center = {
           glyph = "brand-qq";
         };
-        # Umbriel layout per focused workspace / active submap (official
-        # noctalia/umbriel-companion plugin; hides itself outside Umbriel
-        # sessions).
+        # Official plugin; hides itself outside Umbriel sessions.
         umbriel_companion = {
           type = "noctalia/umbriel-companion:bar";
         };
@@ -303,8 +286,6 @@ in
         ];
       };
       plugins = {
-        # umbriel-companion and bitwarden were enabled via the v4 state file and
-        # dropped by the v5 migration; declared here so they survive UI rewrites.
         enabled = [
           "noctalia/bitwarden"
           "noctalia/translator"
