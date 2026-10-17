@@ -52,8 +52,8 @@ health:
             printf '  MISSING  %s  (install: %s)\n' "$1" "$2"
         fi
     }
-    check pi 'provided by pkgsUnstable; run just switch'
-    check codex 'provided by pkgsUnstable; run just switch'
+    check pi 'provided by the flake; run just switch'
+    check codex 'provided by the flake; run just switch'
     check codegraph 'npm install -g --prefix "$HOME/.local/share/agent-runtime/npm" @colbymchenry/codegraph'
     check gentle-ai 'curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash'
     check engram 'installed alongside gentle-ai; run the gentle-ai installer and then gentle-ai sync'

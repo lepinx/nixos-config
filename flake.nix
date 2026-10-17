@@ -69,12 +69,7 @@
     let
       system = "x86_64-linux";
       userName = "lucho";
-      repoName = "nixos-config";
-      repoPath = "/home/${userName}/${repoName}";
-      pkgsUnstable = import nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
-      };
+      repoPath = "/home/${userName}/nixos-config";
       mkNixos =
         {
           hostName,
@@ -91,10 +86,8 @@
           specialArgs = {
             inherit
               inputs
-              pkgsUnstable
               hostName
               userName
-              repoName
               repoPath
               diskDevice
               ;
@@ -115,10 +108,8 @@
                   extraSpecialArgs = {
                     inherit
                       inputs
-                      pkgsUnstable
                       hostName
                       userName
-                      repoName
                       repoPath
                       diskDevice
                       ;

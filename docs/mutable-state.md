@@ -10,12 +10,12 @@ both layers and how to reconstruct a fresh machine completely.
 | Piece | Where |
 | --- | --- |
 | System packages, desktop, umbriel, noctalia base | `modules/nixos/`, `flake.nix` |
-| Home environment, fish, git, nvim, zed, yazi | `modules/home/` |
+| Home environment, fish, git, nvim, yazi | `modules/home/` |
 | Ghostty config (hot-reload symlink) | `configs/ghostty/config` |
 | Noctalia UI overrides (hot-reload symlink) | `configs/noctalia/settings.toml` |
-| Nvim and zed editor configs (hot-reload symlinks) | `configs/nvim/`, `configs/zed/` |
+| Nvim config (hot-reload symlinks) | `configs/nvim/` |
 | `/usr/bin/tar` bridge for gentle-pi's postinstall | `modules/nixos/core.nix` (tmpfiles rule) |
-| pi and codex binaries | `pkgsUnstable` (`modules/home/development.nix`) |
+| pi and codex binaries | `modules/home/development.nix` |
 
 Rule of thumb: `readlink -f <path>` ending inside this repository is mutable
 and hot-reloads; ending in `/nix/store` is declared and needs `just switch`.

@@ -10,7 +10,6 @@ let
   shellShortcuts = {
     # Editors and helpers
     vim = "nvim";
-    zed = "zeditor";
     hd = "herdr";
 
     # Desktop and file management
@@ -288,10 +287,11 @@ in
       enable = true;
       settings = {
         core = {
-          editor = "zeditor";
+          editor = "nvim";
           excludesfile = "~/.config/git/ignore";
         };
-        # Subtle palette-driven styles for terminal git (see note above):
+        # Subtle palette-driven styles for terminal git (syntax note in the
+        # delta options above):
         # grammar is "[attributes] [fg] [bg]" — a background color requires an
         # explicit foreground, and 'normal' is a special color, not an attribute.
         delta."noctalia-ansi" = {

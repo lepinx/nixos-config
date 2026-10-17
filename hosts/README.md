@@ -25,7 +25,7 @@ La regla práctica:
 Por ahora no hay otro host planificado. `homelab` era el próximo host y ya quedó
 definido en el flake; sólo resta la instalación real.
 
-El flake pasa `hostName`, `userName`, `repoName` y `repoPath` a los módulos para
+El flake pasa `hostName`, `userName` y `repoPath` a los módulos para
 evitar rutas hardcodeadas. El `justfile` usa el hostname corto de la máquina por
 defecto:
 

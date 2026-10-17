@@ -31,7 +31,6 @@ in
     (mpv.override {
       scripts = [ pkgs.mpvScripts.mpris ]; # media keys + noctalia media widget for the yt-music plugin
     })
-    nerd-fonts.hurmit
     nerd-fonts.jetbrains-mono
     networkmanagerapplet
     pkgs.bruno

@@ -124,7 +124,6 @@ bluetoothctl power on
 Firefox es el navegador predeterminado para HTTP/HTTPS y HTML. Helium queda
 instalado como alternativa Chromium para pruebas puntuales de motor. Se evita
 Google Chrome en el perfil diario para no depender de su manejo de sesión bajo
-Umbriel/Noctalia.
 Umbriel/Noctalia. El repositorio no contiene perfiles, sesiones, cookies,
 contraseñas ni datos de wallets.
 
@@ -150,9 +149,9 @@ La gestión de credenciales usa la extensión del navegador y `bitwarden-cli`.
 
 Podman es el runtime de containers del sistema. `docker` queda como alias de
 `podman` para compatibilidad CLI, y `podman-compose` cubre stacks locales de
-bases de datos. El socket Docker-compatible queda desactivado por defecto porque
-requiere dar permisos equivalentes a Docker; habilitarlo sólo cuando un flujo
-local concreto lo justifique.
+bases de datos. El socket Docker-compatible está habilitado (`dockerCompat`) y
+`DOCKER_HOST` apunta al socket de Podman, así que las herramientas que esperan
+un socket de Docker funcionan sin configuración extra.
 
 Los runtimes, linters y CLIs específicos viven en `devShell`/`direnv` por
 repositorio. El perfil global conserva sólo herramientas transversales de uso
@@ -160,12 +159,12 @@ diario.
 
 ## Editores
 
-Zed y Neovim se configuran en `configs/zed` y `configs/nvim`. Neovim usa una
+Neovim se configura en `configs/nvim`. Usa una
 configuración chica propia; sus plugins y language servers se instalan desde
 Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
 
 Pi y Codex son los agentes de código soportados. Sus ejecutables
-provienen de `pkgsUnstable` y quedan fijados por `flake.lock`; no usar
+provienen del flake y quedan fijados por `flake.lock`; no usar
 `pi update self` ni los auto-updates upstream de Codex para
 reemplazarlos. Las extensiones de Pi, Gentle AI, Engram y sus datos siguen
 siendo mutables y se conservan fuera del store. Tras cambios upstream en esos
@@ -242,7 +241,7 @@ reboot
 powerprofilesctl get
 firefox
 ghostty
-zeditor
+nvim
 systemctl --failed
 systemctl --user --failed
 ```

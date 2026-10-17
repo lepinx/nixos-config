@@ -70,7 +70,7 @@ y al salir se descarga.
 ## Runtime de agentes
 
 Pi, Codex y OpenCode son los agentes de código soportados por esta
-configuración. Sus **ejecutables** los provee `pkgsUnstable` mediante el perfil
+configuración. Sus **ejecutables** los provee el flake mediante el perfil
 de usuario de Nix; la revisión queda fijada por `flake.lock`. No instalar ni
 actualizar esos binarios con npm, instaladores upstream, `pi update self` ni los
 mecanismos de autoactualización upstream de Codex y OpenCode: esos flujos no

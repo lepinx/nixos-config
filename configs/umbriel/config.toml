@@ -174,7 +174,7 @@ default_floating = true
 "Mod+Alt+L" = "spawn:noctalia msg session lock"
 "Ctrl+Alt+Delete" = { action = "spawn:ghostty -e btop", repeat = false }
 "Mod+F" = "spawn:ghostty -e yazi"
-"Mod+E" = "spawn:zeditor"
+"Mod+E" = "spawn:ghostty -e nvim"
 "Mod+B" = "spawn:firefox"
 "Mod+Alt+B" = { action = "spawn:noctalia msg panel-open launcher /bw", repeat = false }
 

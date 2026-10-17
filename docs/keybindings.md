@@ -20,7 +20,6 @@ También se puede abrir directamente con `Mod+Shift+/`.
 - Terminal Ghostty: `configs/ghostty/config`
 - Multiplexer Herdr: `~/.config/herdr/config.toml`
 - Neovim: `configs/nvim/lua/config/keymaps.lua`
-- Zed: `configs/zed/keymap.json`
 - Shell Fish: `modules/home/shell.nix`
 
 ## Criterio
