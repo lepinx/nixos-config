@@ -50,7 +50,6 @@ in
     packages = with pkgs; [
       direnv
       gh
-      pkgs.gh-dash
       pkgs.glab
       pkgs.pi-coding-agent
       pkgs.codex

@@ -7,26 +7,6 @@
 }:
 
 let
-  # Ayu Dark base16 palette, previously provided by Stylix (now removed;
-  # Noctalia is the single theme source of truth).
-  colors = {
-    base00 = "#0b0e14";
-    base01 = "#131721";
-    base02 = "#202229";
-    base03 = "#3e4b59";
-    base04 = "#bfbdb6";
-    base05 = "#e6e1cf";
-    base06 = "#ece8db";
-    base07 = "#f2f0e7";
-    base08 = "#f07178";
-    base09 = "#ff8f40";
-    base0A = "#ffb454";
-    base0B = "#aad94c";
-    base0C = "#95e6cb";
-    base0D = "#59c2ff";
-    base0E = "#d2a6ff";
-    base0F = "#e6b450";
-  };
   shellShortcuts = {
     # Editors and helpers
     vim = "nvim";
@@ -108,7 +88,6 @@ in
     unzip
     wget
     wl-clipboard
-    wofi
     wtype
     zoxide
     starship
@@ -298,81 +277,6 @@ in
       enableFishIntegration = true;
     };
 
-    wofi = {
-      enable = true;
-      settings = {
-        insensitive = true;
-        allow_images = true;
-        width = "620";
-        height = "420";
-        prompt = "Bitwarden";
-        key_down = "Down,Ctrl-j,Ctrl-n";
-        key_up = "Up,Ctrl-k,Ctrl-p";
-      };
-      style = with colors; ''
-        * {
-          font-family: "JetBrainsMono Nerd Font";
-          font-size: 14px;
-        }
-
-        window {
-          margin: 0;
-          border: 1px solid ${base03};
-          border-radius: 12px;
-          background-color: ${base00};
-          color: ${base05};
-        }
-
-        #outer-box {
-          margin: 12px;
-          background-color: transparent;
-        }
-
-        #input {
-          min-height: 42px;
-          margin: 0 0 10px 0;
-          padding: 0 14px;
-          border: 1px solid ${base03};
-          border-radius: 8px;
-          background-color: ${base01};
-          color: ${base05};
-        }
-
-        #input:focus {
-          border-color: ${base0A};
-        }
-
-        #scroll {
-          margin: 0;
-          border-radius: 8px;
-          background-color: transparent;
-        }
-
-        #entry {
-          min-height: 36px;
-          padding: 7px 10px;
-          border-radius: 7px;
-          background-color: transparent;
-        }
-
-        #entry:selected {
-          background-color: ${base02};
-        }
-
-        #entry:selected #text {
-          color: ${base06};
-        }
-
-        #text {
-          color: ${base05};
-        }
-
-        #img {
-          margin-right: 10px;
-        }
-      '';
-    };
-
     git = {
       enable = true;
       settings = {
@@ -410,8 +314,6 @@ in
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/herdr/config.toml";
     };
-    "gh-dash/config.yml".source =
-      config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh-dash/config.yml";
     "gh/config.yml".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gh/config.yml";
     "lazydocker/config.yml".source =
       config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/lazydocker/config.yml";
