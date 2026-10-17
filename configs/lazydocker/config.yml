@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://json.schemastore.org/lazydocker.json
+# Minimal config derived from lazydocker's official defaults (docs/Config.md).
+# Theme colors are ANSI palette names, so they follow the terminal, which
+# follows the Noctalia wallpaper palette (no Noctalia template exists for
+# lazydocker).
+gui:
+  scrollHeight: 2
+  border: "rounded"
+  theme:
+    activeBorderColor:
+      - cyan
+      - bold
+    inactiveBorderColor:
+      - white
+    selectedLineBgColor:
+      - blue
+    optionsTextColor:
+      - blue
+  sidePanelWidth: 0.333
+  showBottomLine: true
+  wrapMainPanel: true
