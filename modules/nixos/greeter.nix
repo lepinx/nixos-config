@@ -6,7 +6,7 @@
     greeter-args = "--session umbriel --user ${userName}";
     settings.cursor = {
       theme = "Bibata-Modern-Classic";
-      size = 32;
+      size = 24;
       package = pkgs.bibata-cursors;
     };
   };

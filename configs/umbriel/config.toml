@@ -19,9 +19,9 @@ natural_scroll = true
 
 [input.cursor]
 # Bibata ships real 8px-grid variants; Adwaita 50 only embeds 24/30/36px, so
-# size never changes it (umbriel#441). 32 at scale 1.7 -> nearest variant (56px).
+# size never changes it (umbriel#441). 24 at scale 1.7 -> nearest variant (40px).
 theme = "Bibata-Modern-Classic"
-size = 32
+size = 24
 hardware_cursor = true
 
 [general]

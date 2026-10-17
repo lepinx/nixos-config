@@ -7,7 +7,7 @@
     TERMINAL = "ghostty";
     BROWSER = "firefox";
     XCURSOR_THEME = "Bibata-Modern-Classic";
-    XCURSOR_SIZE = "32";
+    XCURSOR_SIZE = "24";
     NIXOS_OZONE_WL = "1";
   };
 
@@ -70,7 +70,8 @@
   dconf.settings."org/gnome/desktop/interface" = {
     color-scheme = lib.mkDefault "prefer-dark";
     gtk-theme = lib.mkDefault "Adwaita-dark";
-    cursor-theme = lib.mkDefault "Adwaita";
+    # Bibata, not Adwaita: every other consumer (env, greeter, umbriel) uses it.
+    cursor-theme = lib.mkDefault "Bibata-Modern-Classic";
     cursor-size = lib.mkDefault 24;
   };
 }
