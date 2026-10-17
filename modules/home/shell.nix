@@ -215,6 +215,13 @@ in
         la = "ls --all";
       };
       extraConfig = ''
+        # FZF theme from Noctalia: the user template "fzf_nu" renders the opts
+        # file on every wallpaper/theme change; load it when present.
+        let fzf_theme = ($nu.home-path | path join ".config" "fzf" "themes" "noctalia.opts")
+        if ($fzf_theme | path exists) {
+          $env.FZF_DEFAULT_OPTS = (open --raw $fzf_theme | str trim)
+        }
+
         source ${pkgs.fzf}/share/fzf/completion.nu
 
         def --env mkcd [directory: path] {
@@ -284,6 +291,19 @@ in
           editor = "zeditor";
           excludesfile = "~/.config/git/ignore";
         };
+        # Subtle palette-driven styles for terminal git (see note above):
+        # grammar is "[attributes] [fg] [bg]" — a background color requires an
+        # explicit foreground, and 'normal' is a special color, not an attribute.
+        delta."noctalia-ansi" = {
+          minus-style = "normal";
+          minus-emph-style = "bold red";
+          minus-non-emph-style = "dim";
+          plus-style = "normal";
+          plus-emph-style = "bold green";
+          line-numbers-minus-style = "red";
+          line-numbers-plus-style = "green";
+          line-numbers-zero-style = "brightblack";
+        };
         fetch.prune = true;
         init.defaultBranch = "main";
         pull.rebase = true;
@@ -295,10 +315,19 @@ in
 
     delta = {
       enable = true;
-      enableGitIntegration = false;
+      # delta reads its options from git config; without this the options
+      # below are written nowhere and delta silently runs on defaults.
+      enableGitIntegration = true;
       options = {
-        features = "line-numbers decorations";
-        syntax-theme = "OneHalfDark";
+        features = "line-numbers decorations noctalia-ansi";
+        # delta only knows its bundled syntax themes (no template can inject
+        # palette hexes), so "ansi" is used: syntax colors resolve through the
+        # terminal's 16-color palette, which ghostty derives from the Noctalia
+        # wallpaper palette. Inside lazygit this looked heavy (solid 16-color
+        # blocks), so lazygit uses its native renderer and this subtle variant
+        # only styles terminal git: dimmed removed lines, changed tokens in
+        # bold red/green, no backgrounds. Verified: zero 24-bit escape codes.
+        syntax-theme = "ansi";
       };
     };
 

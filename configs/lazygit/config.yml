@@ -1,11 +1,39 @@
 gui:
+  theme:
+    activeBorderColor:
+      - "#f7b1e0"
+      - bold
+    inactiveBorderColor:
+      - "#e0bdd1"
+    searchingActiveBorderColor:
+      - "#ffb3b1"
+      - bold
+    optionsTextColor:
+      - "#d3c2ca"
+    selectedLineBgColor:
+      - "#2e282b"
+    inactiveViewSelectedLineBgColor:
+      - bold
+    cherryPickedCommitFgColor:
+      - "#d3c2ca"
+    cherryPickedCommitBgColor:
+      - "#ffb3b1"
+    markedBaseCommitFgColor:
+      - "#ffb3b1"
+    markedBaseCommitBgColor:
+      - "#ffb4ab"
+    unstagedChangesColor:
+      - "#ffb4ab"
+    defaultFgColor:
+      - "#ebe0e4"
   sidePanelWidth: 0.23
   mainPanelSplitMode: horizontal
   showNumstatInFilesView: true
   wrapLinesInDiffView: false
 
-git:
-  diffRenderers:
-    - name: delta
-      colorArg: always
-      command: delta --dark --paging=never --features='line-numbers decorations' --syntax-theme='OneHalfDark'
+# Diff renderers: lazygit's native renderer, permanently — delta restricted to
+# the terminal's 16-color palette reads as flat monochrome inside lazygit
+# (no backgrounds, no line numbers contrast), so it lost the A/B comparison.
+# The gui.theme block is owned by Noctalia's community "lazygit" template: it
+# rewrites this file on every wallpaper/theme change (same out-of-store
+# pattern as starship.toml).
