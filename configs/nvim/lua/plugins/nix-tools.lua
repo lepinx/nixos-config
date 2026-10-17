@@ -57,6 +57,8 @@ return {
         end,
       })
 
+      opts.servers.just = {}
+
       for _, server in ipairs(nix_lsp_servers) do
         opts.servers[server] = vim.tbl_deep_extend("force", opts.servers[server] or {}, {
           mason = false,
