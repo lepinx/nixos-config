@@ -23,38 +23,6 @@ return {
     },
   },
   {
-    "petertriho/nvim-scrollbar",
-    dependencies = { "lewis6991/gitsigns.nvim" },
-    event = "BufReadPost",
-    config = function()
-      local scrollbar = require("scrollbar")
-
-      scrollbar.setup({
-        show_in_active_only = false,
-        handle = {
-          text = " ",
-          blend = 10,
-          highlight = "CursorColumn",
-        },
-        marks = {
-          GitAdd = { text = "▍" },
-          GitChange = { text = "▍" },
-          GitDelete = { text = "▍" },
-        },
-        excluded_filetypes = {
-          "DiffviewFiles",
-          "DiffviewFileHistory",
-        },
-        handlers = {
-          cursor = false,
-          diagnostic = true,
-          gitsigns = true,
-          handle = true,
-        },
-      })
-    end,
-  },
-  {
     "sindrets/diffview.nvim",
     opts = {
       view = {
@@ -63,11 +31,13 @@ return {
       },
       hooks = {
         diff_buf_win_enter = function()
-          vim.opt_local.wrap = false
-          vim.opt_local.linebreak = false
-          vim.opt_local.breakindent = false
-          vim.opt_local.smoothscroll = false
-          vim.opt_local.showbreak = ""
+          -- Wrapped diff lines so long changes read at a glance. (nvim-scrollbar
+          -- was removed, so there is nothing to hide for wrapped lines anymore.)
+          vim.opt_local.wrap = true
+          vim.opt_local.linebreak = true
+          vim.opt_local.breakindent = true
+          vim.opt_local.showbreak = "↪ "
+          vim.opt_local.smoothscroll = true
           vim.opt_local.foldenable = false
           vim.opt_local.foldlevel = 99
         end,
