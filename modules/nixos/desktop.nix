@@ -89,7 +89,6 @@
 
   environment.systemPackages = with pkgs; [
     brightnessctl
-    e2fsprogs # chattr/lsattr, needed for NOCOW swapfile on btrfs
     libnotify
     powertop
     wl-clipboard
