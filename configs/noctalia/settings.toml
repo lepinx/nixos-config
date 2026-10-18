@@ -1,5 +1,9 @@
 config_version = 15
 
+[dock]
+auto_hide = true
+smart_auto_hide = false
+
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
