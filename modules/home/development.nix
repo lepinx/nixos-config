@@ -1,22 +1,9 @@
 {
   config,
-  inputs,
   pkgs,
   repoPath,
   ...
 }:
-
-let
-  glab-tui = pkgs.rustPlatform.buildRustPackage {
-    pname = "glab-tui";
-    version = "0.8.3";
-    cargoLock = {
-      lockFile = "${inputs.glab-tui}/Cargo.lock";
-    };
-    src = inputs.glab-tui;
-    doCheck = false;
-  };
-in
 {
   home = {
     # Out-of-store so gentle-ai's imports and edits land back in the repo.
@@ -49,7 +36,6 @@ in
       pkgs.glab
       pkgs.pi-coding-agent
       pkgs.codex
-      glab-tui
       just-lsp
       jujutsu
       lazydocker
