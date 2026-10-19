@@ -59,6 +59,18 @@ return {
 
       opts.servers.just = {}
 
+      -- nil: archive flake inputs automatically instead of prompting "Fetch
+      -- them now?" every time an input is missing from the eval cache.
+      opts.servers.nil_ls = vim.tbl_deep_extend("force", opts.servers.nil_ls or {}, {
+        settings = {
+          ["nil"] = {
+            nix = {
+              flake = { autoArchive = true },
+            },
+          },
+        },
+      })
+
       for _, server in ipairs(nix_lsp_servers) do
         opts.servers[server] = vim.tbl_deep_extend("force", opts.servers[server] or {}, {
           mason = false,
