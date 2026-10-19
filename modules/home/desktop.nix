@@ -215,6 +215,7 @@ in
         ];
         center = [ "clock" ];
         end = [
+          "tray"
           "notifications"
           "network"
           "bluetooth"
@@ -224,6 +225,12 @@ in
         ];
       };
       widget = {
+        tray = {
+          type = "tray";
+          drawer = true;
+          drawer_columns = 3;
+          hide_passive = false;  # Telegram registers as Passive
+        };
         control-center = {
           glyph = "brand-qq";
         };
@@ -280,7 +287,6 @@ in
           "io.ente.auth"
           "bruno"
           "dbeaver"
-          "com.nousresearch.hermes"
           "io.github.tobagin.karere"
           "org.telegram.desktop"
         ];

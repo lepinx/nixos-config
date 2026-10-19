@@ -2,7 +2,22 @@ config_version = 15
 
 [dock]
 auto_hide = true
+pinned = [
+    "org.gnome.Nautilus",
+    "thunderbird",
+    "discord",
+    "com.github.th-ch.youtube-music",
+    "helium",
+    "firefox",
+    "com.mitchellh.ghostty",
+    "io.ente.auth",
+    "bruno",
+    "dbeaver",
+    "io.github.tobagin.karere",
+    "org.telegram.desktop"
+]
 smart_auto_hide = false
+
 
 [lockscreen_widgets]
 enabled = false
