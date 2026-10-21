@@ -19,6 +19,47 @@
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";
     };
 
+    # Out-of-store so pi config and extension opt-outs land back in the repo.
+    file.".pi/agent/settings.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/settings.json";
+    };
+
+    file.".pi/agent/mcp.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/mcp.json";
+    };
+
+    file.".pi/agent/skills/oss-fork" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/skills/oss-fork";
+    };
+
+    file.".pi/agent/themes/noctalia.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/themes/noctalia.json";
+    };
+
+    file.".pi/gentle-ai/models.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/models.json";
+    };
+
+    file.".pi/gentle-ai/persona.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/persona.json";
+    };
+
+    file.".pi/gentle-ai/vim.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/vim.json";
+    };
+
+    file.".pi/gentle-ai/background-subagents.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/background-subagents.json";
+    };
+
     sessionVariables = {
       NPM_CONFIG_PREFIX = "$HOME/.local/share/agent-runtime/npm";
       NPM_CONFIG_CACHE = "$HOME/.cache/agent-runtime/npm";

@@ -1,0 +1,26 @@
+{
+  "defaultModel": "glm5.3-flash",
+  "defaultProvider": "nan",
+  "defaultThinkingLevel": "high",
+  "extensions": [
+    "-builtin:codemode",
+    "+builtin:mcp",
+    "+builtin:tool-search"
+  ],
+  "lastChangelogVersion": "1.2.0",
+  "packages": [
+    {
+      "extensions": [
+        "-extensions/startup-banner.ts"
+      ],
+      "source": "npm:gentle-pi"
+    },
+    "npm:pi-web-access",
+    "npm:pi-btw",
+    "npm:@gtrabanco/pi-nan-provider",
+    "npm:gentle-engram"
+  ],
+  "showHardwareCursor": true,
+  "theme": "noctalia",
+  "tuiMode": "fullscreen"
+}
