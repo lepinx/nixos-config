@@ -18,7 +18,6 @@ pinned = [
 ]
 smart_auto_hide = false
 
-
 [lockscreen_widgets]
 enabled = false
 schema_version = 2
@@ -56,11 +55,16 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_unlock_hint = true
         show_weather = true
 
+[theme]
+builtin = "Tokyo-Night"
+community_palette = "Vesper"
+source = "community"
+
 [wallpaper.default]
-path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"
 
 [wallpaper.last]
-path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"
 
 [wallpaper.monitors.eDP-1]
-path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"

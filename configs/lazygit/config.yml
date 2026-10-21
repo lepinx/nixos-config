@@ -1,31 +1,31 @@
 gui:
   theme:
     activeBorderColor:
-      - "#f7b1e0"
+      - "#ffc799"
       - bold
     inactiveBorderColor:
-      - "#e0bdd1"
+      - "#99ffe4"
     searchingActiveBorderColor:
-      - "#ffb3b1"
+      - "#fbadff"
       - bold
     optionsTextColor:
-      - "#d3c2ca"
+      - "#a0a0a0"
     selectedLineBgColor:
-      - "#2e282b"
+      - "#262626"
     inactiveViewSelectedLineBgColor:
       - bold
     cherryPickedCommitFgColor:
-      - "#d3c2ca"
+      - "#a0a0a0"
     cherryPickedCommitBgColor:
-      - "#ffb3b1"
+      - "#fbadff"
     markedBaseCommitFgColor:
-      - "#ffb3b1"
+      - "#fbadff"
     markedBaseCommitBgColor:
-      - "#ffb4ab"
+      - "#ff8080"
     unstagedChangesColor:
-      - "#ffb4ab"
+      - "#ff8080"
     defaultFgColor:
-      - "#ebe0e4"
+      - "#ffffff"
   sidePanelWidth: 0.23
   mainPanelSplitMode: horizontal
   showNumstatInFilesView: true
