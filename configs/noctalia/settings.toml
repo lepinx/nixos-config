@@ -53,7 +53,7 @@ builtin_ids = [
   "starship",
   "umbriel",
 ]
-community_ids = ["bat", "herdr", "lazygit", "neovim", "pi-agent", "yazi"]
+community_ids = ["bat", "discord", "fastfetch", "fzf", "herdr", "karere", "lazygit", "neovim", "pi-agent", "yazi"]
 
 [wallpaper]
 enabled = true
