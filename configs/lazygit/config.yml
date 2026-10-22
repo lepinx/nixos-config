@@ -33,14 +33,15 @@ gui:
 
 git:
   diffRenderers:
-    - show-diff
-    - difftool
-  paging:
-    colorArg: always
-    # Truecolor bat theme (not the flat gitconfig "ansi" one that killed the
-    # first delta attempt); --no-gitconfig keeps terminal-git features out.
-    pager: delta --dark --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers
-    externalDiffCommand: difft --color always
+    - type: stdinFilter
+      name: delta
+      colorArg: always
+      # Truecolor bat theme (not the flat gitconfig "ansi" one that killed the
+      # first delta attempt); --no-gitconfig keeps terminal-git features out.
+      command: delta --dark --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers
+    - type: extDiff
+      name: difftastic
+      command: difft --color always
 
 # gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
-# | cycles show-diff (delta truecolor) <-> difftool (difftastic AST).
+# | cycles the diff renderers: delta truecolor <-> difftastic AST.
