@@ -87,6 +87,7 @@
       just
       nix-direnv
       nixfmt
+      difftastic
       shellcheck
       sql-formatter
     ];
