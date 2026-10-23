@@ -304,9 +304,7 @@ in
 
     delta = {
       enable = true;
-      # delta reads its options from git config; without this the options
-      # below are written nowhere and delta silently runs on defaults.
-      enableGitIntegration = true;
+      enableGitIntegration = true; # without it the options below are written nowhere
       options = {
         features = "line-numbers decorations noctalia-ansi";
         # No template can inject hexes into delta's bundled themes, so "ansi" resolves

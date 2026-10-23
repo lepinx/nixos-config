@@ -71,19 +71,15 @@ in
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
-    # Structural/technical keys only: everything the Settings UI can change
-    # lives in the instance-owned settings.toml (configs/noctalia/settings.toml).
+    # Structural keys only; UI settings live in configs/noctalia/settings.toml.
     settings = {
       shell = {
-        # Toggle-priority until upstream fixes the exclusive-keyboard-layer
-        # interaction (noctalia-dev/umbriel#360): with this on, the type-to-launch
-        # layer blocks hot corners while the overview is open.
+        # workaround noctalia-dev/umbriel#360: type-to-launch blocks hot corners while the overview is open.
         umbriel_overview_type_to_launch_enabled = true;
         launch_apps_as_systemd_services = true;
       };
       theme.templates.user = {
-        # Community fzf template ships bash/fish outputs only; this renders the same
-        # palette mapping to an opts file that nushell loads at startup.
+        # community fzf template has no nushell output; this renders the palette to one.
         fzf_nu = {
           input_path = "${repoPath}/configs/noctalia-templates/fzf-opts";
           output_path = "$XDG_CONFIG_HOME/fzf/themes/noctalia.opts";

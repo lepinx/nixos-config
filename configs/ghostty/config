@@ -1,4 +1,3 @@
-theme = noctalia
 
 font-size = 9
 font-family = JetBrains Mono Nerd Font
@@ -67,3 +66,4 @@ keybind = super+ctrl+shift+arrow_left=unbind
 keybind = super+ctrl+shift+arrow_right=unbind
 
 command = herdr
+theme = noctalia

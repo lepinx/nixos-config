@@ -32,12 +32,8 @@ gui:
   wrapLinesInDiffView: false
 
 git:
+  # -w={{width}}: wrap to the lazygit panel width, not the outer terminal's.
   diffRenderers:
-    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
-    - type: extDiff
-      name: difftastic
-      # Side-by-side only when the focused panel is wide enough; inline elsewhere.
-      command: difft --color=always --background={{colorScheme}} --context={{diffContext}} {{if gt .width 160}}--display side-by-side{{else}}--display inline{{end}}
+    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}" -w={{width}}
 
 # gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
-# | cycles the diff renderers: delta truecolor <-> difftastic AST.
