@@ -29,11 +29,11 @@ gui:
   sidePanelWidth: 0.23
   mainPanelSplitMode: horizontal
   showNumstatInFilesView: true
-  wrapLinesInDiffView: false
+  wrapLinesInDiffView: true
 
 git:
   # -w={{width}}: wrap to the lazygit panel width, not the outer terminal's.
   diffRenderers:
-    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}" -w={{width}}
+    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 
 # gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
