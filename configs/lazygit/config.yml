@@ -33,15 +33,11 @@ gui:
 
 git:
   diffRenderers:
-    - type: stdinFilter
-      name: delta
-      colorArg: always
-      # Truecolor bat theme (not the flat gitconfig "ansi" one that killed the
-      # first delta attempt); --no-gitconfig keeps terminal-git features out.
-      command: delta --dark --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers
+    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
     - type: extDiff
       name: difftastic
-      command: difft --color always
+      # Side-by-side only when the focused panel is wide enough; inline elsewhere.
+      command: difft --color=always --background={{colorScheme}} --context={{diffContext}} {{if gt .width 160}}--display side-by-side{{else}}--display inline{{end}}
 
 # gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
 # | cycles the diff renderers: delta truecolor <-> difftastic AST.
