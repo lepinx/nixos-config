@@ -14,7 +14,6 @@ capsule = true
 capsule_fill = "surface_variant"
 capsule_opacity = 0.55000000000000004
 capsule_radius = 8.0
-center = [ "clock", "cat" ]
 end = [ "tray", "notifications", "network", "bluetooth", "volume", "battery", "session" ]
 font_weight = 600
 margin_edge = 6
@@ -180,12 +179,6 @@ unit = "celsius"
 hide_when_no_connected_device = true
 show_label = false
 type = "bluetooth"
-
-[widget.cat]
-audio_spectrum = true
-tappy_mode = true
-type = "noctalia/bongocat:cat"
-use_mpris_filter = true
 
 [widget.clock]
 format = "{:%a %d %b  %H:%M:%S}"
