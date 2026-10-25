@@ -14,8 +14,8 @@ capsule = true
 capsule_fill = "surface_variant"
 capsule_opacity = 0.55000000000000004
 capsule_radius = 8.0
-center = [ "clock", "cat", "keyboard_layout" ]
-end = [ "tray", "notifications", "network", "bluetooth", "volume", "battery", "control-center" ]
+center = [ "clock", "cat" ]
+end = [ "tray", "notifications", "network", "bluetooth", "volume", "battery", "session" ]
 font_weight = 600
 margin_edge = 6
 margin_ends = 8
@@ -24,7 +24,7 @@ position = "top"
 radius = 12
 reserve_space = true
 shadow = true
-start = [ "launcher", "workspaces" ]
+start = [ "control-center", "workspaces", "keyboard_layout" ]
 thickness = 36
 widget_spacing = 8
 
@@ -194,6 +194,9 @@ type = "clock"
 
 [widget.control-center]
 glyph = "brand-windows-filled"
+
+[widget.launcher]
+enabled = false
 
 [widget.network]
 show_label = false
