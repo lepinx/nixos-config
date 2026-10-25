@@ -37,7 +37,7 @@ enabled = true
     type = "google"
 
 [dock]
-auto_hide = false
+auto_hide = true
 enabled = true
 icon_size = 32
 launcher_position = "start"
@@ -60,7 +60,6 @@ reserve_space = false
 show_dots = true
 show_instance_count = true
 show_running = true
-smart_auto_hide = true
 
 [idle]
 pre_action_fade_seconds = 2.0
@@ -145,7 +144,7 @@ telemetry_enabled = false
     transparency_mode = "soft"
 
 [theme]
-builtin = "Tokyo-Night"
+builtin = "Noctalia"
 community_palette = "Vesper"
 mode = "dark"
 source = "community"
@@ -161,13 +160,13 @@ directory = "~/Pictures/wallpapers"
 enabled = true
 
     [wallpaper.default]
-    path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
     [wallpaper.last]
-    path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/lucho/Pictures/wallpapers/1_Mvv7jPyz_digital-art-beautiful-mountains.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
 [weather]
 effects = true
