@@ -78,13 +78,6 @@ in
         umbriel_overview_type_to_launch_enabled = true;
         launch_apps_as_systemd_services = true;
       };
-      theme.templates.user = {
-        # community fzf template has no nushell output; this renders the palette to one.
-        fzf_nu = {
-          input_path = "${repoPath}/configs/noctalia-templates/fzf-opts";
-          output_path = "$XDG_CONFIG_HOME/fzf/themes/noctalia.opts";
-        };
-      };
     };
   };
 }

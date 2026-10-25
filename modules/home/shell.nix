@@ -205,13 +205,6 @@ in
         la = "ls --all";
       };
       extraConfig = ''
-        # FZF theme from Noctalia: the user template "fzf_nu" renders the opts
-        # file on every wallpaper/theme change; load it when present.
-        let fzf_theme = ($env.HOME | path join ".config" "fzf" "themes" "noctalia.opts")
-        if ($fzf_theme | path exists) {
-          $env.FZF_DEFAULT_OPTS = (open --raw $fzf_theme | str trim)
-        }
-
         source ${pkgs.fzf}/share/fzf/completion.nu
 
         def --env mkcd [directory: path] {
