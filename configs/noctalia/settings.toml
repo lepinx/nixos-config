@@ -145,23 +145,7 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "ghostty", "gtk3", "gtk4", "helix", "qt", "starship", "umbriel" ]
-    community_ids = [
-        "pi-agent",
-        "pear-desktop",
-        "discord",
-        "karere",
-        "telegram",
-        "lazyvim",
-        "neovim",
-        "fastfetch",
-        "thunderbird",
-        "bat",
-        "fzf",
-        "herdr",
-        "lazygit",
-        "starship",
-        "yazi"
-    ]
+    community_ids = [ "pi-agent", "neovim", "fastfetch", "bat", "fzf", "herdr", "starship", "yazi" ]
     enable_builtin_templates = true
 
 [wallpaper]

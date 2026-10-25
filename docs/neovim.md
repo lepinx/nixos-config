@@ -5,6 +5,18 @@ Esta configuración usa LazyVim como base y módulos propios en
 que cada repo declare lo específico del proyecto con `devShell`, `direnv` y, si
 hace falta, `.nvim.lua`.
 
+## Tema
+
+LazyVim selecciona **Matugen/Base16** en `configs/nvim/lua/plugins/theme.lua`.
+El template comunitario `neovim` de Noctalia regenera la paleta local
+`configs/nvim/lua/matugen.lua` al cambiar el tema y avisa a las sesiones
+abiertas mediante SIGUSR1. Ese archivo es estado generado e ignorado por Git.
+El template `lazyvim` queda deshabilitado para que los dos esquemas no compitan.
+Noctalia sigue gestionando el tema de las demás aplicaciones habilitadas.
+
+Para comprobar el tema activo: `:lua print(vim.g.colors_name)` debe mostrar
+`matugen`.
+
 ## Búsqueda
 
 Atajos principales de LazyVim:
