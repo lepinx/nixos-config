@@ -14,7 +14,7 @@ capsule = true
 capsule_fill = "surface_variant"
 capsule_opacity = 0.55000000000000004
 capsule_radius = 8.0
-center = [ "clock" ]
+center = [ "clock", "cat" ]
 end = [ "tray", "notifications", "network", "bluetooth", "volume", "battery", "control-center" ]
 font_weight = 600
 margin_edge = 6
@@ -24,12 +24,18 @@ position = "top"
 radius = 12
 reserve_space = true
 shadow = true
-start = [ "launcher", "workspaces", "umbriel_companion" ]
+start = [ "launcher", "workspaces" ]
 thickness = 36
 widget_spacing = 8
 
 [battery]
 warning_threshold = 20
+
+[calendar]
+enabled = true
+
+    [calendar.account.personal_google]
+    type = "google"
 
 [dock]
 auto_hide = false
@@ -129,12 +135,15 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden" ]
+enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden", "noctalia/bongocat" ]
 
 [shell]
 font_family = "JetBrainsMono Nerd Font"
 polkit_agent = true
 telemetry_enabled = false
+
+    [shell.panel]
+    transparency_mode = "soft"
 
 [theme]
 builtin = "Tokyo-Night"
@@ -172,13 +181,19 @@ hide_when_no_connected_device = true
 show_label = false
 type = "bluetooth"
 
+[widget.cat]
+audio_spectrum = true
+tappy_mode = true
+type = "noctalia/bongocat:cat"
+use_mpris_filter = true
+
 [widget.clock]
 format = "{:%a %d %b  %H:%M:%S}"
 tooltip_format = "{:%A, %d de %B de %Y}"
 type = "clock"
 
 [widget.control-center]
-glyph = "brand-qq"
+glyph = "brand-windows-filled"
 
 [widget.network]
 show_label = false
