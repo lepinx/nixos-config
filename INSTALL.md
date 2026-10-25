@@ -131,6 +131,13 @@ findmnt / /home /nix /boot
 just build
 ```
 
+Al iniciar sesión, el servicio de usuario `provision-agent-tools` instala el
+CLI `gentle-ai` y CodeGraph si faltan. Si la red no está disponible, reintenta
+cada cinco minutos. Después, ejecutá
+`gentle-ai` una vez para elegir Pi y configurar su ecosistema de forma
+interactiva. No hay paso de bootstrap manual; si falla el servicio,
+consultá `systemctl --user status provision-agent-tools`.
+
 ## Habilitar TPM2 + PIN
 
 TPM2 + PIN evita escribir la passphrase larga en el uso diario. El PIN sólo

@@ -4,6 +4,24 @@
   repoPath,
   ...
 }:
+let
+  gentleAiInstaller = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/v4.2.0/scripts/install.sh";
+    hash = "sha256-e6J5w+ylnRzoEwcljNpF2kgZgq0/FSGuWvf7ZqpGsfI=";
+  };
+  provisionAgentTools = pkgs.writeShellApplication {
+    name = "provision-agent-tools";
+    runtimeInputs = with pkgs; [
+      coreutils
+      curl
+      git
+      gnutar
+      gzip
+      nodejs
+    ];
+    text = builtins.readFile ../../scripts/provision-agent-tools.sh;
+  };
+in
 {
   home = {
     # Out-of-store so gentle-ai's imports and edits land back in the repo.
@@ -90,6 +108,23 @@
       shellcheck
       sql-formatter
     ];
+  };
+
+  # Install missing mutable tools on first login; existing installations and
+  # user-managed upgrades are never replaced by a Nix generation.
+  systemd.user.services.provision-agent-tools = {
+    Unit = {
+      Description = "Provision missing mutable agent tools";
+      After = [ "network-online.target" ];
+      StartLimitIntervalSec = 0;
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${provisionAgentTools}/bin/provision-agent-tools ${gentleAiInstaller}";
+      Restart = "on-failure";
+      RestartSec = "5min";
+    };
+    Install.WantedBy = [ "default.target" ];
   };
 
   programs.direnv = {

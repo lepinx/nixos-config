@@ -43,7 +43,7 @@ health:
     systemctl --user --failed --no-pager
 
     echo
-    echo "Mutable agent components (outside Nix; missing entries are manual installs):"
+    echo "Mutable agent components (missing entries are provisioned on login):"
     check() {
         if command -v "$1" >/dev/null 2>&1; then
             printf '  ok       %s\n' "$1"
@@ -53,19 +53,14 @@ health:
     }
     check pi 'provided by the flake; run just switch'
     check codex 'provided by the flake; run just switch'
-    check codegraph 'npm install -g --prefix "$HOME/.local/share/agent-runtime/npm" @colbymchenry/codegraph'
-    check gentle-ai 'curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash'
-    check engram 'installed alongside gentle-ai; run the gentle-ai installer and then gentle-ai sync'
+    check codegraph 'check: systemctl --user status provision-agent-tools'
+    check gentle-ai 'check: systemctl --user status provision-agent-tools'
+    check engram 'run the first interactive gentle-ai setup for Pi'
     if [ -d "$HOME/.pi/agent/npm/node_modules/gentle-pi" ]; then
         echo '  ok       gentle-pi (Pi extension)'
     else
-        echo '  MISSING  gentle-pi (Pi extension)  (install: just bootstrap-agents; may fail on NixOS, see docs/development.md)'
+        echo '  MISSING  gentle-pi (Pi extension)  (run the first interactive gentle-ai setup for Pi)'
     fi
-
-# Reconstruct the mutable agent tooling a fresh install does not cover:
-# pi extensions, codegraph and the standalone gentle-ai CLI. Idempotent.
-bootstrap-agents:
-    "{{ repo_root }}/scripts/bootstrap-agents.sh"
 
 hotkeys:
     umbriel msg cheatsheet-open

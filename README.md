@@ -167,8 +167,11 @@ Pi y Codex son los agentes de código soportados. Sus ejecutables
 provienen del flake y quedan fijados por `flake.lock`; no usar
 `pi update self` ni los auto-updates upstream de Codex para
 reemplazarlos. Las extensiones de Pi, Gentle AI, Engram y sus datos siguen
-siendo mutables y se conservan fuera del store. Tras cambios upstream en esos
-componentes, ejecutar `gentle-ai sync`. El orden del `PATH` debe resolver
+siendo mutables y se conservan fuera del store. Al primer login Home Manager
+instala el CLI de Gentle AI y CodeGraph si faltan; después
+se ejecuta `gentle-ai` interactivamente para configurar Pi. No hace falta un
+bootstrap manual. Tras cambios upstream en esos componentes, ejecutar
+`gentle-ai sync`. El orden del `PATH` debe resolver
 primero los binarios Nix; verificarlo con `type -a pi codex`.
 
 El instalador package-local de `gentle-pi` 3.7.0 sólo confía en

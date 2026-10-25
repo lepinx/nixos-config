@@ -20,17 +20,24 @@ both layers and how to reconstruct a fresh machine completely.
 Rule of thumb: `readlink -f <path>` ending inside this repository is mutable
 and hot-reloads; ending in `/nix/store` is declared and needs `just switch`.
 
-## Mutable (reconstructed with `just bootstrap-agents`)
+## Mutable (provisioned on first login)
 
 | Piece | Owner | Reconstructed by |
 | --- | --- | --- |
-| pi extensions (gentle-pi, gentle-engram, pi-web-access, pi-btw, nan provider, pi-mcp-adapter) | pi (`pi install`, `pi update --extensions`) | `just bootstrap-agents` |
-| codegraph (npm global in the agent runtime prefix) | npm | `just bootstrap-agents` |
-| standalone gentle-ai CLI (optional; pi uses the package-local binary) | gentle-shell installer | `just bootstrap-agents` (asks) |
+| gentle-ai CLI | upstream installer, then `gentle-ai upgrade` | Home Manager user service installs the CLI if missing |
+| codegraph (npm global in the agent runtime prefix) | npm | same service installs if missing |
+| gentle-pi, gentle-engram, pi-web-access, pi-btw | pi | first interactive `gentle-ai` setup for Pi |
+| optional NaN media MCP tools (`@gtrabanco/pi-nan-provider`) | pi | declared in Pi settings; not provisioned by the login service |
 
-Nix deliberately does not own these directories: pi manages its own
-extension lifecycle, and a second package manager over the same tree is the
-class of conflict the `/usr/bin/tar` bridge exists to avoid.
+After the first login, run `gentle-ai` and select Pi to configure the ecosystem.
+The service does not run the TUI or select components for you. Check automatic
+installation failures with `systemctl --user status provision-agent-tools` and
+`journalctl --user -u provision-agent-tools`. Missing tools are retried after
+five minutes; existing mutable installations are never downgraded or replaced.
+
+Nix declares this service but does not own the destination directories: Pi and
+npm manage their own package lifecycles. The `/usr/bin/tar` bridge supports
+Gentle Shell's postinstall on NixOS.
 
 ## Alternative: standalone `gentle-shell` launcher
 
@@ -44,17 +51,20 @@ and one lifecycle; the standalone launcher isolates Gentle Shell from
 `~/.pi/agent` at the cost of a second home and an npm-global launcher that
 `pi update --extensions` does not manage. Neither mode avoids the
 postinstall `/usr/bin/tar` requirement on NixOS. Current choice:
-in-agent via `just bootstrap-agents`; revisit only if isolation from
-`~/.pi/agent` becomes desirable.
+in-agent via the interactive `gentle-ai` setup; revisit only if isolation
+from `~/.pi/agent` becomes desirable.
 
 ## Manual steps (never automated, never versioned)
 
 These hold secrets or personal data. After a fresh install:
 
 1. Open pi and log in to each provider — creates `~/.pi/agent/auth.json`.
-2. Export `NAN_API_KEY` in the shell profile if the nan provider is used.
-3. Run `gentle-ai sync` if the standalone CLI is in use.
+2. Use `/login nan` in Pi, or export `NAN_API_KEY` if preferred.
+3. Run `gentle-ai` once to select Pi and configure its ecosystem; later run
+   `gentle-ai sync` after upstream updates. Gentle Shell already supports NaN
+   chat, `/login nan` and `/gentle:usage` without the separate media add-on.
 
 Everything else on a fresh machine: clone the repo, `sudo nixos-rebuild
 switch --flake .#workstation` (or the guarded `just install-workstation`
-from an ISO), then `just bootstrap-agents`.
+from an ISO), then log in. Home Manager provisions the missing CLI and tools;
+run the interactive `gentle-ai` setup when ready.

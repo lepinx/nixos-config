@@ -89,9 +89,12 @@ Home Manager y verificá el orden con:
 type -a pi codex
 ```
 
-`just health` también reporta si falta algún componente mutable fuera de Nix
-(`gentle-ai`, `engram`, la extensión `gentle-pi`) y muestra el comando de
-instalación correspondiente. Es un chequeo manual: no corre con `just switch`.
+`just health` también reporta si falta algún componente mutable fuera de Nix.
+Al iniciar sesión, el servicio de usuario `provision-agent-tools` instala sólo
+el CLI `gentle-ai` y CodeGraph si faltan; si la red no está disponible,
+reintenta cada cinco minutos. No ejecuta la TUI: abrí
+`gentle-ai` una vez para elegir Pi y configurar su ecosistema. Para errores,
+consultá `systemctl --user status provision-agent-tools`.
 
 El prefijo y su caché permanecen deliberadamente mutables y fuera del store:
 
@@ -106,11 +109,18 @@ nunca dentro de `/nix/store`.
 
 ### Pi, CodeGraph y extensiones
 
-CodeGraph y otras herramientas npm siguen instalándose y actualizándose mediante
-sus flujos upstream en el prefijo npm mutable. Las extensiones de Pi también son
-mutables: `pi install` y `pi update --extensions` las gestionan fuera del store,
-sin modificar el ejecutable Nix de Pi. Las extensiones ejecutan código con tus
-permisos de usuario; instalalas sólo desde fuentes revisadas o confiables.
+CodeGraph se instala automáticamente cuando falta, pero sus actualizaciones
+siguen el flujo npm en el prefijo mutable. Las extensiones de Pi también son
+mutables: la primera configuración interactiva de `gentle-ai` instala su stack
+en Pi; `pi update --extensions` lo actualiza fuera del store, sin modificar el
+ejecutable Nix de Pi. Gentle Shell ya ofrece modelos NaN, `/login nan` y
+`/gentle:usage`; no se instala otro proveedor para esas funciones.
+`@gtrabanco/pi-nan-provider` sigue declarado en
+`configs/pi/agent/settings.json` por sus herramientas MCP de imagen/audio,
+embeddings, reranking y cuotas, que Gentle Shell no incluye; el servicio no
+lo instala automáticamente. No se instala el adaptador MCP antiguo: Pi ya
+provee MCP integrado. Las extensiones ejecutan código con tus permisos de
+usuario; instalalas sólo desde fuentes revisadas o confiables.
 
 Después de cambios upstream en extensiones de Pi, Gentle AI o Engram, ejecutá:
 
@@ -130,19 +140,22 @@ instalado puede seguir funcionando.
 
 ### Gentle AI y Engram
 
-El CLI independiente de Gentle AI se instala desde un shell host normal, sin
-fijar una versión en esta configuración. Este comando no soluciona la
-instalación package-local de `gentle-pi` descrita arriba:
+Home Manager obtiene una copia del instalador oficial fijada por URL y hash
+Nix; la ejecuta sólo si falta el CLI en `~/.local/bin/gentle-ai`. Ese
+instalador descarga la última versión estable y verifica el checksum publicado
+por upstream para el archivo descargado (no una firma independiente). No
+actualiza ni reemplaza instalaciones posteriores. Si upstream cambia el
+formato de instalación, hay que actualizar la URL y el hash del instalador en
+`modules/home/development.nix`; las actualizaciones normales del CLI siguen
+siendo mutables. Esto no soluciona la instalación package-local de `gentle-pi`
+descrita arriba: el puente `/usr/bin/tar` sigue
+siendo necesario.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
-```
-
-El instalador oficial elige y mantiene su canal estable. Al terminar, iniciá
-`gentle-ai` y configurá únicamente Pi. El instalador y `gentle-ai sync` son los
-dueños de sus skills, prompts, configuraciones MCP y perfiles; no mezclar esos
-archivos con `home.file` de Home Manager. Para actualizar Gentle AI y sus
-configuraciones gestionadas, seguí el flujo upstream desde un shell host:
+Al terminar, iniciá `gentle-ai` interactivamente y configurá Pi. El instalador
+y `gentle-ai sync` son los dueños de sus skills, prompts, configuraciones MCP y
+perfiles; no mezclar esos archivos con `home.file` de Home Manager. Para
+actualizar Gentle AI y sus configuraciones gestionadas, seguí el flujo upstream
+desde un shell host:
 
 ```bash
 gentle-ai upgrade
