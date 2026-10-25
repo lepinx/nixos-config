@@ -134,7 +134,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden", "noctalia/bongocat" ]
+enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden" ]
 
 [shell]
 font_family = "JetBrainsMono Nerd Font"
