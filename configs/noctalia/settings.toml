@@ -1,4 +1,4 @@
-config_version = 15
+config_version = 16
 
 [accessibility]
 ui_scale = 0.80000000000000004
@@ -11,7 +11,7 @@ tint_intensity = 0.0
 [bar.main]
 background_opacity = 0.88
 capsule = true
-capsule_fill = "surface_variant"
+capsule_fill = "surface_container"
 capsule_opacity = 0.55000000000000004
 capsule_radius = 8.0
 end = [ "tray", "notifications", "network", "bluetooth", "volume", "battery", "session" ]
@@ -23,7 +23,7 @@ position = "top"
 radius = 12
 reserve_space = true
 shadow = true
-start = [ "control-center", "workspaces", "keyboard_layout" ]
+start = [ "workspaces", "keyboard_layout" ]
 thickness = 36
 widget_spacing = 8
 
@@ -117,7 +117,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -133,7 +133,22 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         show_weather = true
 
 [plugins]
-enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden" ]
+enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwarden", "lepinx/noctatype" ]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
+
+    [[plugins.source]]
+    kind = "path"
+    location = "/home/lucho/open-source/noctalia-dev-plugins"
+    name = "dev"
 
 [shell]
 font_family = "JetBrainsMono Nerd Font"

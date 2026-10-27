@@ -24,13 +24,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Pinned to the pre-5.3.0 rev: dock smart auto-hide stays pinned visible
-    # against umbriel 0-unstable-2026-10-06 (nixpkgs). Unpin once nixpkgs ships
-    # a newer umbriel or upstream fixes the smart-hide query:
-    #   url = "github:noctalia-dev/noctalia";
-    #   nix flake update noctalia
     noctalia = {
-      url = "github:noctalia-dev/noctalia/64bc5b178f3f3dc943afb2e6adf1aab79ae76d03";
+      url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
