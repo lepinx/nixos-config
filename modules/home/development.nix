@@ -37,11 +37,10 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";
     };
 
-    # Out-of-store so pi config and extension opt-outs land back in the repo.
-    file.".pi/agent/settings.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/settings.json";
-    };
+    # settings.json is owned by the pi runtime (packages list, extension
+    # opt-outs, tuiMode): gentle-pi's postinstall replaces it with atomic
+    # rename and refuses any symlink, so it must stay a regular mutable file.
+    # The repo copy is the reference; seedPiSettings seeds fresh installs.
 
     file.".pi/agent/mcp.json" = {
       force = true;
@@ -109,6 +108,16 @@ in
       sql-formatter
     ];
   };
+
+  # Seed the mutable pi settings on machines where the file does not exist
+  # yet (fresh installs). Existing files are never touched: the pi runtime
+  # owns this file from then on. Skipped during dry runs.
+  home.activation.seedPiSettings = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$HOME/.pi/agent/settings.json" ]; then
+      install -Dm600 "${repoPath}/configs/pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
+      echo "seeded ~/.pi/agent/settings.json from repo"
+    fi
+  '';
 
   # Install missing mutable tools on first login; existing installations and
   # user-managed upgrades are never replaced by a Nix generation.
