@@ -1,31 +1,34 @@
 gui:
+  # One Dark Pro, to match nvim's onedark_dark (see configs/nvim/lua/plugins/theme.lua).
+  # Frozen on purpose: the noctalia community lazygit template was a one-shot
+  # rewrite, and the desktop palette would clash with the editor otherwise.
   theme:
     activeBorderColor:
-      - "#ffc799"
+      - "#61afef"
       - bold
     inactiveBorderColor:
-      - "#99ffe4"
+      - "#4b5263"
     searchingActiveBorderColor:
-      - "#fbadff"
+      - "#e5c07b"
       - bold
     optionsTextColor:
-      - "#a0a0a0"
+      - "#61afef"
     selectedLineBgColor:
-      - "#262626"
+      - "#3e4451"
     inactiveViewSelectedLineBgColor:
       - bold
     cherryPickedCommitFgColor:
-      - "#a0a0a0"
+      - "#56b6c2"
     cherryPickedCommitBgColor:
-      - "#fbadff"
+      - "#c678dd"
     markedBaseCommitFgColor:
-      - "#fbadff"
+      - "#c678dd"
     markedBaseCommitBgColor:
-      - "#ff8080"
+      - "#e06c75"
     unstagedChangesColor:
-      - "#ff8080"
+      - "#e06c75"
     defaultFgColor:
-      - "#ffffff"
+      - "#abb2bf"
   sidePanelWidth: 0.23
   mainPanelSplitMode: horizontal
   showNumstatInFilesView: true
@@ -34,6 +37,6 @@ gui:
 git:
   # -w={{width}}: wrap to the lazygit panel width, not the outer terminal's.
   diffRenderers:
-    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme noctalia --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - command: delta --{{colorScheme}} --paging=never --no-gitconfig --syntax-theme TwoDark --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
 
 # gui.theme is rewritten by Noctalia's community lazygit template (out-of-store).
