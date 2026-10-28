@@ -7,9 +7,6 @@ return {
     "olimorris/onedarkpro.nvim",
     priority = 1000,
     opts = {
-      options = {
-        transparency = true,
-      },
       styles = {
         comments = "italic",
         keywords = "italic",
@@ -19,12 +16,6 @@ return {
         Cursor = { fg = "#000000", bg = "#61afef" },
         Visual = { bg = "#303b4a" },
         FloatBorder = { fg = "#abb2bf" },
-        -- onedarkpro's transparency option skips CursorLine/CursorLineNr/
-        -- QuickFixLine: they keep a solid dark bar that clashes with the
-        -- ghostty wallpaper blend (oil shows it full width).
-        CursorLine = { bg = "NONE" },
-        CursorLineNr = { bg = "NONE" },
-        QuickFixLine = { bg = "NONE" },
       },
       plugins = {
         lsp_semantic_tokens = true,
