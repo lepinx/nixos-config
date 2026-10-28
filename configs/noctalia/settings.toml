@@ -167,7 +167,10 @@ wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "ghostty", "gtk3", "gtk4", "helix", "qt", "starship", "umbriel" ]
-    community_ids = [ "pi-agent", "neovim", "fastfetch", "bat", "fzf", "herdr", "starship", "yazi" ]
+    # neovim removed on purpose: configs/nvim/lua/matugen.lua holds a hand-frozen
+    # palette (the template would clobber it on every wallpaper change), same
+    # reason lazygit's gui.theme is a frozen snapshot.
+    community_ids = [ "pi-agent", "fastfetch", "bat", "fzf", "herdr", "starship", "yazi" ]
     enable_builtin_templates = true
 
 [wallpaper]
