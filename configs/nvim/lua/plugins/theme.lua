@@ -19,9 +19,11 @@ return {
         Cursor = { fg = "#000000", bg = "#61afef" },
         Visual = { bg = "#303b4a" },
         FloatBorder = { fg = "#abb2bf" },
-        -- onedarkpro's transparency option skips CursorLine/QuickFixLine: they
-        -- keep a solid dark bar that clashes with the ghostty wallpaper blend.
+        -- onedarkpro's transparency option skips CursorLine/CursorLineNr/
+        -- QuickFixLine: they keep a solid dark bar that clashes with the
+        -- ghostty wallpaper blend (oil shows it full width).
         CursorLine = { bg = "NONE" },
+        CursorLineNr = { bg = "NONE" },
         QuickFixLine = { bg = "NONE" },
       },
       plugins = {
