@@ -5,10 +5,6 @@
   ...
 }:
 let
-  gentleAiInstaller = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/v4.2.0/scripts/install.sh";
-    hash = "sha256-e6J5w+ylnRzoEwcljNpF2kgZgq0/FSGuWvf7ZqpGsfI=";
-  };
   provisionAgentTools = pkgs.writeShellApplication {
     name = "provision-agent-tools";
     runtimeInputs = with pkgs; [
@@ -129,7 +125,7 @@ in
     };
     Service = {
       Type = "oneshot";
-      ExecStart = "${provisionAgentTools}/bin/provision-agent-tools ${gentleAiInstaller}";
+      ExecStart = "${provisionAgentTools}/bin/provision-agent-tools";
       Restart = "on-failure";
       RestartSec = "5min";
     };
