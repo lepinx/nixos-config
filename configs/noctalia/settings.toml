@@ -162,14 +162,11 @@ telemetry_enabled = false
 builtin = "Noctalia"
 community_palette = "Vesper"
 mode = "dark"
-source = "community"
+source = "wallpaper"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = [ "alacritty", "btop", "cava", "ghostty", "gtk3", "gtk4", "helix", "qt", "starship", "umbriel" ]
-    # neovim removed on purpose: configs/nvim/lua/matugen.lua holds a hand-frozen
-    # palette (the template would clobber it on every wallpaper change), same
-    # reason lazygit's gui.theme is a frozen snapshot.
     community_ids = [ "pi-agent", "fastfetch", "bat", "fzf", "herdr", "starship", "yazi" ]
     enable_builtin_templates = true
 
@@ -178,13 +175,13 @@ directory = "~/Pictures/wallpapers"
 enabled = true
 
     [wallpaper.default]
-    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
     [wallpaper.last]
-    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
 
 [weather]
 effects = true
