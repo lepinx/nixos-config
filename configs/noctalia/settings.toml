@@ -175,13 +175,13 @@ directory = "~/Pictures/wallpapers"
 enabled = true
 
     [wallpaper.default]
-    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
     [wallpaper.last]
-    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
     [wallpaper.monitors.eDP-1]
-    path = "/home/lucho/Pictures/wallpapers/1_3sLNWN6g_72.jpg"
+    path = "/home/lucho/Pictures/wallpapers/1_6pSRdJX2_74.jpg"
 
 [weather]
 effects = true
