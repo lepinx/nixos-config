@@ -1,10 +1,32 @@
+-- One Dark Pro (darker) wins for the editor: syntax highlighting is taste,
+-- and the generated M3 palettes are mediocre at it. Noctalia keeps the
+-- desktop and terminal tools; matugen stays available via
+-- configs/nvim/colors/matugen.lua (frozen, not the default).
 return {
+  {
+    "olimorris/onedarkpro.nvim",
+    priority = 1000,
+    opts = {
+      styles = {
+        comments = "italic",
+        keywords = "italic",
+      },
+      highlights = {
+        LspInlayHint = { fg = "#6b7280", italic = true },
+        Cursor = { fg = "#000000", bg = "#61afef" },
+        Visual = { bg = "#303b4a" },
+        FloatBorder = { fg = "#abb2bf" },
+      },
+      plugins = {
+        lsp_semantic_tokens = true,
+        treesitter = true,
+      },
+    },
+  },
   {
     "LazyVim/LazyVim",
     opts = {
-      -- configs/nvim/colors/matugen.lua wraps the noctalia-generated palette as a
-      -- real colorscheme (regenerated on every wallpaper change).
-      colorscheme = "matugen",
+      colorscheme = "onedark_dark",
     },
   },
 }

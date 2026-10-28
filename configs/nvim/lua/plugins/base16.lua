@@ -1,6 +1,4 @@
-return { 'RRethy/base16-nvim',
-  config = function()
-    local ok, matugen = pcall(require, 'matugen')
-    if ok then matugen.setup() end
-  end,
-}
+-- matugen.setup() is applied by configs/nvim/colors/matugen.lua when that
+-- colorscheme is selected; running it here unconditionally would pollute
+-- every other colorscheme (it rewrites base16 groups at startup).
+return { 'RRethy/base16-nvim' }
