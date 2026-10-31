@@ -15,6 +15,14 @@
   # power saving). Remove it if a peripheral wakes too slowly.
   powerManagement.powertop.enable = true;
 
+  # Workaround for NixOS/nixpkgs#577729: kernel 6.18.57 builds ACPI_TINY_POWER_BUTTON
+  # as a module alongside ACPI_BUTTON, and on s2idle wake it treats the firmware's
+  # power-button ACPI notify as a real press, sending SIGRTMIN+4 to PID 1 which
+  # powers the machine off mid-resume. The real power key keeps working via logind
+  # and the `button` driver. Remove once nixpkgs sets ACPI_TINY_POWER_BUTTON = no
+  # in common-config.nix (or ships the upstream kernel fix ab06eb920401).
+  boot.blacklistedKernelModules = [ "tiny_power_button" ];
+
   systemd.services.power-profile-auto = {
     description = "Set the power profile according to AC power";
     after = [ "power-profiles-daemon.service" ];
