@@ -31,16 +31,8 @@ in
 {
   programs.yazi.enable = true;
 
-  services.udiskie = {
-    enable = true;
-    automount = true;
-    notify = true;
-    tray = "never";
-  };
-
   home.packages = with pkgs; [
     trash-cli
-    udiskie
     yaziDevices
     yaziTrash
   ];
