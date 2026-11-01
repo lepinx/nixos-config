@@ -190,6 +190,7 @@ in
     nushell = {
       enable = true;
       package = pkgs.nushell;
+      loadSessionVariables = true;
       settings = {
         show_banner = false;
         edit_mode = "vi";
