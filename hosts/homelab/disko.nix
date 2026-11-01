@@ -1,21 +1,12 @@
 {
-  diskDeviceBoot ? "/dev/sda",
-  hostName ? "homelab",
+  diskDeviceBoot ? "/dev/vda",
   ...
 }:
 
-let
-  btrfsMountOptions = [
-    "compress=zstd"
-    "noatime"
-    "ssd"
-    "discard=async"
-  ];
-in
 {
-  # The data HDD is intentionally NOT managed by disko: it is staged with plain
-  # Btrfs before install, and having disko reference it would reformat and
-  # destroy that data. It is mounted by label in default.nix instead.
+  # Proxmox VM system disk (virtio, on the host SSD / local-lvm). Family data
+  # lives in the host zfs pool (tank), shared into the VM separately; this
+  # disk only holds the OS.
   disko.devices = {
     disk.boot = {
       type = "disk";
@@ -37,34 +28,13 @@ in
             };
           };
 
-          cryptroot = {
+          root = {
             size = "100%";
             content = {
-              type = "luks";
-              name = "cryptroot";
-              settings.allowDiscards = true;
-              content = {
-                type = "btrfs";
-                extraArgs = [
-                  "-f"
-                  "-L"
-                  hostName
-                ];
-                subvolumes = {
-                  "/root" = {
-                    mountpoint = "/";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "/home" = {
-                    mountpoint = "/home";
-                    mountOptions = btrfsMountOptions;
-                  };
-                  "/nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = btrfsMountOptions;
-                  };
-                };
-              };
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/";
+              mountOptions = [ "noatime" ];
             };
           };
         };

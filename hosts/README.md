@@ -17,8 +17,25 @@ La regla práctica:
 ## Hosts activos
 
 - `workstation`: notebook personal, instalado.
-- `homelab`: servidor casero. Expuesto como `nixosConfigurations.homelab`, con
-  layout de discos, red y servicios definidos; todavía no instalado en la torre.
+- `homelab`: servidor principal, VM NixOS sobre Proxmox (`192.168.1.10`, VM id
+  100) definido como `nixosConfigurations.homelab`; bootstrap pendiente. La
+  torre Ubuntu vieja (`192.168.1.50`) queda para backups + laboratorio.
+
+## Asignación de IPs (LAN 192.168.1.0/24)
+
+El router ADSL reparte DHCP en `.100-.254`. El rango `.2-.99` queda reservado
+para infraestructura con IP estática:
+
+| IP | Host | Rol |
+| --- | --- | --- |
+| `192.168.1.1` | Router ADSL | gateway |
+| `192.168.1.2` | Switch HPE OfficeConnect 1420 | gestión |
+| `192.168.1.10` | `proxmox` (Aoostar WTR Pro) | hipervisor, VMs y zpool `tank` |
+| `192.168.1.11` | VM NixOS `homelab` (planeado) | server principal de servicios |
+| `192.168.1.50` | Torre Ubuntu (ex-homelab) | backups (restic) + laboratorio |
+
+Nuevas VMs o servicios con IP fija van en `.12-.99`; todo lo dinámico en el
+rango DHCP.
 
 ## Próximo host previsto
 

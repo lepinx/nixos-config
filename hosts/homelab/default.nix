@@ -9,7 +9,6 @@
     ./disko.nix
     ./hardware-configuration.nix
     ../../modules/nixos/profiles/server.nix
-    ./samba.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -19,33 +18,18 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-
-    # systemd initrd is required for tpm2-device=auto.
-    initrd = {
-      systemd.enable = true;
-      luks.devices.cryptroot.crypttabExtraOpts = [ "tpm2-device=auto" ];
-    };
-  };
-
-  # Data HDD: never managed by disko (see disko.nix); mounted by label so the
-  # pre-staged Btrfs data survives reinstalls.
-  fileSystems."/srv/data/lucho" = {
-    device = "/dev/disk/by-label/homelab-data";
-    fsType = "btrfs";
-    options = [
-      "compress=zstd"
-      "noatime"
-      "subvol=lucho"
-    ];
+    # The Proxmox host grew the virtio disk; grow the root fs at boot.
+    growPartition = true;
   };
 
   networking = {
     inherit hostName;
 
-    # Static LAN address; gateway/DNS are assumptions to verify at install time.
-    interfaces.eno1.ipv4.addresses = [
+    # Static LAN address; ens18 is the virtio NIC on the q35 machine. Gateway
+    # and DNS are assumptions to verify at install time.
+    interfaces.ens18.ipv4.addresses = [
       {
-        address = "192.168.1.50";
+        address = "192.168.1.11";
         prefixLength = 24;
       }
     ];
@@ -57,9 +41,11 @@
 
     firewall = {
       enable = true;
-      # 80/443 for the future Pangolin edge, 51820/udp for Gerbil WireGuard
-      # tunnels.
+      # 22 for LAN SSH, 80/443 for the Pangolin edge, 51820/udp for WireGuard
+      # tunnels. The router never forwards these from the WAN, so everything
+      # stays LAN/VPN-only.
       allowedTCPPorts = [
+        22
         80
         443
       ];
@@ -77,7 +63,6 @@
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
     };
-    openFirewall = false;
   };
 
   users.users.${userName} = {
