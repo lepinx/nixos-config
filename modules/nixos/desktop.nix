@@ -93,7 +93,8 @@
   };
   services.pulseaudio.enable = false;
 
-  services.printing.enable = true;
+  # Printing disabled: no printer on this host. Re-enable with
+  # services.printing.enable = true if one is ever needed.
 
   environment.systemPackages = with pkgs; [
     brightnessctl

@@ -96,7 +96,6 @@ in
       lazygit
       nodejs
       nil
-      nixd
       just
       nix-direnv
       nixfmt

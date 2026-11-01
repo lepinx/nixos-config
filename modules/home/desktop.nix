@@ -40,13 +40,6 @@ in
 
   xdg = {
     configFile = {
-      "autostart/nm-applet.desktop".text = ''
-        [Desktop Entry]
-        Type=Application
-        Name=NetworkManager Applet
-        Hidden=true
-        X-GNOME-Autostart-enabled=false
-      '';
       "ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/ghostty/config";
       # Out-of-store: Noctalia's alacritty template rewrites the theme import here.
       "alacritty/alacritty.toml".source =

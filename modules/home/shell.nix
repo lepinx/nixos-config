@@ -82,7 +82,6 @@ in
     tree
     unzip
     wget
-    wl-clipboard
     wtype
     zoxide
     starship
