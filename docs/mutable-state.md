@@ -31,10 +31,13 @@ and hot-reloads; ending in `/nix/store` is declared and needs `just switch`.
 | optional NaN media MCP tools (`@gtrabanco/pi-nan-provider`) | pi | declared in Pi settings; not provisioned by the login service |
 
 Two runtime files look versioned but are not, and drift is expected:
-`~/.pi/agent/settings.json` (Pi and its package manager rewrite it with atomic
-renames and reject symlinks) and `~/.pi/agent/subagents.json` (gentle-ai owns
-the subagent model profiles). The repo copy of `settings.json` is the seed for
-a fresh machine, not a live mirror.
+`~/.gentle-shell/agent/settings.json` (Pi and its package manager rewrite it
+with atomic renames and reject symlinks) and
+`~/.gentle-shell/agent/subagents.json` (gentle-ai owns the subagent model
+profiles). The repo copy of `settings.json` is the seed for a fresh machine,
+not a live mirror. `mcp.json` and `gentle-ai/persona.json` are seeded the same
+way: gentle-ai's setup and sync refuse to read a symlink they are about to
+inject into, so Nix writes them once and the agent owns them from then on.
 
 After the first login, run `gentle-ai` and select Pi to configure the ecosystem.
 The service does not run the TUI or select components for you. Check automatic
@@ -50,16 +53,35 @@ Gentle Shell's postinstall on NixOS.
 
 `gentle-shell` opens the flake's `pi` with the Gentle Shell package loaded and
 never edits the pi it finds. It is provisioned into the agent runtime prefix and
-`gentle-shell home link` makes it reuse `~/.pi/agent` (sign-ins, models, chats),
-so this machine keeps one home and one lifecycle for the harness.
+runs with its isolated home (`~/.gentle-shell/config.json`, `"home":
+"isolated"`), so every piece of agent state lives under `~/.gentle-shell`:
+`~/.gentle-shell/agent` for Pi (auth, sessions, models, packages) and
+`~/.gentle-shell/gentle-ai` for the CLI (profile, models, backups). `~/.pi` is
+neither written nor read.
 
-Why linked rather than isolated: the dedicated `~/.gentle-shell/agent` home
-would duplicate every symlink under `configs/pi/` and split state across two
-homes, while buying isolation this setup does not want — bare `pi` is not a
-supported entrypoint here.
+Home Manager exports `GENTLE_AI_HOME` and `PI_CODING_AGENT_DIR` with those same
+two paths. Without them a bare `pi` — or a `gentle-ai sync` run outside the
+launcher — resolves `~/.pi/agent` and `~/.pi/gentle-ai` again and silently
+re-creates the old split home.
+
+Why isolated rather than `gentle-shell home link`: the linked mode wrote Pi's
+state into `~/.pi/agent` and the CLI's into `~/.pi/gentle-ai`, so the harness
+kept re-creating a tree this setup wants gone and every Nix-declared file had to
+be mirrored under it. With the isolated home there is one tree and one owner,
+and the launcher needs no `home link` step. Bare `pi` is still not the
+entrypoint: it starts without the harness.
 
 Consequences of this mode:
 
+- `~/.gentle-shell/agent` holds Pi's `settings.json`, `auth.json`,
+  `subagents.json` and the npm package prefix; `~/.gentle-shell/gentle-ai` holds
+  `profiles.json`, `models.json`, `vim.json` and `background-subagents.json`.
+- `profiles.json` stays an out-of-store symlink into `configs/pi/gentle-ai/`, so
+  the `/gentle:profiles` panel's active-profile rewrite lands in the repo.
+- `settings.json`, `mcp.json` and `gentle-ai/persona.json` are seeded regular
+  files (`seedAgentSettings` in `modules/home/development.nix`). gentle-ai's
+  setup and sync refuse to read a symlink they are about to inject into, which
+  broke `gentle-shell setup` and `gentle-ai sync` while they were symlinks.
 - `gentle-pi` is supplied by the launcher, not by Pi's package list: it is absent
   from `settings.json` and `pi update --extensions` never manages it.
 - npm's lifecycle-script gate stays closed for `gentle-pi`. On Linux its
@@ -67,9 +89,10 @@ Consequences of this mode:
   neither `go` nor `/usr/bin/tar`.
 - `gentle-ai` itself stays the mutable binary in `~/.local/bin`, updated with
   `gentle-ai upgrade`.
-- Revert with `gentle-shell home isolated`; the dedicated home is created on the
-  next launch and copies `auth.json`/`mcp.json` from `~/.pi/agent` only when
-  asked (`gentle-shell home import-pi`).
+- `~/.pi` and `~/.gentle-ai` are leftovers of the earlier linked home. Nothing
+  the agent reads lives there any more: `~/.pi/agent` keeps empty `auth.json`
+  and `models-store.json` stubs, `~/.gentle-ai` keeps old upgrade backups.
+  Deleting them is safe once those backups are no longer needed.
 
 The `/usr/bin/tar` bridge in `modules/nixos/core.nix` no longer has a known
 consumer in this mode. It stays until the interactive `gentle-ai` setup and
@@ -88,7 +111,8 @@ configuration.
 
 These hold secrets or personal data. After a fresh install:
 
-1. Open pi and log in to each provider — creates `~/.pi/agent/auth.json`.
+1. Open `gentle-shell` and log in to each provider — creates
+   `~/.gentle-shell/agent/auth.json`.
 2. Use `/login nan` in Pi, or export `NAN_API_KEY` if preferred.
 3. Run `gentle-ai` once to select Pi and configure its ecosystem; later run
    `gentle-ai sync` after upstream updates. Gentle Shell already supports NaN

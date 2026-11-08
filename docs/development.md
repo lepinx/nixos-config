@@ -76,11 +76,12 @@ con npm, instaladores upstream ni `pi update self`: esos flujos no deben
 reemplazar el binario administrado por Nix.
 
 El punto de entrada es `gentle-shell`, el launcher de Gentle Shell sobre ese
-mismo `pi`: abre Pi con el paquete `gentle-pi` cargado y, con
-`gentle-shell home link`, reutiliza este home, así que `~/.pi/agent` sigue
-siendo la única fuente de verdad y no se crea el home aislado
-`~/.gentle-shell/agent`. `pi` a secas arranca sin el harness: no es el
-entrypoint esperado.
+mismo `pi`: abre Pi con el paquete `gentle-pi` cargado y usa su home aislado
+`~/.gentle-shell/agent`, con la configuración de Gentle AI en
+`~/.gentle-shell/gentle-ai`. Home Manager exporta `GENTLE_AI_HOME` para que el
+CLI escriba en ese mismo árbol; todo el estado del agente vive bajo
+`~/.gentle-shell` y `~/.pi` no se usa. `pi` a secas arranca sin el harness: no
+es el entrypoint esperado.
 
 Node y el prefijo npm aislado continúan siendo dependencias de host declaradas
 por Nix/Home Manager. Home Manager expone `NPM_CONFIG_PREFIX` y
@@ -178,28 +179,19 @@ El estado gestionado de Gentle AI y la memoria local de Engram permanecen fuera
 del store:
 
 ```text
-~/.gentle-ai/    # configuración y backups gestionados
-~/.pi/           # paquetes y configuración de Pi
-~/.engram/       # memoria SQLite local de Engram
-~/.local/bin/    # gentle-ai y engram instalados por upstream
+~/.gentle-shell/agent/     # home de Pi del launcher: sesiones, auth, paquetes
+~/.gentle-shell/gentle-ai/ # configuración, backups y assets gestionados
+~/.engram/                 # memoria SQLite local de Engram
+~/.local/bin/              # gentle-ai y engram instalados por upstream
 ```
 
-La excepción deliberada es el store de perfiles de agentes
-(`~/.pi/gentle-ai/profiles.json`): es una decisión autoral, no estado, y se
-versiona como copia manual en `configs/pi/gentle-ai/profiles.json`. Nunca como
-`home.file`, porque el panel `/gentle:profiles` reescribe el marcador de perfil
-activo y el snapshot no debe pelear con esa escritura. Después de un cambio de
-routing a propósito, refrescar la copia desde la raíz del repositorio:
-
-```bash
-cp ~/.pi/gentle-ai/profiles.json configs/pi/gentle-ai/profiles.json
-```
-
-Tras una reinstalación, restaurar con la copia inversa:
-
-```bash
-cp configs/pi/gentle-ai/profiles.json ~/.pi/gentle-ai/profiles.json
-```
+El store de perfiles de agentes (`~/.gentle-shell/gentle-ai/profiles.json`) es
+una decisión autoral, no estado, y se versiona en
+`configs/pi/gentle-ai/profiles.json`. Home Manager lo enlaza fuera del store
+(`mkOutOfStoreSymlink`) en vez de copiarlo: el panel `/gentle:profiles` reescribe
+el marcador de perfil activo y, al pasar por el symlink, la edición cae directo
+en el repo. Después de un cambio de routing a propósito, revisá el `git diff` y
+commiteá; en una máquina nueva el symlink ya trae el contenido.
 
 La base `~/.engram/engram.db` es la fuente de verdad de Engram. Sus archivos
 `-wal` y `-shm` son parte normal de SQLite y nunca se borran por separado. Para
