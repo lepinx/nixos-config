@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Reconcile only missing mutable tools. The user owns upgrades and the first
-# interactive `gentle-ai` setup; never run the TUI or downgrade existing tools.
+# interactive `gentle-ai` setup; never run the TUI, never select components and
+# never downgrade existing tools.
 set -euo pipefail
 
 # The installer comes from main at runtime (first install always gets the
@@ -22,4 +23,14 @@ npm_prefix="$HOME/.local/share/agent-runtime/npm"
 if [ ! -x "$npm_prefix/bin/codegraph" ]; then
   npm install -g --prefix "$npm_prefix" @colbymchenry/codegraph
   [ -x "$npm_prefix/bin/codegraph" ] || { echo 'codegraph installation failed' >&2; exit 1; }
+fi
+
+# `gentle-shell` is the entrypoint this repo standardises on: the launcher
+# supplies gentle-pi and runs the pi the flake provides. Its postinstall is not
+# needed here — it installs no artifact at package level on Linux — so npm's
+# lifecycle-script gate can stay closed; gentle-ai remains the binary the block
+# above provisions.
+if [ ! -x "$npm_prefix/bin/gentle-shell" ]; then
+  npm install -g --prefix "$npm_prefix" gentle-pi
+  [ -x "$npm_prefix/bin/gentle-shell" ] || { echo 'gentle-shell launcher installation failed' >&2; exit 1; }
 fi
