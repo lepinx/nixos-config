@@ -42,6 +42,14 @@ menos 3 generaciones mientras el sistema cambia bastante.
 Para cambios de greeter o sesión gráfica, es más prolijo usar `just boot` y
 reiniciar. Así la sesión gráfica actual no se corta en caliente.
 
+Un `just switch` que cambie Umbriel u otra pieza de la sesión Wayland no
+reinicia el compositor: reescribe `~/.config/umbriel/config.toml` pero el
+proceso sigue ejecutando el binario con el que arrancó. Con una configuración
+de atajos nueva y un binario viejo, Umbriel ignora en silencio los binds cuyo
+formato no entiende. Después de activar un cambio de ese tipo, cerrá sesión y
+volvé a entrar (o `just boot` y reiniciá). `umbriel config validate` confirma
+que la configuración es válida, pero no dice qué proceso la está leyendo.
+
 ## Modelo mental
 
 - `flake.nix` declara las fuentes y la composición del sistema.
