@@ -30,10 +30,8 @@
   };
 
   environment.systemPackages = with pkgs; [
-    cifs-utils
     nmap
     openvpn
-    samba
     wireguard-tools
   ];
 }

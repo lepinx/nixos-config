@@ -138,7 +138,6 @@
         homelab = mkNixos {
           hostName = "homelab";
           enableHomeManager = false;
-          diskDevice = "/dev/sda";
           modules = [
             ./hosts/homelab
             inputs.disko.nixosModules.disko

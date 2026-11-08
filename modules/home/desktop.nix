@@ -28,10 +28,9 @@ in
     localsend
     loupe
     (mpv.override {
-      scripts = [ pkgs.mpvScripts.mpris ]; # media keys + noctalia media widget for the yt-music plugin
+      scripts = [ pkgs.mpvScripts.mpris ]; # MPRIS: media keys + the Noctalia media widget control mpv playback
     })
     nerd-fonts.jetbrains-mono
-    networkmanagerapplet
     pkgs.bruno
     pkgs.dbeaver-bin
     seahorse

@@ -11,7 +11,8 @@
     };
   };
 
-  # allowUnfree is set per host (see flake.nix); the pkgs instance decides.
+  # allowUnfree is set per host (hosts/workstation/default.nix and
+  # hosts/homelab/default.nix); the pkgs instance decides.
 
   # Prebuilt glibc binaries (codegraph's Node, npm-native tools) die with
   # "NixOS cannot run dynamically linked executables" without a real loader.
