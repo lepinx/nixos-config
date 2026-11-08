@@ -69,28 +69,36 @@ y al salir se descarga.
 
 ## Runtime de agentes
 
-Pi y Codex son los agentes de código soportados por esta
-configuración. Sus **ejecutables** los provee el flake mediante el perfil
-de usuario de Nix; la revisión queda fijada por `flake.lock`. No instalar ni
-actualizar esos binarios con npm, instaladores upstream, `pi update self` ni
-los mecanismos de autoactualización upstream de Codex: esos flujos no
-deben reemplazar los binarios administrados por Nix.
+Pi es el único agente de código que soporta esta configuración. Su
+**ejecutable** lo provee el flake mediante el perfil de usuario de Nix; la
+revisión queda fijada por `flake.lock`. No instalar ni actualizar ese binario
+con npm, instaladores upstream ni `pi update self`: esos flujos no deben
+reemplazar el binario administrado por Nix.
+
+El punto de entrada es `gentle-shell`, el launcher de Gentle Shell sobre ese
+mismo `pi`: abre Pi con el paquete `gentle-pi` cargado y, con
+`gentle-shell home link`, reutiliza este home, así que `~/.pi/agent` sigue
+siendo la única fuente de verdad y no se crea el home aislado
+`~/.gentle-shell/agent`. `pi` a secas arranca sin el harness: no es el
+entrypoint esperado.
 
 Node y el prefijo npm aislado continúan siendo dependencias de host declaradas
 por Nix/Home Manager. Home Manager expone `NPM_CONFIG_PREFIX` y
 `NPM_CONFIG_CACHE`, mantiene disponibles `~/.local/bin` y el directorio `bin`
-del prefijo, y Nix provee Node. El perfil Nix tiene prioridad: `pi` y `codex`
-resuelven allí antes que los binarios heredados en esas rutas mutables. Abrí una
+del prefijo, y Nix provee Node. El perfil Nix tiene prioridad: `pi` y
+`gentle-shell` resuelven allí antes que los binarios heredados en esas rutas
+mutables. Abrí una
 terminal host nueva —o ejecutá `exec fish -l`— después de activar cambios de
 Home Manager y verificá el orden con:
 
 ```bash
-type -a pi codex
+type -a pi gentle-shell
 ```
 
 `just health` también reporta si falta algún componente mutable fuera de Nix.
 Al iniciar sesión, el servicio de usuario `provision-agent-tools` instala sólo
-el CLI `gentle-ai` y CodeGraph si faltan; si la red no está disponible,
+el CLI `gentle-ai`, el launcher `gentle-shell` y CodeGraph si faltan; si la red
+no está disponible,
 reintenta cada cinco minutos. No ejecuta la TUI: abrí
 `gentle-ai` una vez para elegir Pi y configurar su ecosistema. Para errores,
 consultá `systemctl --user status provision-agent-tools`.
@@ -102,7 +110,7 @@ El prefijo y su caché permanecen deliberadamente mutables y fuera del store:
 ~/.cache/agent-runtime/npm/        # caché npm correspondiente
 ```
 
-Los binarios heredados y el estado de Pi, Codex, CodeGraph, Gentle AI y Engram
+Los binarios heredados y el estado de Pi, CodeGraph, Gentle AI y Engram
 se conservan sin que Nix/Home Manager los borre ni sobrescriba. No se escribe
 nunca dentro de `/nix/store`.
 
@@ -128,27 +136,32 @@ gentle-ai sync
 ```
 
 Eso sincroniza los artefactos administrados por Gentle AI; no instala ni
-actualiza automáticamente los ejecutables Nix de Pi o Codex.
+actualiza automáticamente el ejecutable Nix de Pi.
 
 #### Limitación de gentle-pi
 
 El instalador package-local de `gentle-pi` 3.7.0 sólo confía en `/usr/bin/tar`
-o `/bin/tar`; esas rutas no existen en una instalación NixOS vanilla. Por eso
-puede fallar una instalación nueva o la autoreparación, aunque un binario ya
-instalado puede seguir funcionando.
+o `/bin/tar`; esas rutas no existen en una instalación NixOS vanilla. En este
+setup el launcher no ejecuta ese postinstall —npm 11 lo bloquea con su gate de
+lifecycle scripts y en Linux no instala ningún artefacto a nivel de paquete—,
+así que el puente de `modules/nixos/core.nix` no tiene consumidor conocido.
+Queda hasta verificar sin él la configuración interactiva de `gentle-ai` y
+`gentle-ai upgrade`; se retira en un cambio propio.
 
 ### Gentle AI y Engram
 
-Home Manager obtiene una copia del instalador oficial fijada por URL y hash
-Nix; la ejecuta sólo si falta el CLI en `~/.local/bin/gentle-ai`. Ese
+Home Manager ejecuta el instalador oficial que descarga de `main` en tiempo de
+arranque, sin pin en Nix; corre sólo si falta el CLI en `~/.local/bin/gentle-ai`.
+Ese
 instalador descarga la última versión estable y verifica el checksum publicado
 por upstream para el archivo descargado (no una firma independiente). No
 actualiza ni reemplaza instalaciones posteriores. Si upstream cambia el
-formato de instalación, hay que actualizar la URL y el hash del instalador en
-`modules/home/development.nix`; las actualizaciones normales del CLI siguen
-siendo mutables. Esto no soluciona la instalación package-local de `gentle-pi`
-descrita arriba: el puente `/usr/bin/tar` sigue
-siendo necesario.
+formato de instalación, el script cambia con él: no hay URL ni hash que
+actualizar en `modules/home/development.nix`, y por eso una instalación nueva no
+es reproducible byte a byte. Las actualizaciones normales del CLI siguen
+siendo mutables. Esto no involucra la instalación package-local de `gentle-pi`
+descrita arriba: ese postinstall ya no corre acá y el puente `/usr/bin/tar`
+sólo espera su verificación pendiente.
 
 Al terminar, iniciá `gentle-ai` interactivamente y configurá Pi. El instalador
 y `gentle-ai sync` son los dueños de sus skills, prompts, configuraciones MCP y

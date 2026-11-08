@@ -15,7 +15,7 @@ both layers and how to reconstruct a fresh machine completely.
 | Noctalia UI overrides (hot-reload symlink) | `configs/noctalia/settings.toml` |
 | Nvim config (hot-reload symlinks) | `configs/nvim/` |
 | `/usr/bin/tar` bridge for gentle-pi's postinstall | `modules/nixos/core.nix` (tmpfiles rule) |
-| pi and codex binaries | `modules/home/development.nix` |
+| pi binary | `modules/home/development.nix` |
 
 Rule of thumb: `readlink -f <path>` ending inside this repository is mutable
 and hot-reloads; ending in `/nix/store` is declared and needs `just switch`.
@@ -26,8 +26,15 @@ and hot-reloads; ending in `/nix/store` is declared and needs `just switch`.
 | --- | --- | --- |
 | gentle-ai CLI | upstream installer, then `gentle-ai upgrade` | Home Manager user service installs the CLI if missing |
 | codegraph (npm global in the agent runtime prefix) | npm | same service installs if missing |
-| gentle-pi, gentle-engram, pi-web-access, pi-btw | pi | first interactive `gentle-ai` setup for Pi |
+| `gentle-shell` launcher (supplies `gentle-pi`) | npm, in the agent runtime prefix | Home Manager user service installs it if missing |
+| gentle-engram, pi-web-access, pi-btw | pi | first interactive `gentle-ai` setup for Pi |
 | optional NaN media MCP tools (`@gtrabanco/pi-nan-provider`) | pi | declared in Pi settings; not provisioned by the login service |
+
+Two runtime files look versioned but are not, and drift is expected:
+`~/.pi/agent/settings.json` (Pi and its package manager rewrite it with atomic
+renames and reject symlinks) and `~/.pi/agent/subagents.json` (gentle-ai owns
+the subagent model profiles). The repo copy of `settings.json` is the seed for
+a fresh machine, not a live mirror.
 
 After the first login, run `gentle-ai` and select Pi to configure the ecosystem.
 The service does not run the TUI or select components for you. Check automatic
@@ -39,20 +46,43 @@ Nix declares this service but does not own the destination directories: Pi and
 npm manage their own package lifecycles. The `/usr/bin/tar` bridge supports
 Gentle Shell's postinstall on NixOS.
 
-## Alternative: standalone `gentle-shell` launcher
+## Entrypoint: the `gentle-shell` launcher
 
-Upstream also ships a launcher that runs Pi with the Gentle Shell package
-from its own home (`~/.gentle-shell/agent`) or, with `--link`, reusing this
-machine's `~/.pi/agent` (sign-ins, models, chats). Installed with
-`npm i -g gentle-pi`; it never modifies the pi install it finds.
+`gentle-shell` opens the flake's `pi` with the Gentle Shell package loaded and
+never edits the pi it finds. It is provisioned into the agent runtime prefix and
+`gentle-shell home link` makes it reuse `~/.pi/agent` (sign-ins, models, chats),
+so this machine keeps one home and one lifecycle for the harness.
 
-Trade-off for this setup: the in-agent install (current) keeps one pi home
-and one lifecycle; the standalone launcher isolates Gentle Shell from
-`~/.pi/agent` at the cost of a second home and an npm-global launcher that
-`pi update --extensions` does not manage. Neither mode avoids the
-postinstall `/usr/bin/tar` requirement on NixOS. Current choice:
-in-agent via the interactive `gentle-ai` setup; revisit only if isolation
-from `~/.pi/agent` becomes desirable.
+Why linked rather than isolated: the dedicated `~/.gentle-shell/agent` home
+would duplicate every symlink under `configs/pi/` and split state across two
+homes, while buying isolation this setup does not want — bare `pi` is not a
+supported entrypoint here.
+
+Consequences of this mode:
+
+- `gentle-pi` is supplied by the launcher, not by Pi's package list: it is absent
+  from `settings.json` and `pi update --extensions` never manages it.
+- npm's lifecycle-script gate stays closed for `gentle-pi`. On Linux its
+  postinstall installs no artifact at package level, so the launcher needs
+  neither `go` nor `/usr/bin/tar`.
+- `gentle-ai` itself stays the mutable binary in `~/.local/bin`, updated with
+  `gentle-ai upgrade`.
+- Revert with `gentle-shell home isolated`; the dedicated home is created on the
+  next launch and copies `auth.json`/`mcp.json` from `~/.pi/agent` only when
+  asked (`gentle-shell home import-pi`).
+
+The `/usr/bin/tar` bridge in `modules/nixos/core.nix` no longer has a known
+consumer in this mode. It stays until the interactive `gentle-ai` setup and
+`gentle-ai upgrade` are verified without it; remove it in its own change.
+
+### Removed: the Codex CLI
+
+`pkgs.codex` is no longer installed and `~/.codex/skills` no longer feeds the
+skill registry. `~/.codex` itself is left on disk untouched: it holds
+`auth.json`, and the `openai` profile in `configs/pi/gentle-ai/profiles.json`
+references `openai-codex/*` model ids that may read it. Delete the directory
+only after that profile moves to another provider; until then it is state, not
+configuration.
 
 ## Manual steps (never automated, never versioned)
 
