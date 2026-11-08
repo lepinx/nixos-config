@@ -1,4 +1,4 @@
-config_version = 16
+config_version = 19
 
 [accessibility]
 ui_scale = 0.80000000000000004
@@ -58,7 +58,6 @@ pinned = [
 position = "bottom"
 reserve_space = false
 show_dots = true
-show_instance_count = true
 show_running = true
 
 [idle]
@@ -144,11 +143,6 @@ enabled = [ "noctalia/translator", "noctalia/umbriel-companion", "noctalia/bitwa
     kind = "git"
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
-
-    [[plugins.source]]
-    kind = "path"
-    location = "/home/lucho/open-source/noctalia-dev-plugins"
-    name = "dev"
 
 [shell]
 font_family = "JetBrainsMono Nerd Font"
