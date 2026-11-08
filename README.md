@@ -168,8 +168,9 @@ diario.
 ## Editores
 
 Neovim se configura en `configs/nvim`. Usa una
-configuración chica propia; sus plugins y language servers se instalan desde
-Nix/Home Manager para evitar descargas y actualizaciones al abrir el editor.
+configuración chica propia. El bootstrap de lazy.nvim y los plugins se
+descargan de la red en el primer arranque (fijados por el lockfile de
+lazy.nvim); lo demás vive en Nix/Home Manager.
 
 Pi y Codex son los agentes de código soportados. Sus ejecutables
 provienen del flake y quedan fijados por `flake.lock`; no usar

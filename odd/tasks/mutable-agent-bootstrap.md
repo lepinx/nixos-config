@@ -22,7 +22,7 @@ so nothing is forgotten.
 
 ## Tasks
 
-- [x] Write `scripts/bootstrap-agents.sh` (guarded, idempotent, verification at the end).
-- [x] Wire `just bootstrap-agents` recipe.
+- [x] Write `scripts/bootstrap-agents.sh` (guarded, idempotent, verification at the end). Historical: later replaced by `scripts/provision-agent-tools.sh` (user systemd service `provision-agent-tools`); the script no longer exists.
+- [x] Wire `just bootstrap-agents` recipe. Historical: that recipe no longer exists in the justfile; agent tools are provisioned on login by the `provision-agent-tools` user service.
 - [x] Add `docs/mutable-state.md` with the declared-vs-mutable map and reconstruction steps.
 - [x] Run locally to prove idempotency, commit (fbfa29a). Push left to the user after the safety-policy confirmation prompt.

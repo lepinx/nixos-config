@@ -43,7 +43,7 @@ Repository precedent: `modules/home/editors.nix` already links `configs/nvim/lua
 ## Tasks
 - [x] T1 — Fix the two declarative config defects and commit.
 - [x] T2 — Add `configs/noctalia/settings.toml`, link it through `xdg.stateFile` with `mkOutOfStoreSymlink`, drop the duplicated `dock.enabled`, and commit.
-- [x] T3 — Add the shadowed-key detector and the `just noctalia-diff` recipe, then commit.
+- [x] T3 — Add the shadowed-key detector and the `just noctalia-diff` recipe, then commit. (Historical: the `just noctalia-diff` recipe no longer exists in the justfile.)
 - [x] T4 — Rewrite `docs/noctalia.md` for the two-layer model and the migration steps, then commit.
 - [x] T5 — Run `just check` and `just build`, record results and the manual migration/verification commands.
 - [x] T6 — Host migration and post-migration verification (user step).
@@ -62,7 +62,7 @@ duplicate value for a key the UI persists.
 - The state file path is a symlink to `configs/noctalia/settings.toml` after activation.
 - A UI change updates the repository file and appears in `git diff`.
 - `noctalia config validate` reports no warnings for the declarative config.
-- `just noctalia-diff` reports no shadowed keys.
+- `just noctalia-diff` reports no shadowed keys. (Historical at the time of this task; the recipe was later removed.)
 - `just check` and `just build` pass, or failures are recorded exactly.
 
 ## Progress

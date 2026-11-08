@@ -31,7 +31,7 @@ para infraestructura con IP estática:
 | `192.168.1.1` | Router ADSL | gateway |
 | `192.168.1.2` | Switch HPE OfficeConnect 1420 | gestión |
 | `192.168.1.10` | `proxmox` (Aoostar WTR Pro) | hipervisor, VMs y zpool `tank` |
-| `192.168.1.11` | VM NixOS `homelab` (planeado) | server principal de servicios |
+| `192.168.1.11` | VM NixOS `homelab` (instalada) | server principal de servicios |
 | `192.168.1.50` | Torre Ubuntu (ex-homelab) | backups (restic) + laboratorio |
 
 Nuevas VMs o servicios con IP fija van en `.12-.99`; todo lo dinámico en el
@@ -39,8 +39,8 @@ rango DHCP.
 
 ## Próximo host previsto
 
-Por ahora no hay otro host planificado. `homelab` era el próximo host y ya quedó
-definido en el flake; sólo resta la instalación real.
+Por ahora no hay otro host planificado. `homelab` era el próximo host y ya está
+instalado en la VM de Proxmox (ver `odd/tasks/homelab-proxmox.md`).
 
 El flake pasa `hostName`, `userName` y `repoPath` a los módulos para
 evitar rutas hardcodeadas. El `justfile` usa el hostname corto de la máquina por

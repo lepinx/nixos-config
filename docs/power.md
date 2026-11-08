@@ -76,9 +76,9 @@ journalctl -b -1 | rg "suspend|PM: suspend|wakeup|wake|ACPI"
 
 ## Regla Logitech antigua
 
-El repo anterior tenía una regla para el receiver Logitech `046d:c548` porque
-generaba wakeup espurio en `s2idle`.
-
-No se migró como regla activa porque ese hardware no está conectado actualmente.
-Si vuelve el problema y `lsusb` confirma el mismo receiver, se puede declarar en
-NixOS con una regla udev específica.
+La regla para el receiver Logitech `046d:c548` está declarada en
+`modules/nixos/hardware/logitech.nix` (importada por
+`modules/nixos/hardware/default.nix`, activa en el perfil workstation):
+deshabilita el wakeup del device USB para evitar reanudaciones espurias en
+`s2idle`. Si `lsusb` muestra otro receiver con el mismo problema, extender la
+regla con el par vendor/product correspondiente.

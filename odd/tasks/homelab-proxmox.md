@@ -48,9 +48,9 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   zfs-scrub-monthly@tank habilitado por el usuario.
 - T4 (S2): crear la VM NixOS en Proxmox (EFI/OVMF, 4-6 vCPU, 8-12 GB RAM,
   disco virtio 40-80 GB en el SSD). [route: user GUI/CLI + guía]
-  Estado: en curso — instrucciones entregadas (qm create 100: cpu host, 4
-  cores, 12 GB, virtio 64G discard, agent, ISO minimal 26.11). Pendiente:
-  user crea la VM y baja la ISO.
+  Estado: hecha — VM creada (qm create 100: cpu host, 4
+  cores, 12 GB, virtio 64G discard, agent, ISO minimal 26.11); el
+  bootstrap del sistema quedó registrado en T6.
 - T5 (S2): reescribir hosts/homelab para perfil VM (sin disko LUKS/TPM2,
   boot EFI virtio, sin stack de escritorio) hasta que
   `nix build .#nixosConfigurations.homelab` compile. [route: inline ODD]

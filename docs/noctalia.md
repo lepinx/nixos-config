@@ -163,12 +163,13 @@ pena.
 Cuando Noctalia v5 salga estable, revisar si ya soporta de forma nativa cosas que
 hoy resolvemos a mano:
 
-- integración de secretos/launcher, para reemplazar o simplificar `rofi-rbw` +
-  `wofi`;
+- el manejo de secretos ahora vive en el plugin `noctalia/bitwarden`
+  (habilitado en `configs/noctalia/settings.toml`); revisar si v5 lo soporta de
+  forma nativa y permite eliminar el plugin;
 - acciones custom del launcher para buscar secretos, copiar usuario/password,
   autotype con confirmación y abrir URLs asociadas al item;
-- un plugin propio de Noctalia para consultar `rbw` sin depender de un launcher
-  externo, si la API de plugins lo vuelve cómodo;
+- un plugin propio de Noctalia para consultar el vault sin depender de un
+  launcher externo, si la API de plugins lo vuelve cómodo;
 - keybinds estilo Vim en launcher y paneles;
 - generación de tema desde wallpaper y compatibilidad con Stylix;
 - nombres de opciones que hayan cambiado entre la versión actual y v5 estable.

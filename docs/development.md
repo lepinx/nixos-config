@@ -69,13 +69,12 @@ y al salir se descarga.
 
 ## Runtime de agentes
 
-Pi, Codex y OpenCode son los agentes de código soportados por esta
+Pi y Codex son los agentes de código soportados por esta
 configuración. Sus **ejecutables** los provee el flake mediante el perfil
 de usuario de Nix; la revisión queda fijada por `flake.lock`. No instalar ni
-actualizar esos binarios con npm, instaladores upstream, `pi update self` ni los
-mecanismos de autoactualización upstream de Codex y OpenCode: esos flujos no
-deben reemplazar los binarios administrados por Nix. Para actualizarlos, revisar y actualizar el
-input bloqueado y luego aplicar la generación de Home Manager.
+actualizar esos binarios con npm, instaladores upstream, `pi update self` ni
+los mecanismos de autoactualización upstream de Codex: esos flujos no
+deben reemplazar los binarios administrados por Nix.
 
 Node y el prefijo npm aislado continúan siendo dependencias de host declaradas
 por Nix/Home Manager. Home Manager expone `NPM_CONFIG_PREFIX` y
@@ -412,10 +411,9 @@ usuario normal. No reemplaza una VM/sandbox cuando hay desconfianza real.
 ## Política actual de este repo
 
 Los runtimes y versiones específicas viven en los `devShell` de cada proyecto.
-`agent-runtime` es la excepción deliberada: un entorno FHS invocado mediante
-wrappers para compatibilidad con el ecosistema mutable de Gentle AI, sin volver
-globales Node, npm, PNPM o Go.
+Pi corre contra el Node del host, con el prefijo npm mutable en
+`~/.local/share/agent-runtime/npm` declarado por Home Manager
+(`NPM_CONFIG_PREFIX`/`NPM_CONFIG_CACHE`).
 
 La virtualización local queda disponible en el perfil diario para poder aislar
-proyectos o probar sistemas sin cambiar de configuración. Paquetes ocasionales
-como Herdr o RustDesk quedan fuera y se usan sólo cuando hacen falta.
+proyectos o probar sistemas sin cambiar de configuración. RustDesk queda fuera y se usa sólo cuando hace falta.
