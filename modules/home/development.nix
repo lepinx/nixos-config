@@ -20,15 +20,18 @@ let
 in
 {
   home = {
-    # Out-of-store so gentle-ai's imports and edits land back in the repo.
-    file.".pi/gentle-ai/profiles.json" = {
+    # The agent lives entirely under ~/.gentle-shell: the launcher's isolated
+    # home holds Pi's state, and GENTLE_AI_HOME points the gentle-ai CLI (and
+    # the launcher's own child process) at the same tree, so nothing is written
+    # to ~/.pi.
+    file.".gentle-shell/gentle-ai/profiles.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/profiles.json";
     };
 
     # alt+up/down for prompt navigation: gentle-pi's todo panel owns
     # ctrl+shift+up/down, and this override also silences the conflict warnings.
-    file.".pi/agent/keybindings.json" = {
+    file.".gentle-shell/agent/keybindings.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";
     };
@@ -36,39 +39,35 @@ in
     # settings.json is owned by the pi runtime (packages list, extension
     # opt-outs, tuiMode): gentle-pi's postinstall replaces it with atomic
     # rename and refuses any symlink, so it must stay a regular mutable file.
-    # The repo copy is the reference; seedPiSettings seeds fresh installs.
+    # The repo copy is the reference; seedAgentSettings seeds fresh installs.
 
-    file.".pi/agent/mcp.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/mcp.json";
-    };
+    # mcp.json and persona.json are seeded regular files for the same reason:
+    # gentle-ai's install and sync pipelines refuse to read a symlink they are
+    # about to inject into (`refusing to read symlink`), which broke both
+    # `gentle-shell setup` and `gentle-ai sync`. Nix seeds them; the agent owns
+    # them from then on, and the repo copy stays the fresh-machine reference.
 
-    file.".pi/agent/skills/oss-fork" = {
+    file.".gentle-shell/agent/skills/oss-fork" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/skills/oss-fork";
     };
 
-    file.".pi/agent/themes/noctalia.json" = {
+    file.".gentle-shell/agent/themes/noctalia.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/themes/noctalia.json";
     };
 
-    file.".pi/gentle-ai/models.json" = {
+    file.".gentle-shell/gentle-ai/models.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/models.json";
     };
 
-    file.".pi/gentle-ai/persona.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/persona.json";
-    };
-
-    file.".pi/gentle-ai/vim.json" = {
+    file.".gentle-shell/gentle-ai/vim.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/vim.json";
     };
 
-    file.".pi/gentle-ai/background-subagents.json" = {
+    file.".gentle-shell/gentle-ai/background-subagents.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/background-subagents.json";
     };
@@ -76,6 +75,13 @@ in
     sessionVariables = {
       NPM_CONFIG_PREFIX = "$HOME/.local/share/agent-runtime/npm";
       NPM_CONFIG_CACHE = "$HOME/.cache/agent-runtime/npm";
+      # Keep the gentle-ai CLI and the launcher on one tree: without this the
+      # CLI recreates ~/.pi/gentle-ai even when the agent home lives elsewhere.
+      GENTLE_AI_HOME = "$HOME/.gentle-shell/gentle-ai";
+      # A hand-run pi or `gentle-ai sync` resolves the *agent* home from this
+      # variable, not from GENTLE_AI_HOME; the launcher sets it only for its own
+      # children. Without it the CLI still writes into ~/.pi/agent.
+      PI_CODING_AGENT_DIR = "$HOME/.gentle-shell/agent";
     };
 
     sessionPath = [
@@ -103,14 +109,19 @@ in
     ];
   };
 
-  # Seed the mutable pi settings on machines where the file does not exist
-  # yet (fresh installs). Existing files are never touched: the pi runtime
-  # owns this file from then on. Skipped during dry runs.
-  home.activation.seedPiSettings = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$HOME/.pi/agent/settings.json" ]; then
-      install -Dm600 "${repoPath}/configs/pi/agent/settings.json" "$HOME/.pi/agent/settings.json"
-      echo "seeded ~/.pi/agent/settings.json from repo"
-    fi
+  # Seed the mutable agent settings on machines where the file does not exist
+  # yet (fresh installs). Existing files are never touched: the pi runtime owns
+  # this file from then on. Skipped during dry runs.
+  home.activation.seedAgentSettings = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    seed() {
+      if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$2" ]; then
+        install -Dm600 "$1" "$2"
+        echo "seeded $2 from repo"
+      fi
+    }
+    seed "${repoPath}/configs/pi/agent/settings.json" "$HOME/.gentle-shell/agent/settings.json"
+    seed "${repoPath}/configs/pi/agent/mcp.json" "$HOME/.gentle-shell/agent/mcp.json"
+    seed "${repoPath}/configs/pi/gentle-ai/persona.json" "$HOME/.gentle-shell/gentle-ai/persona.json"
   '';
 
   # Install missing mutable tools on first login; existing installations and
