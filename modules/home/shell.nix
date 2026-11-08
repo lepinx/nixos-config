@@ -11,6 +11,10 @@ let
     vim = "nvim";
     hd = "herdr";
 
+    # gentle-shell is the agent entrypoint. `gs` is already git-status, so the
+    # launcher gets `gsh`; `abbr` expands in the prompt and is not an alias.
+    gsh = "gentle-shell";
+
     nmc = "nm-connection-editor";
     yd = "yazi-devices";
     yt = "yazi-trash";
@@ -149,9 +153,9 @@ in
         pi = {
           description = "Run Pi outside the home directory (maintenance commands pass through)";
           body = ''
-            # Commands that manage global state under ~/.pi/agent never bind a
-            # project directory, so they always pass through. Everything else
-            # (i.e. starting a session) is guarded below.
+            # Commands that manage global agent state (auth, packages, models)
+            # never bind a project directory, so they always pass through.
+            # Everything else (i.e. starting a session) is guarded below.
             set -l passthrough update install uninstall --version --help -h help
             if set -q argv[1]; and contains -- $argv[1] $passthrough
               command pi $argv
@@ -213,9 +217,9 @@ in
         }
 
         def pi [...args: string] {
-          # Commands that manage global state under ~/.pi/agent never bind a
-          # project directory, so they always pass through. Everything else
-          # (i.e. starting a session) is guarded below.
+          # Commands that manage global agent state (auth, packages, models)
+          # never bind a project directory, so they always pass through.
+          # Everything else (i.e. starting a session) is guarded below.
           let passthrough = [update install uninstall "--version" "--help" "-h" help]
           if (not ($args | is-empty)) and ($args.0 in $passthrough) {
             ^pi ...$args
