@@ -89,10 +89,13 @@ Consequences of this mode:
   neither `go` nor `/usr/bin/tar`.
 - `gentle-ai` itself stays the mutable binary in `~/.local/bin`, updated with
   `gentle-ai upgrade`.
-- `~/.pi` and `~/.gentle-ai` are leftovers of the earlier linked home. Nothing
-  the agent reads lives there any more: `~/.pi/agent` keeps empty `auth.json`
-  and `models-store.json` stubs, `~/.gentle-ai` keeps old upgrade backups.
-  Deleting them is safe once those backups are no longer needed.
+- `~/.pi` and `~/.gentle-ai` belonged to the linked mode and are removed. If
+  either reappears, the process that wrote it was missing the two exported
+  variables: `home.sessionVariables` reaches a shell only at login, so a shell
+  (or the agent it launches) that predates the switch still resolves the old
+  paths and re-creates `~/.pi/gentle-ai/agent-status`, `~/.pi/agent/pi-pretty`
+  and `~/.gentle-ai/telemetry.json`. Log out and back in once, then delete
+  them; the launcher on its own writes only inside `~/.gentle-shell`.
 
 The `/usr/bin/tar` bridge in `modules/nixos/core.nix` no longer has a known
 consumer in this mode. It stays until the interactive `gentle-ai` setup and
