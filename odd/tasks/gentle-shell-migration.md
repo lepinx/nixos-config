@@ -14,10 +14,10 @@ Make `gentle-shell` the single agent entrypoint on top of the nix-managed Pi, re
 
 ## Tasks
 
-- **T1** — Provision `gentle-pi` (Path A launcher) into the existing mutable npm prefix, idempotently, as `provision-agent-tools` already does for codegraph. Covers `S1`. Commit: `feat(pi): provision the gentle-shell launcher`. Risk: item 5.
-- **T2** — Make `gentle-shell` the entrypoint: `gentle-shell home link` so it reuses `~/.pi/agent`, and verify launch + no isolated home. Covers `S1`. Commit: `docs(pi): make gentle-shell the single entrypoint`. Risk: none.
-- **T3** — Remove Codex: drop `pkgs.codex` from `modules/home/development.nix`, drop codex claims from `docs/development.md`, document `~/.codex` as removable state. Covers `S2`, `S3`. Commit: `chore(pi): drop the codex CLI`. Risk: item 6.
-- **T4** — Reconcile the versioning docs with reality: `docs/mutable-state.md` (declared vs mutable, launcher, settings.json/subagents.json drift) and `docs/development.md` (provision list). Covers `S3`. Commit: `docs: reconcile agent state with the code`. Risk: none.
+- **T1** — Provision `gentle-pi` (Path A launcher) into the existing mutable npm prefix, idempotently, as `provision-agent-tools` already does for codegraph. Covers `S1`. Done in `b222d6e` (`feat(pi): provision the gentle-shell launcher`). Risk: item 5.
+- **T2** — Make `gentle-shell` the entrypoint: `gentle-shell home link` so it reuses `~/.pi/agent`, and verify launch + no isolated home. Covers `S1`. Done in `b222d6e` (launcher) and `6ca1d24` (docs); the link itself is machine state, not a repo file. Risk: none.
+- **T3** — Remove Codex: drop `pkgs.codex` from `modules/home/development.nix`, drop codex claims from `docs/development.md`, document `~/.codex` as removable state. Covers `S2`, `S3`. Done in `eb3c1b1` (`chore(pi): drop the codex CLI`). Risk: item 5.
+- **T4** — Reconcile the versioning docs with reality: `docs/mutable-state.md` (declared vs mutable, launcher, settings.json/subagents.json drift) and `docs/development.md` (provision list). Covers `S3`. Done in `6ca1d24` (`docs: describe the launcher entrypoint and its state`). Risk: none.
 
 ## Log
 
