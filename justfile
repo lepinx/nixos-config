@@ -52,14 +52,14 @@ health:
         fi
     }
     check pi 'provided by the flake; run just switch'
-    check codex 'provided by the flake; run just switch'
+    check gentle-shell 'check: systemctl --user status provision-agent-tools'
     check codegraph 'check: systemctl --user status provision-agent-tools'
     check gentle-ai 'check: systemctl --user status provision-agent-tools'
     check engram 'run the first interactive gentle-ai setup for Pi'
-    if [ -d "$HOME/.pi/agent/npm/node_modules/gentle-pi" ]; then
-        echo '  ok       gentle-pi (Pi extension)'
+    if [ -d "$HOME/.local/share/agent-runtime/npm/lib/node_modules/gentle-pi" ]; then
+        echo '  ok       gentle-pi (supplied by the gentle-shell launcher)'
     else
-        echo '  MISSING  gentle-pi (Pi extension)  (run the first interactive gentle-ai setup for Pi)'
+        echo '  MISSING  gentle-pi (supplied by the gentle-shell launcher)  (check: systemctl --user status provision-agent-tools)'
     fi
 
 hotkeys:

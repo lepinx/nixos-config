@@ -89,7 +89,6 @@ in
       gh
       pkgs.glab
       pkgs.pi-coding-agent
-      pkgs.codex
       just-lsp
       jujutsu
       lazydocker
