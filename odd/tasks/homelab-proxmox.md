@@ -63,6 +63,11 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   la allowlist). Sin commitear.
 - T6 (S2): bootstrap del sistema en la VM (nixos-install desde ISO con el
   flake). [route: user + guía]
+  Estado: hecha — disko + nixos-install corrieron en la sesión live (con
+  NIX_CONFIG experimental-features), la VM reinició de vuelta al ISO por
+  boot order (ide2 primero, ISO enganchada) — se remontó por consola,
+  password de lucho seteada vía chroot live, ISO desmontada y boot desde
+  disco OK. ssh lucho@192.168.1.11 operativo.
 - T7 (S3): Pangolin en la VM NixOS (nativo si está empaquetado en nixpkgs,
   si no podman), port-forward 80/443, dominio home.pinol.dev. [inline ODD]
 - T8 (S4): CrowdSec + bouncer nftables en NixOS; bouncer en Proxmox. [inline]
