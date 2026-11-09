@@ -23,7 +23,9 @@ el directorio destino, así que:
 
 1. Cambiás algo en la UI de Noctalia (`Win+,` o `noctalia msg settings-open`).
 2. Noctalia escribe el override en `configs/noctalia/settings.toml`.
-3. `git diff configs/noctalia/settings.toml` te muestra exactamente qué cambió.
+3. `git diff configs/noctalia/settings.toml` te muestra qué cambió. Ojo: el
+   serializador reescribe el archivo completo y reordena claves, así que el diff
+   puede traer más ruido del que tocaste — compará por clave, no el diff entero.
 4. `git commit`.
 
 Para volver atrás no hace falta rollback del sistema: alcanza con
@@ -35,17 +37,16 @@ queda muerto y un rebuild parecería no hacer nada.
 
 ## Qué vive en la capa declarativa
 
-Todo lo que la UI no toca, porque necesita cálculo en Nix o simplemente no se
-ajusta desde la interfaz:
+Hoy es mínima a propósito. `programs.noctalia` en `modules/home/desktop.nix`
+solo lleva `enable`, `systemd.enable` y dos claves estructurales de la shell
+(`umbriel_overview_type_to_launch_enabled` y
+`launch_apps_as_systemd_services`). Todo lo demás —fuente, escala, idle y
+bloqueo, keybinds, `theme.templates.builtin_ids`, `wallpaper.directory` y
+plugins— vive en `configs/noctalia/settings.toml`, que también está versionado.
 
-- datos de la shell: fuente, escala, telemetría, agente polkit, apps como
-  servicios systemd;
-- idle, bloqueo y umbral de batería;
-- keybinds de la UI;
-- `theme.templates.builtin_ids`, que habilita el template builtin `umbriel`;
-- `wallpaper.directory`, clima y ubicación;
-- plugins.
-
+El motivo: una clave repetida en las dos capas deja el valor de Nix muerto, y un
+rebuild parecería no hacer nada. Si de verdad necesitás validación en el build o
+parametrización desde Nix, promové la clave (ver abajo) en vez de duplicarla.
 El resto —dock, layout del lockscreen, wallpaper concreto, y cualquier cosa que
 toques desde la UI— vive en `configs/noctalia/settings.toml`.
 
