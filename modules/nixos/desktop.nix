@@ -6,6 +6,14 @@
 {
   security.rtkit.enable = true;
 
+  # Apps that ask fontconfig for `monospace` (GTK, browsers, fc-match) previously
+  # resolved to DejaVu Sans Mono because only the user profile shipped fonts.
+  # Ordered preference: Fantasque default, JetBrains Mono as fallback.
+  fonts.fontconfig.defaultFonts.monospace = [
+    "FantasqueSansM Nerd Font"
+    "JetBrainsMono Nerd Font"
+  ];
+
   services = {
     upower.enable = true;
     power-profiles-daemon.enable = true;

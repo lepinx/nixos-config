@@ -30,6 +30,9 @@ in
     (mpv.override {
       scripts = [ pkgs.mpvScripts.mpris ]; # MPRIS: media keys + the Noctalia media widget control mpv playback
     })
+    # Editor/terminal typeface. Fantasque is the default; JetBrains Mono stays
+    # installed as the fontconfig fallback below.
+    nerd-fonts.fantasque-sans-mono
     nerd-fonts.jetbrains-mono
     pkgs.bruno
     pkgs.dbeaver-bin
