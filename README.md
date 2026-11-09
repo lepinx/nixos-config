@@ -266,6 +266,7 @@ mantenimiento de LUKS, TPM2 + PIN y passphrases queda en [LUKS + TPM2](docs/luks
 - [Bluetooth troubleshooting](docs/bluetooth.md)
 - [NetworkManager y VPN](docs/network.md)
 - [Atajos](docs/keybindings.md)
+- [Teclado: acentos y ñ](docs/keyboard.md)
 - [Noctalia: cambios en vivo](docs/noctalia.md)
 - [Energía, suspend y wakeup USB](docs/power.md)
 - [Recuperación local](docs/recovery.md)

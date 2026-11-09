@@ -9,8 +9,13 @@ files = ["@umbriel_outputs_path@"]
 files = ["noctalia.toml"]
 
 [input.keyboard]
-layout = "us,es"
-options = "grp:alt_space_toggle"
+# Single US layout: altgr-intl keeps level 1/2 as plain US and puts the
+# international characters on level 3 (AltGr), so AltGr+n types ñ without a
+# layout switch. Caps doubles as level 3 so ñ stays reachable on keyboards
+# without a right Alt; Caps+Ctrl still locks.
+layout = "us"
+variant = "altgr-intl"
+options = "lv3:caps_switch_capslock_with_ctrl"
 numlock_toggle = true
 
 [input.touchpad]

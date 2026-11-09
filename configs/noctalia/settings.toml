@@ -23,7 +23,7 @@ position = "top"
 radius = 12
 reserve_space = true
 shadow = true
-start = [ "workspaces", "keyboard_layout" ]
+start = [ "workspaces" ]
 thickness = 36
 widget_spacing = 8
 
@@ -123,7 +123,7 @@ widget_order = [ "lockscreen-login-box@eDP-1" ]
         input_radius = 6.0
         layout = "regular"
         show_caps_lock = true
-        show_keyboard_layout = true
+        show_keyboard_layout = false
         show_login_button = true
         show_media = true
         show_session_buttons = true
