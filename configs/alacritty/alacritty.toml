@@ -5,7 +5,7 @@ import = [
 ]
 
 [font]
-size = 10.0
+size = 11.0
 
 [font.normal]
-family = "FantasqueSansM Nerd Font"
+family = "FantasqueSansM Nerd Font Mono"

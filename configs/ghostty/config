@@ -1,7 +1,7 @@
 
 # Repeated font-family entries are fallbacks: Fantasque first, JetBrains Mono second.
-font-size = 10
-font-family = FantasqueSansM Nerd Font
+font-size = 11
+font-family = FantasqueSansM Nerd Font Mono
 font-family = JetBrainsMono Nerd Font
 
 window-decoration = false

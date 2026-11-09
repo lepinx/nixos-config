@@ -19,8 +19,9 @@ Para comprobar el tema activo: `:lua print(vim.g.colors_name)` debe mostrar
 ## Fuente
 
 Neovim no define tipografía: hereda la del emulador de terminal. El default es
-Ghostty con **Fantasque Sans Mono Nerd Font** (`FantasqueSansM Nerd Font` es el
-nombre de familia real) y JetBrains Mono como fallback
+Ghostty con **Fantasque Sans Mono Nerd Font** (`FantasqueSansM Nerd Font Mono`
+es la familia real; el sufijo `Mono` mantiene los iconos en una sola celda) y
+JetBrains Mono como fallback
 (`configs/ghostty/config`); Alacritty y
 `fonts.fontconfig.defaultFonts.monospace` usan la misma preferencia, así que
 `fc-match monospace` tampoco cae en DejaVu. Los paquetes se declaran en

@@ -10,7 +10,7 @@
   # resolved to DejaVu Sans Mono because only the user profile shipped fonts.
   # Ordered preference: Fantasque default, JetBrains Mono as fallback.
   fonts.fontconfig.defaultFonts.monospace = [
-    "FantasqueSansM Nerd Font"
+    "FantasqueSansM Nerd Font Mono"
     "JetBrainsMono Nerd Font"
   ];
 
