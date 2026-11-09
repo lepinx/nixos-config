@@ -1,7 +1,6 @@
 -- One Dark Pro (darker) wins for the editor: syntax highlighting is taste,
--- and the generated M3 palettes are mediocre at it. Noctalia keeps the
--- desktop and terminal tools; matugen stays available via
--- configs/nvim/colors/matugen.lua (frozen, not the default).
+-- and generated palettes are mediocre at it. Noctalia keeps the desktop and
+-- terminal colours; the editor palette is maintained by hand, never derived.
 return {
   {
     "olimorris/onedarkpro.nvim",

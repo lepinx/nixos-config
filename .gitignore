@@ -6,5 +6,3 @@ result-*
 .codegraph
 .pi
 
-# Noctalia neovim template regenerates this file on every theme change
-configs/nvim/lua/matugen.lua
