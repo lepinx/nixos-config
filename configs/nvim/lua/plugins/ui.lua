@@ -51,10 +51,5 @@ return {
         },
       },
     },
-    keys = {
-      { "<leader>gd", false },
-      { "<leader>gD", false },
-      { "<leader>gh", function() require("snacks").picker.git_diff() end, desc = "Git Diff (hunks)" },
-    },
   },
 }

@@ -1,37 +1,14 @@
-local nix_lsp_servers = {
-  "cssls",
-  "gopls",
-  "html",
-  "jsonls",
-  "lua_ls",
-  "nil_ls",
-  "pyright",
-  "rust_analyzer",
-  "taplo",
-  "vtsls",
-}
-
 local function normal_file_buffer(bufnr)
   local name = vim.api.nvim_buf_get_name(bufnr)
   return name ~= "" and not name:match("^diffview://") and vim.bo[bufnr].buftype == ""
 end
 
 return {
-  {
-    "mason-org/mason.nvim",
-    build = false,
-    opts = function(_, opts)
-      opts.ensure_installed = {}
-      opts.PATH = "skip"
-    end,
-  },
-  {
-    "mason-org/mason-lspconfig.nvim",
-    opts = {
-      ensure_installed = {},
-      automatic_enable = false,
-    },
-  },
+  -- Every LSP server comes from Nix (PATH) or the project devShell, so mason has
+  -- nothing to install. LazyVim pulls it in; disable it instead of leaving an
+  -- installed plugin whose only effect is a dead `:Mason` command.
+  { "mason-org/mason.nvim", enabled = false },
+  { "mason-org/mason-lspconfig.nvim", enabled = false },
   {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
@@ -70,12 +47,6 @@ return {
           },
         },
       })
-
-      for _, server in ipairs(nix_lsp_servers) do
-        opts.servers[server] = vim.tbl_deep_extend("force", opts.servers[server] or {}, {
-          mason = false,
-        })
-      end
     end,
   },
 }

@@ -2,8 +2,8 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     keys = {
-      { "]h", function() require("gitsigns").nav_hunk("next") end, desc = "Next Git hunk" },
-      { "[h", function() require("gitsigns").nav_hunk("prev") end, desc = "Previous Git hunk" },
+      -- `]h`/`[h` and the full `<leader>gh*` group already come from LazyVim.
+      -- These are the shorter aliases on top, nothing more.
       {
         "<leader>hp",
         function() require("gitsigns").preview_hunk() end,
@@ -42,10 +42,12 @@ return {
       },
     },
     keys = {
-      { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Open diff view" },
-      { "<leader>gD", "<cmd>DiffviewClose<CR>", desc = "Close diff view" },
-      { "<leader>gF", "<cmd>DiffviewFileHistory %<CR>", desc = "File history" },
-      { "<leader>gR", "<cmd>DiffviewFileHistory<CR>", desc = "Repo history" },
+      -- `<leader>gd` stays on LazyVim's snacks hunks picker (the daily driver).
+      -- Diffview owns the full-branch view and history, on keys LazyVim leaves free.
+      { "<leader>gv", "<cmd>DiffviewOpen<CR>", desc = "Open diff view" },
+      { "<leader>gV", "<cmd>DiffviewClose<CR>", desc = "Close diff view" },
+      { "<leader>gf", "<cmd>DiffviewFileHistory %<CR>", desc = "File history" },
+      { "<leader>gF", "<cmd>DiffviewFileHistory<CR>", desc = "Repo history" },
     },
   },
 }
