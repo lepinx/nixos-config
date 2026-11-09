@@ -77,7 +77,8 @@ Ver historial:
 just history
 ```
 
-Conservar sólo las últimas 5 generaciones del sistema y correr GC:
+Conservar sólo las últimas 5 generaciones del perfil del sistema y del perfil
+de usuario, y correr GC:
 
 ```bash
 just prune-generations 5

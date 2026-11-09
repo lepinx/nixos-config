@@ -18,7 +18,7 @@ just switch    # activa y crea una nueva generación
 just update    # actualiza flake.lock, pero no activa nada
 just rollback  # activa la generación anterior
 just history   # muestra generaciones del sistema
-just prune-generations 5 # conserva las últimas 5 generaciones y corre GC
+just prune-generations 5 # conserva las últimas 5 generaciones de cada perfil y corre GC
 ```
 
 Los comandos de build usan `--no-link`, por lo que no dejan un symlink
@@ -86,7 +86,8 @@ Los timers del sistema viven en `modules/nixos/maintenance.nix`.
 máquina estaba apagada cuando tocaba correr, systemd lo ejecuta al volver a
 arrancar. El GC automático conserva historial por edad, no por cantidad; si se
 hacen muchas activaciones en un mismo día, pueden acumularse hasta que pasen 7
-días. Para limpiar por cantidad existe `just prune-generations 5`.
+días. Para limpiar por cantidad existe `just prune-generations 5`, que poda el
+perfil del sistema y el perfil de usuario antes de correr GC.
 
 Comandos útiles para inspeccionar:
 

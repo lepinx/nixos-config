@@ -132,9 +132,20 @@ capture-logs lines="240":
 gc:
     sudo nix store gc
 
+# Prune both profiles this host uses, then free store objects.
 prune-generations keep="5":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # Deleting only the system profile left the user's default profile as a GC
+    # root, so `nix store gc` could not free what those generations referenced.
     [[ "{{ keep }}" =~ ^[0-9]+$ ]]
     sudo nix-env --profile /nix/var/nix/profiles/system --delete-generations +{{ keep }}
+    user_profile="$HOME/.local/state/nix/profiles/profile"
+    if [ -e "$user_profile" ]; then
+        nix-env --profile "$user_profile" --delete-generations +{{ keep }}
+    else
+        echo "no user profile at $user_profile, skipping"
+    fi
     sudo nix store gc
 
 # Run the guarded fresh-install flow (destructive; from a NixOS ISO)
