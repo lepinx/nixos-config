@@ -159,7 +159,7 @@ source = "wallpaper"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "cava", "ghostty", "gtk3", "gtk4", "helix", "qt", "starship", "umbriel" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "ghostty", "qt", "umbriel" ]
     community_ids = [ "fastfetch", "bat", "fzf", "herdr", "starship", "yazi" ]
     enable_builtin_templates = true
 

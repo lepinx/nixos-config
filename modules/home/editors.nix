@@ -21,7 +21,9 @@
     helix = {
       enable = true;
       settings = {
-        theme = "noctalia";
+        # Coherent with the editor (onedark_dark). Noctalia no longer generates a
+        # helix theme, so this must be a builtin name, not "noctalia".
+        theme = "onedark";
         editor = {
           line-number = "relative";
           mouse = false;
