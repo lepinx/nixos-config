@@ -4,19 +4,19 @@
   "profiles": {
     "nan": {
       "orchestrator": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "gentle-ai-explore": {
         "model": "nan/deepseek-v4-flash",
-        "thinking": "medium"
+        "thinking": "high"
       },
       "gentle-ai-worker": {
-        "model": "nan/deepseek-v4-flash",
-        "thinking": "medium"
+        "model": "nan/glm5.3-flash",
+        "thinking": "high"
       },
       "gentle-ai-verify": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "review-risk": {
@@ -24,23 +24,23 @@
         "thinking": "high"
       },
       "review-resilience": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "review-readability": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "review-reliability": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "review-refuter": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "review-validator": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "jd-judge-a": {
@@ -48,7 +48,7 @@
         "thinking": "high"
       },
       "jd-judge-b": {
-        "model": "nan/glm5.3-flash",
+        "model": "nan/deepseek-v4-flash",
         "thinking": "high"
       },
       "jd-fix-agent": {

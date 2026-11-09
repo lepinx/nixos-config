@@ -124,7 +124,7 @@ en Pi; `pi update --extensions` lo actualiza fuera del store, sin modificar el
 ejecutable Nix de Pi. Gentle Shell ya ofrece modelos NaN, `/login nan` y
 `/gentle:usage`; no se instala otro proveedor para esas funciones.
 `@gtrabanco/pi-nan-provider` sigue declarado en
-`configs/pi/agent/settings.json` por sus herramientas MCP de imagen/audio,
+`configs/gentle-shell/agent/settings.json` por sus herramientas MCP de imagen/audio,
 embeddings, reranking y cuotas, que Gentle Shell no incluye; el servicio no
 lo instala automáticamente. No se instala el adaptador MCP antiguo: Pi ya
 provee MCP integrado. Las extensiones ejecutan código con tus permisos de
@@ -187,11 +187,14 @@ del store:
 
 El store de perfiles de agentes (`~/.gentle-shell/gentle-ai/profiles.json`) es
 una decisión autoral, no estado, y se versiona en
-`configs/pi/gentle-ai/profiles.json`. Home Manager lo enlaza fuera del store
-(`mkOutOfStoreSymlink`) en vez de copiarlo: el panel `/gentle:profiles` reescribe
-el marcador de perfil activo y, al pasar por el symlink, la edición cae directo
-en el repo. Después de un cambio de routing a propósito, revisá el `git diff` y
-commiteá; en una máquina nueva el symlink ya trae el contenido.
+`configs/gentle-shell/gentle-ai/profiles.json`. Home Manager lo **siembra** como
+archivo regular en máquinas nuevas (`seedAgentSettings`), no lo enlaza: el panel
+`/gentle:profiles` reescribe el archivo con un rename atómico, que reemplaza
+cualquier symlink, así que con un enlace cada edición caía fuera del repo y la
+próxima activación (`force = true`) restauraba el enlace sobre ella y la
+descartaba. El archivo vive en el home del agente y la copia del repo es la
+referencia: después de un cambio de routing a propósito, copiala al repo y
+commiteá.
 
 La base `~/.engram/engram.db` es la fuente de verdad de Engram. Sus archivos
 `-wal` y `-shm` son parte normal de SQLite y nunca se borran por separado. Para

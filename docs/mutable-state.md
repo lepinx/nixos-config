@@ -76,12 +76,20 @@ Consequences of this mode:
 - `~/.gentle-shell/agent` holds Pi's `settings.json`, `auth.json`,
   `subagents.json` and the npm package prefix; `~/.gentle-shell/gentle-ai` holds
   `profiles.json`, `models.json`, `vim.json` and `background-subagents.json`.
-- `profiles.json` stays an out-of-store symlink into `configs/pi/gentle-ai/`, so
-  the `/gentle:profiles` panel's active-profile rewrite lands in the repo.
-- `settings.json`, `mcp.json` and `gentle-ai/persona.json` are seeded regular
-  files (`seedAgentSettings` in `modules/home/development.nix`). gentle-ai's
-  setup and sync refuse to read a symlink they are about to inject into, which
-  broke `gentle-shell setup` and `gentle-ai sync` while they were symlinks.
+- `models.json`, `vim.json`, `background-subagents.json`, `agent/keybindings.json`,
+  `agent/skills/oss-fork` and `agent/themes/noctalia.json` stay out-of-store
+  symlinks into `configs/gentle-shell/`, so a repo edit is live without a switch.
+- `settings.json`, `mcp.json`, `gentle-ai/persona.json` and
+  `gentle-ai/profiles.json` are seeded regular files (`seedAgentSettings` in
+  `modules/home/development.nix`). gentle-ai's setup and sync refuse to read a
+  symlink they are about to inject into, which broke `gentle-shell setup` and
+  `gentle-ai sync` while they were symlinks. `profiles.json` earns its place in
+  that list the same way: `/gentle:profiles` rewrites it with an atomic rename,
+  the rename replaces a symlink with a regular file, so every profile edit
+  landed outside the repo and the next activation with `force = true` restored
+  the link over it and silently discarded the edit. The repo copy is the
+  fresh-machine reference; to version a profile change, copy it back from
+  `~/.gentle-shell/gentle-ai/profiles.json`.
 - `gentle-pi` is supplied by the launcher, not by Pi's package list: it is absent
   from `settings.json` and `pi update --extensions` never manages it.
 - npm's lifecycle-script gate stays closed for `gentle-pi`. On Linux its
@@ -105,7 +113,7 @@ consumer in this mode. It stays until the interactive `gentle-ai` setup and
 
 `pkgs.codex` is no longer installed and `~/.codex/skills` no longer feeds the
 skill registry. `~/.codex` itself is left on disk untouched: it holds
-`auth.json`, and the `openai` profile in `configs/pi/gentle-ai/profiles.json`
+`auth.json`, and the `openai` profile in `configs/gentle-shell/gentle-ai/profiles.json`
 references `openai-codex/*` model ids that may read it. Delete the directory
 only after that profile moves to another provider; until then it is state, not
 configuration.

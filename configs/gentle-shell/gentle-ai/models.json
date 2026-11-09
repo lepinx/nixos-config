@@ -8,11 +8,11 @@
     "thinking": "high"
   },
   "gentle-ai-worker": {
-    "model": "nan/glm5.3-flash",
+    "model": "nan/deepseek-v4-flash",
     "thinking": "high"
   },
   "gentle-ai-verify": {
-    "model": "nan/deepseek-v4-flash",
+    "model": "nan/glm5.3-flash",
     "thinking": "high"
   },
   "review-risk": {
@@ -20,15 +20,15 @@
     "thinking": "high"
   },
   "review-resilience": {
-    "model": "nan/deepseek-v4-flash",
+    "model": "nan/glm5.3-flash",
     "thinking": "high"
   },
   "review-readability": {
-    "model": "nan/deepseek-v4-flash",
+    "model": "nan/glm5.3-flash",
     "thinking": "high"
   },
   "review-reliability": {
-    "model": "nan/deepseek-v4-flash",
+    "model": "nan/glm5.3-flash",
     "thinking": "high"
   },
   "review-refuter": {

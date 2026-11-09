@@ -24,16 +24,12 @@ in
     # home holds Pi's state, and GENTLE_AI_HOME points the gentle-ai CLI (and
     # the launcher's own child process) at the same tree, so nothing is written
     # to ~/.pi.
-    file.".gentle-shell/gentle-ai/profiles.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/profiles.json";
-    };
 
     # alt+up/down for prompt navigation: gentle-pi's todo panel owns
     # ctrl+shift+up/down, and this override also silences the conflict warnings.
     file.".gentle-shell/agent/keybindings.json" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/keybindings.json";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/keybindings.json";
     };
 
     # settings.json is owned by the pi runtime (packages list, extension
@@ -41,35 +37,40 @@ in
     # rename and refuses any symlink, so it must stay a regular mutable file.
     # The repo copy is the reference; seedAgentSettings seeds fresh installs.
 
-    # mcp.json and persona.json are seeded regular files for the same reason:
-    # gentle-ai's install and sync pipelines refuse to read a symlink they are
-    # about to inject into (`refusing to read symlink`), which broke both
-    # `gentle-shell setup` and `gentle-ai sync`. Nix seeds them; the agent owns
-    # them from then on, and the repo copy stays the fresh-machine reference.
+    # mcp.json, persona.json and profiles.json are seeded regular files for the
+    # same reason: gentle-ai's install and sync pipelines refuse to read a
+    # symlink they are about to inject into (`refusing to read symlink`), which
+    # broke both `gentle-shell setup` and `gentle-ai sync`. profiles.json earns
+    # its place here the same way: `/gentle:profiles` rewrites it with an atomic
+    # rename, which replaces the symlink with a regular file, so every profile
+    # edit landed outside the repo and the next activation with `force = true`
+    # restored the symlink over it and discarded the edit. Nix seeds them; the
+    # agent owns them from then on, and the repo copy stays the fresh-machine
+    # reference.
 
     file.".gentle-shell/agent/skills/oss-fork" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/skills/oss-fork";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/skills/oss-fork";
     };
 
     file.".gentle-shell/agent/themes/noctalia.json" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/agent/themes/noctalia.json";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/themes/noctalia.json";
     };
 
     file.".gentle-shell/gentle-ai/models.json" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/models.json";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/models.json";
     };
 
     file.".gentle-shell/gentle-ai/vim.json" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/vim.json";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/vim.json";
     };
 
     file.".gentle-shell/gentle-ai/background-subagents.json" = {
       force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/pi/gentle-ai/background-subagents.json";
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/background-subagents.json";
     };
 
     sessionVariables = {
@@ -119,9 +120,10 @@ in
         echo "seeded $2 from repo"
       fi
     }
-    seed "${repoPath}/configs/pi/agent/settings.json" "$HOME/.gentle-shell/agent/settings.json"
-    seed "${repoPath}/configs/pi/agent/mcp.json" "$HOME/.gentle-shell/agent/mcp.json"
-    seed "${repoPath}/configs/pi/gentle-ai/persona.json" "$HOME/.gentle-shell/gentle-ai/persona.json"
+    seed "${repoPath}/configs/gentle-shell/agent/settings.json" "$HOME/.gentle-shell/agent/settings.json"
+    seed "${repoPath}/configs/gentle-shell/agent/mcp.json" "$HOME/.gentle-shell/agent/mcp.json"
+    seed "${repoPath}/configs/gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/gentle-ai/persona.json"
+    seed "${repoPath}/configs/gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/gentle-ai/profiles.json"
   '';
 
   # Install missing mutable tools on first login; existing installations and
