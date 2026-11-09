@@ -23,12 +23,22 @@
   # power saving). Remove it if a peripheral wakes too slowly.
   powerManagement.powertop.enable = true;
 
-  # Workaround for NixOS/nixpkgs#577729: kernel 6.18.57 builds ACPI_TINY_POWER_BUTTON
+  # Workaround for NixOS/nixpkgs#577729: the kernel builds ACPI_TINY_POWER_BUTTON
   # as a module alongside ACPI_BUTTON, and on s2idle wake it treats the firmware's
-  # power-button ACPI notify as a real press, sending SIGRTMIN+4 to PID 1 which
+  # power-button fixed event as a real press, sending SIGRTMIN+4 to PID 1 which
   # powers the machine off mid-resume. The real power key keeps working via logind
-  # and the `button` driver. Remove once nixpkgs sets ACPI_TINY_POWER_BUTTON = no
-  # in common-config.nix (or ships the upstream kernel fix ab06eb920401).
+  # and the `button` driver.
+  #
+  # Kernel 6.18.60 alone is NOT enough to drop this: ab06eb9 only registers a
+  # platform device for fixed-event buttons, and tiny-power-button.c is now a
+  # platform driver, so both drivers match the same device (PNP0C0C:00) and only
+  # the winner installs the fixed-event handler. `modprobe -R acpi:PNP0C0C:`
+  # matches both modules, kmod loads both on udev coldplug, and the winner is
+  # load-order dependent. Observed twice on 6.18.60: `acpi-button` keeps the
+  # device and the tiny driver binds nothing -- but that is an ordering race, not
+  # a guarantee, and the failure mode is an unsafe shutdown mid-resume.
+  # Drop this only when nixpkgs stops enabling ACPI_TINY_POWER_BUTTON (that is
+  # NixOS/nixpkgs#577729), or when the kernel makes the binding deterministic.
   boot.blacklistedKernelModules = [ "tiny_power_button" ];
 
   systemd.services.power-profile-auto = {
