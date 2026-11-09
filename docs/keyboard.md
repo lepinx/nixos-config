@@ -11,15 +11,14 @@ Todo vive en `configs/umbriel/config.toml`, sección `[input.keyboard]`:
 [input.keyboard]
 layout = "us"
 variant = "altgr-intl"
-options = "lv3:caps_switch_capslock_with_ctrl"
+options = "lv3:caps_switch"
 numlock_toggle = true
 ```
 
 - `layout = "us"` con `variant = "altgr-intl"` (nombre XKB: *English (intl., with
   AltGr dead keys*). Es una sola disposición, sin grupo secundario.
-- `options` pone `Caps` como `ISO_Level3_Shift` y deja `Caps+Ctrl` para bloquear
-  mayúsculas. `Alt` derecha también es nivel 3, porque el variant incluye
-  `level3(ralt_switch)`.
+- `options` pone `Caps` como `ISO_Level3_Shift`. `Alt` derecha también es nivel
+  3, porque el variant incluye `level3(ralt_switch)`.
 - Es copia del store: un cambio acá necesita `just switch` (o `just test`). No
   recarga en caliente.
 
@@ -104,7 +103,10 @@ xkbcli how-to-type --layout us --variant altgr-intl 241   # 241 = ñ
 
 ## Notas
 
-- `Caps` deja de bloquear mayúsculas directamente: eso ahora es `Caps+Ctrl`.
+- `Caps` no bloquea mayúsculas: es solo el modificador de nivel 3. Si alguna
+  vez hace falta el bloqueo, se cambia la opción a
+  `lv3:caps_switch_capslock_with_ctrl` (`Caps+Ctrl`) o a `caps:numlock`/
+  `caps:none` según convenga.
 - Si una tecla del nivel 3 no produce lo esperado, el sospechoso suele ser el
   keycode y no el layout. Un teclado físico español/latinoamericano manda la ñ
   como `AC10` (la posición de `;` en US), y ahí el nivel 3 es `¶`, no `ñ`. En un
