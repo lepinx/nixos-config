@@ -53,11 +53,6 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/skills/oss-fork";
     };
 
-    file.".gentle-shell/agent/themes/noctalia.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/themes/noctalia.json";
-    };
-
     file.".gentle-shell/gentle-ai/models.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/models.json";

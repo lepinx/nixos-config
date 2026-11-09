@@ -76,9 +76,12 @@ Consequences of this mode:
 - `~/.gentle-shell/agent` holds Pi's `settings.json`, `auth.json`,
   `subagents.json` and the npm package prefix; `~/.gentle-shell/gentle-ai` holds
   `profiles.json`, `models.json`, `vim.json` and `background-subagents.json`.
-- `models.json`, `vim.json`, `background-subagents.json`, `agent/keybindings.json`,
-  `agent/skills/oss-fork` and `agent/themes/noctalia.json` stay out-of-store
-  symlinks into `configs/gentle-shell/`, so a repo edit is live without a switch.
+- `models.json`, `vim.json`, `background-subagents.json`, `agent/keybindings.json`
+  and `agent/skills/oss-fork` stay out-of-store symlinks into
+  `configs/gentle-shell/`, so a repo edit is live without a switch. The agent
+  theme is not versioned: `agent/settings.json` selects the pure-Lua
+  `Gentleman-Sexy` theme that ships with gentle-shell, so there is no generated
+  `themes/*.json` to keep in sync.
 - `settings.json`, `mcp.json`, `gentle-ai/persona.json` and
   `gentle-ai/profiles.json` are seeded regular files (`seedAgentSettings` in
   `modules/home/development.nix`). gentle-ai's setup and sync refuse to read a
