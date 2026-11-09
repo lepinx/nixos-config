@@ -118,7 +118,12 @@ nunca dentro de `/nix/store`.
 ### Pi, CodeGraph y extensiones
 
 CodeGraph se instala automáticamente cuando falta, pero sus actualizaciones
-siguen el flujo npm en el prefijo mutable. Las extensiones de Pi también son
+siguen el flujo npm en el prefijo mutable. El server MCP `codegraph` ya **no**
+se declara en `configs/gentle-shell/agent/mcp.json`: se quitó a propósito,
+porque CodeGraph se alcanza por la tool del harness y por el binario que
+`just health` verifica, y la entrada MCP duplicaba esa vía (ver
+`odd/tasks/gentle-shell-migration.md`, `L13`).
+Las extensiones de Pi también son
 mutables: la primera configuración interactiva de `gentle-ai` instala su stack
 en Pi; `pi update --extensions` lo actualiza fuera del store, sin modificar el
 ejecutable Nix de Pi. Gentle Shell ya ofrece modelos NaN, `/login nan` y
