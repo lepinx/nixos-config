@@ -62,6 +62,28 @@ health:
         echo '  MISSING  gentle-pi (supplied by the gentle-shell launcher)  (check: systemctl --user status provision-agent-tools)'
     fi
 
+    echo
+    echo "Versions (the mutable layer tracks latest on purpose: this block records"
+    echo "what is live so a regression can be tied to a version):"
+    ver() {
+        local name="$1"
+        shift
+        if command -v "$name" >/dev/null 2>&1; then
+            printf '  %-12s %s\n' "$name" "$("$@" 2>/dev/null | head -n1)"
+        else
+            printf '  %-12s %s\n' "$name" MISSING
+        fi
+    }
+    ver pi pi --version
+    ver gentle-shell gentle-shell --version
+    ver codegraph codegraph --version
+    ver gentle-ai gentle-ai --version
+    ver engram engram --version
+    package_json="$HOME/.local/share/agent-runtime/npm/lib/node_modules/gentle-pi/package.json"
+    if [ -r "$package_json" ]; then
+        printf '  %-12s %s\n' gentle-pi "$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$package_json" | head -n1)"
+    fi
+
 hotkeys:
     umbriel msg cheatsheet-open
 
