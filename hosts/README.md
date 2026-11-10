@@ -18,8 +18,10 @@ La regla práctica:
 
 - `workstation`: notebook personal, instalado.
 - `homelab`: servidor principal, VM NixOS sobre Proxmox (`192.168.1.10`, VM id
-  100) definido como `nixosConfigurations.homelab`; bootstrap pendiente. La
-  torre Ubuntu vieja (`192.168.1.50`) queda para backups + laboratorio.
+  100) definido como `nixosConfigurations.homelab`, **instalada y booteando**
+  (NixOS 26.05, SSH en `192.168.1.11`). La torre Ubuntu vieja
+  (`192.168.1.50`) queda para backups (restic) + laboratorio; se planea
+  reinstalarla como NixOS con lo mínimo y moverla a `192.168.1.12`.
 
 ## Asignación de IPs (LAN 192.168.1.0/24)
 
@@ -37,10 +39,48 @@ para infraestructura con IP estática:
 Nuevas VMs o servicios con IP fija van en `.12-.99`; todo lo dinámico en el
 rango DHCP.
 
+## Caso abierto: la notebook no alcanza el LAN desde la WiFi del router
+
+Estado: **sin causa raíz determinada**. Reportado por primera vez el 2026-09-19 y
+revisado el 2026-11-09.
+
+Qué se observó: una notebook asociada a `Covid 5Ghz` (`192.168.1.101`) llegaba
+al gateway `192.168.1.1` en 1,37 ms promedio con jitter de 0,28 ms y cero
+reintentos, pero tenía **100 % de pérdida** hacia `192.168.1.10`, `.11` y `.50`,
+con `:8006` (Proxmox) y `:2222` (torre) filtrados. Su entrada ARP para `.50`
+figuraba *REACHABLE*: el enlace de capa 2 funcionaba y el descarte era de capa 3.
+
+Qué **no** es (verificado el 2026-11-09): **no** es un aislamiento del SSID ni de
+la banda. Un celular asociado al mismo `Covid 5Ghz` (`192.168.1.100`) fue
+alcanzable sin pérdida desde la notebook en `Virus`, desde la torre cableada y
+desde la VM NixOS. Las dos radios son del propio router
+(`Covid 2.4Ghz` = `a8:29:48:12:6e:08`, `Covid 5Ghz` = `a8:29:48:12:6e:0a`) y el
+SSID **sí** puentea al LAN.
+
+Hipótesis vigentes: (a) un bloqueo por dispositivo en el router (control de
+acceso, control parental o lista de dispositivos bloqueados); (b) un estado
+obsoleto de la tabla de reenvío o del ARP en el AP o su uplink después del
+roaming desde `Virus`.
+
+Consecuencia práctica: AdGuard Home (`192.168.1.50`) es el DNS primario que
+reparte el DHCP, así que un cliente que realmente no alcance el LAN pierde
+resolución de nombres.
+
+El router principal es un TP-Link `XC220-G3`: un ONT de fibra con firmware
+personalizado por el ISP (Aginet / TR-181), así que varias opciones están
+ocultas o se administran remotamente. TP-Link documenta un caso análogo en su
+propio foro: en un `EX220`, también personalizado por un ISP, las redes
+Multi-SSID no accedían al LAN.
+
+El arreglo estructural sigue siendo el plan de red segmentada: switch
+administrado y APs propios en bridge, sin depender de la WiFi del router.
+
 ## Próximo host previsto
 
-Por ahora no hay otro host planificado. `homelab` era el próximo host y ya está
-instalado en la VM de Proxmox (ver `odd/tasks/homelab-proxmox.md`).
+La torre Ubuntu (`192.168.1.50`) es el próximo host a convertir: reinstalación
+como NixOS con lo mínimo para el target de `restic`, en `192.168.1.12`, una vez
+que sus datos estén verificados fuera de ella. `homelab` ya está instalado en la
+VM de Proxmox (ver `odd/tasks/homelab-proxmox.md`).
 
 El flake pasa `hostName`, `userName` y `repoPath` a los módulos para
 evitar rutas hardcodeadas. El `justfile` usa el hostname corto de la máquina por
