@@ -45,6 +45,11 @@
     # its own nixpkgs — do not add follows, the uv2nix eval depends on them.
     hermes-agent.url = "github:NousResearch/hermes-agent";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -141,6 +146,7 @@
           modules = [
             ./hosts/homelab
             inputs.disko.nixosModules.disko
+            inputs.sops-nix.nixosModules.sops
           ];
         };
       };

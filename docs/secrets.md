@@ -18,48 +18,79 @@ Regla práctica:
 - sí se pueden versionar secretos cifrados si están bien gestionados;
 - las claves privadas que descifran secretos nunca van al repo.
 
-## Política actual
+## Política adoptada
 
-Para esta PC personal:
+Decisión: adoptar dos capas complementarias en lugar de una sola herramienta.
 
-- La contraseña del usuario `lucho` se define manualmente durante la instalación
-  con `passwd`.
-- La passphrase larga de LUKS se guarda fuera del repo, por ejemplo en
-  Bitwarden.
-- El PIN diario de TPM2 tampoco se versiona.
-- SSH, VPN, tokens y credenciales quedan fuera del repo por ahora.
+1. **Servicios de sistema NixOS → `sops-nix`.** Para secretos que un servicio
+   de NixOS consume en la activación o en runtime: `EnvironmentFile =
+   "/run/secrets/<svc>.env"`, `LoadCredential`,
+   `services.restic.backups.<name>.passwordFile`,
+   `services.pangolin.environmentFile`, etc.
 
-Esto es menos “100% declarativo”, pero es simple y seguro para la migración
-inicial.
+2. **Secretos a nivel de aplicación → `SecretSpec`.** Para apps y contenedores
+   que resuelven sus propios secretos en runtime (por ejemplo, el futuro ERP),
+   y para desarrollo y CI. `SecretSpec` ya se usa en el proyecto `palmares-sql`.
 
-No se adopta `sops-nix` sólo para evitar ejecutar `passwd` durante la
-instalación. Para que eso sea realmente automático también hay que llevar a la
-ISO una clave privada `age` capaz de descifrar el secreto, respaldarla bien y
-evitar que quede copiada donde no corresponde. Para una PC personal, ese extra
-de bootstrap no compensa hasta que existan más secretos declarativos.
+3. **Los secretos personales nunca entran al repo, cifrados o no.** Esta parte
+   de la política no cambia: contraseña del usuario, passphrase de LUKS, PIN de
+   TPM2, password manager, claves SSH privadas personales.
 
-## Política recomendada a futuro
+4. **`sops-nix` y `SecretSpec` son capas, no rivales.** SecretSpec puede
+   consumir SOPS como uno de sus proveedores, así que el almacenamiento cifrado
+   de sops-nix y la resolución a nivel de aplicación se complementan.
 
-Cuando aparezca un secreto que sí convenga desplegar declarativamente, usar
-`sops-nix`.
+## El reparto SecretSpec / sops-nix
 
-Motivos:
+`SecretSpec` es una herramienta de Cachix (los autores de devenv), licencia
+Apache 2.0. Un archivo `secretspec.toml` declara secretos abstractos:
 
-- maneja archivos estructurados como YAML/JSON/env;
-- funciona bien con `age`;
-- permite secretos de sistema y de Home Manager;
-- tiene soporte para secretos necesarios antes de crear usuarios mediante
-  `neededForUsers`;
-- escala mejor si después este repo convive con un homelab NixOS.
+- **profiles** eligen *cuándo* se usan (dev, CI, producción);
+- **providers** eligen *dónde* se guardan (keyring del OS, 1Password,
+  Bitwarden, Vault/OpenBao, Azure Key Vault, dotenv, entorno);
+- **scopes** eligen *qué consumidor* recibe cada secreto.
 
-`agenix` también es una buena opción y es más simple para archivos sueltos. Si
-el único objetivo fuera guardar uno o dos secretos planos, sería suficiente. La
-preferencia para este repo es `sops-nix` porque probablemente también se use en
-el futuro servidor/homelab.
+La inyección en runtime es `secretspec run --profile X --scope Y -- <cmd>`;
+`as_path` materializa un valor como archivo temporal; `secretspec export`
+emite los secretos para `eval` o como JSON.
+
+Para qué **no** sirve en este repo:
+
+- **No reemplaza a sops-nix para servicios de sistema NixOS.** La única
+  integración con Nix documentada en secretspec.dev es con **devenv** (shells
+  de desarrollo), no con servicios de sistema.
+- **En un servidor headless el proveedor keyring no es usable** (no hay
+  keyring del OS ni sesión D-Bus). Un SecretSpec del lado del servidor tendría
+  que usar un proveedor tipo archivo/age/dotenv.
+- **Los scopes no son un límite de autorización** cuando el proceso hijo puede
+  acceder a las credenciales del proveedor; lo advierte la propia documentación
+  de SecretSpec.
+
+En resumen: SecretSpec es una capa de resolución sobre el almacenamiento, no
+un reemplazo del cifrado y despliegue que hace sops-nix.
+
+Nota sin confirmar: hay reportes (sólo fragmentos de búsqueda, sin poder
+verificar la fuente) de un issue abierto de "integración NixOS" en el tracker
+de SecretSpec, un pedido de proveedor systemd-credentials y un PR de Nix que
+agrega soporte de SecretSpec. **Sin confirmar**: hay que verificarlo antes de
+contar con esas mejoras.
+
+## Guardrails
+
+- **`gitleaks` como hook de pre-commit.** En un repo público el riesgo real es
+  commitear un `.env` en texto plano; el hook es la red de seguridad.
+- **Preferir la propia clave host SSH como identidad age**, así no hay que
+  proteger un archivo de clave extra. (*Verificar la opción exacta al
+  implementar.*)
+- **Si no lo podés rotar, no va al repo.** Un secreto que no se puede rotar
+  tras una fuga no debería estar en un repositorio.
+- **La clave privada `age` nunca entra al repositorio.**
 
 ## Contraseña de usuario declarativa
 
-Si más adelante se quiere declarar la contraseña del usuario, no usar:
+Con sops-nix adoptado, esto ya es posible; por ahora no está hecho.
+
+No usar:
 
 ```nix
 users.users.lucho.hashedPassword = "...";
@@ -78,8 +109,6 @@ Con `sops-nix`, ese secreto debe estar disponible antes de crear usuarios:
 ```nix
 sops.secrets.lucho-password.neededForUsers = true;
 ```
-
-Ese cambio queda pospuesto hasta adoptar `sops-nix` formalmente.
 
 ## Qué cosas sí cifrar
 
@@ -108,3 +137,8 @@ y guardar sólo las claves públicas o la configuración no sensible.
 - NixOS Wiki: Comparison of secret managing schemes
 - sops-nix
 - agenix
+- SecretSpec (secretspec.dev)
+
+---
+
+El trabajo del homelab vive en `odd/tasks/homelab-proxmox.md`.

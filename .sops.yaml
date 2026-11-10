@@ -1,0 +1,12 @@
+# sops encryption rules. `homelab_vm` is derived from the homelab VM's SSH
+# host key via `ssh-to-age`. `personal` is the user's break-glass identity;
+# its private key must live outside this repository.
+keys:
+  - &homelab_vm age1zs5qlr0995n4t3vk4xatymrpyrzqutufyngkg92m0ffgps434yyspkq3w8
+  - &personal   age1zxfm5yyzkavlaghfhvksauq5s60snkkkr4sn6hxm3865my6fk9fs6m09l2
+creation_rules:
+  - path_regex: sops/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *homelab_vm
+          - *personal
