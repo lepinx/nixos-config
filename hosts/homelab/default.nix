@@ -12,6 +12,7 @@
     ./hardware-configuration.nix
     ../../modules/nixos/profiles/server.nix
     inputs.sops-nix.nixosModules.sops
+    inputs.hermes-agent.nixosModules.default
   ];
 
   nixpkgs.config.allowUnfree = true;
@@ -61,6 +62,38 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.defaultSopsFile = ../../sops/homelab.yaml;
   sops.secrets.restic_password = { };
+  sops.secrets.telegram_bot_token = { };
+  sops.secrets.telegram_allowed_users = { };
+  sops.secrets.nan_builders_api_key = { };
+  sops.secrets.hermes_dashboard_user = { };
+  sops.secrets.hermes_dashboard_password = { };
+
+  # Hermes reads its .env from HERMES_HOME; the module copies this file there
+  # at activation, so the values never pass through the Nix store in plaintext.
+  sops.templates."hermes.env" = {
+    content = ''
+      TELEGRAM_BOT_TOKEN=${config.sops.placeholder.telegram_bot_token}
+      TELEGRAM_ALLOWED_USERS=${config.sops.placeholder.telegram_allowed_users}
+      NAN_BUILDERS_API_KEY=${config.sops.placeholder.nan_builders_api_key}
+      HERMES_DASHBOARD_BASIC_AUTH_USERNAME=${config.sops.placeholder.hermes_dashboard_user}
+      HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=${config.sops.placeholder.hermes_dashboard_password}
+    '';
+  };
+
+  # The old host ran the container with HERMES_DASHBOARD=1 and Traefik pointed
+  # at port 9119, so "dashboard" reproduces the current behaviour. It listens
+  # on the LAN only; --insecure is required because the desktop/CLI client
+  # cannot authenticate against a remote backend yet (upstream limitation).
+  services.hermes-agent = {
+    enable = true;
+    backend = {
+      mode = "dashboard";
+      host = "0.0.0.0";
+      port = 9119;
+      extraArgs = [ "--insecure" ];
+    };
+    environmentFiles = [ config.sops.templates."hermes.env".path ];
+  };
 
   # The restic systemd service runs as root, so the SSH alias must live in the
   # system-wide client config rather than a per-user ~/.ssh/config.
@@ -116,6 +149,11 @@
       "*.tmp"
       "lost+found"
     ];
+    # Los inodos que devuelve NFS cambian cuando el automount remonta la ruta,
+    # así que sin esto restic considera que todos los archivos cambiaron y
+    # re-lee los 22 GB cada noche en lugar de hacer un incremental.
+    extraBackupArgs = [ "--ignore-inode" ];
+
     timerConfig = {
       OnCalendar = "*-*-* 03:00:00";
       RandomizedDelaySec = "1h";
@@ -149,6 +187,8 @@
         22
         80
         443
+        # Hermes Agent dashboard backend (LAN-only, no WAN forward)
+        9119
       ];
       allowedUDPPorts = [ 51820 ];
     };
