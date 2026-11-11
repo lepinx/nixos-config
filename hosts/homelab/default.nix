@@ -110,6 +110,7 @@
   services.restic.backups.homelab = {
     repository = "sftp:tower:/srv/data/restic/homelab";
     passwordFile = config.sops.secrets.restic_password.path;
+    runCheck = true;
     initialize = true;
     paths = [
       "/etc"
@@ -141,6 +142,7 @@
   services.restic.backups.nas = {
     repository = "sftp:tower:/srv/data/restic/homelab";
     passwordFile = config.sops.secrets.restic_password.path;
+    runCheck = true;
     paths = [
       "/mnt/tank/familia"
       "/mnt/tank/immich"
@@ -189,10 +191,80 @@
         443
         # Hermes Agent dashboard backend (LAN-only, no WAN forward)
         9119
+        # Samba (solo SMB directo; sin NetBIOS 137-139)
+        445
       ];
       allowedUDPPorts = [ 51820 ];
     };
     nftables.enable = true;
+  };
+
+  # Samba: recursos de la familia sobre los datasets NFS del Proxmox. Cada
+  # recurso fuerza usuario/grupo para que las escrituras SMB no dependan del
+  # login y el resultado coincida con el propietario del dataset (fuerza
+  # UID/GID a través de NFS, sin pelear con los permisos 0700/2775).
+  services.samba = {
+    enable = true;
+    settings = {
+      global = {
+        security = "user";
+        "server min protocol" = "SMB2";
+      };
+
+      lucho = {
+        path = "/mnt/tank/familia/lucho";
+        "valid users" = "lucho";
+        "read only" = "no";
+        browseable = "no";
+        "force user" = "lucho";
+        "force group" = "lucho";
+      };
+
+      ricardo = {
+        path = "/mnt/tank/familia/ricardo";
+        "valid users" = "ricardo";
+        "read only" = "no";
+        browseable = "no";
+        "force user" = "ricardo";
+        "force group" = "ricardo";
+      };
+
+      mariaelena = {
+        path = "/mnt/tank/familia/mariaelena";
+        "valid users" = "mariaelena";
+        "read only" = "no";
+        browseable = "no";
+        "force user" = "mariaelena";
+        "force group" = "mariaelena";
+      };
+
+      compartido = {
+        path = "/mnt/tank/familia/compartido";
+        "valid users" = "@familia";
+        "read only" = "no";
+        # Sin force user: cada miembro escribe con su propio uid y el bit
+        # setgid del dataset mantiene el grupo familia (3010).
+        "force group" = "familia";
+      };
+    };
+  };
+
+  # Immich: fotos de la familia sobre /tank/immich (nas:nas en el Proxmox).
+  # El módulo trae su propio Postgres (en /var/lib/postgresql, disco local de
+  # la VM) y Redis por socket unix; no se monta ninguna base de datos en NFS.
+  services.immich = {
+    enable = true;
+    # El nixpkgs fijado trae immich 2.7.5, marcado inseguro (sin más updates;
+    # la 3.x vive en unstable), así que tomamos el paquete del input
+    # nixpkgs-unstable que ya tiene el flake. Es un override SOLO del paquete:
+    # el módulo sigue siendo el del nixpkgs estable fijado. Borrar esta línea
+    # cuando el nixpkgs fijado lleve la 3.x.
+    package = inputs.nixpkgs-unstable.legacyPackages.x86_64-linux.immich;
+    # Escucha en la LAN (el módulo solo abre 2283/tcp con openFirewall).
+    host = "0.0.0.0";
+    port = 2283;
+    openFirewall = true;
+    mediaLocation = "/mnt/tank/immich";
   };
 
   services.openssh = {
@@ -206,9 +278,26 @@
     };
   };
 
-  # Identidad única para el NAS: el mismo uid/gid existe en el Proxmox, así los
-  # archivos de /tank no cambian de dueño al cruzar NFS.
+  # Identidad única para el NAS: los mismos uid/gid existen en el Proxmox, así
+  # los archivos de /tank no cambian de dueño al cruzar NFS. lucho reutiliza la
+  # cuenta admin (uid fijado para que no dependa de la asignación automática);
+  # ricardo y mariaelena son cuentas de servicio sin shell ni home, solo para
+  # autenticarlos en Samba.
   users.groups.nas.gid = 3000;
+  # Immich's module creates this user itself; pinning the ids keeps the NFS
+  # dataset ownership on the Proxmox stable (NFS matches numbers, not names).
+  users.groups.immich.gid = 3011;
+  users.users.immich.uid = 3011;
+  users.groups.ricardo.gid = 3002;
+  users.groups.mariaelena.gid = 3003;
+  # Grupo del recurso compartido: /tank/familia/compartido es nas:familia 2775.
+  # El grupo "lucho" (gid 1000) existe solo para que las escrituras SMB del
+  # recurso privado de lucho salgan como 1000:1000, igual que en el Proxmox.
+  users.groups.lucho.gid = 1000;
+  users.groups.familia = {
+    gid = 3010;
+    members = [ "lucho" "ricardo" "mariaelena" ];
+  };
 
   users.users.nas = {
     isSystemUser = true;
@@ -217,8 +306,25 @@
     description = "NAS service account (Samba/Immich)";
   };
 
+  users.users.ricardo = {
+    isSystemUser = true;
+    uid = 3002;
+    group = "ricardo";
+    description = "Cuenta NAS (Samba) para ricardo";
+  };
+
+  users.users.mariaelena = {
+    isSystemUser = true;
+    uid = 3003;
+    group = "mariaelena";
+    description = "Cuenta NAS (Samba) para mariaelena";
+  };
+
   users.users.${userName} = {
     isNormalUser = true;
+    # Fijado: en el Proxmox /tank/familia/lucho es 1000:1000, y Samba depende
+    # de que este uid sea determinista.
+    uid = 1000;
     extraGroups = [ "wheel" ];
   };
 }
