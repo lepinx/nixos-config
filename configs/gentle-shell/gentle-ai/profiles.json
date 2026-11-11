@@ -24,23 +24,23 @@
         "thinking": "high"
       },
       "review-resilience": {
-        "model": "nan/deepseek-v4-flash",
+        "model": "nan/glm5.3-flash",
         "thinking": "high"
       },
       "review-readability": {
-        "model": "nan/deepseek-v4-flash",
+        "model": "nan/glm5.3-flash",
         "thinking": "high"
       },
       "review-reliability": {
-        "model": "nan/deepseek-v4-flash",
+        "model": "nan/glm5.3-flash",
         "thinking": "high"
       },
       "review-refuter": {
-        "model": "nan/deepseek-v4-flash",
+        "model": "nan/glm5.3-flash",
         "thinking": "high"
       },
       "review-validator": {
-        "model": "nan/deepseek-v4-flash",
+        "model": "nan/glm5.3-flash",
         "thinking": "high"
       },
       "jd-judge-a": {
