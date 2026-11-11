@@ -1,4 +1,4 @@
-config_version = 19
+config_version = 20
 
 [accessibility]
 ui_scale = 0.80000000000000004
@@ -23,7 +23,7 @@ position = "top"
 radius = 12
 reserve_space = true
 shadow = true
-start = [ "workspaces" ]
+start = [ "control-center", "workspaces", "caffeine" ]
 thickness = 36
 widget_spacing = 8
 
