@@ -54,6 +54,7 @@
       '';
       extraPackages = with pkgs; [
         biome
+        csharp-ls
         curl
         delve
         fd
