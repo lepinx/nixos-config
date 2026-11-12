@@ -59,6 +59,14 @@
 
   # The VM's own SSH host key is used as its age identity, so no separate
   # key file is needed.
+  # Deploy sin construir en el host: la notebook copia el closure con
+  # --target-host, y algunos paths se generan localmente y no vienen firmados
+  # por cache.nixos.org (AdGuardHome.yaml es el primero que apareció), así que
+  # el daemon del destino los rechaza por `require-sigs`. lucho ya está en
+  # wheel y puede sudo-ear, por lo que marcarlo trusted no amplía su poder
+  # real sobre esta VM; sólo evita tener que construir acá cada vez.
+  nix.settings.trusted-users = [ userName ];
+
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.defaultSopsFile = ../../sops/homelab.yaml;
   sops.secrets.restic_password = { };
