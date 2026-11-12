@@ -1,0 +1,15 @@
+# statix configuration. Everything except W20 stays a hard gate in `just lint`.
+#
+# The file must be named `statix.toml`, not `.statix.toml`: statix silently
+# ignores the dotted name. And `disabled` takes the lint *name*, not the code
+# (`repeated_keys`, not `W20`) — the code is accepted and silently ignored.
+#
+# W20 (repeated keys) rewrites any dotted attribute path into one nested set:
+#   users.groups.nas.gid = 3000;  ->  users = { groups.nas.gid = 3000; }
+# Four occurrences exist in this repo, and two of them read worse that way:
+# under `users` it produces `users = { users = { immich.uid = ...; }; }`, and
+# `services` groups Hermes with restic backups that have nothing to do with it.
+# The sops block in hosts/homelab is the only place where nesting wins, and one
+# rule-off beats a half-applied style. Revisit if the repo ever reorganises
+# those files.
+disabled = [ "repeated_keys" ]

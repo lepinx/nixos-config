@@ -100,6 +100,8 @@ in
       just
       nix-direnv
       nixfmt
+      deadnix
+      statix
       shellcheck
       sql-formatter
     ];

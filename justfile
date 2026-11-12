@@ -1,13 +1,20 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
 host := env("NIXOS_HOST", `hostname -s`)
-repo_root := justfile_directory()
 
 default:
     @just --list
 
 check:
     nix flake check
+
+# Fast tripwire: nix fmt (rewrites files), deadnix, statix, shellcheck, justfile.
+lint:
+    nix fmt -- --fail-on-change
+    deadnix --fail .
+    statix check .
+    shellcheck scripts/*.sh
+    just --fmt --check
 
 build:
     nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel --no-link
