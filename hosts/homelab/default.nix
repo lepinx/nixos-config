@@ -356,7 +356,11 @@
   users.groups.lucho.gid = 1000;
   users.groups.familia = {
     gid = 3010;
-    members = [ "lucho" "ricardo" "mariaelena" ];
+    members = [
+      "lucho"
+      "ricardo"
+      "mariaelena"
+    ];
   };
 
   users.users.nas = {
