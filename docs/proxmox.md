@@ -34,7 +34,7 @@ Datasets y quién es dueño de cada uno:
 | `tank/familia/mariaelena` | espacio privado | 500G | 3003:3003 | 0700 |
 | `tank/familia/compartido` | compartido, setgid | 1T | 3000:3010 (`nas:familia`) | 2775 |
 | `tank/immich` | biblioteca de Immich | — | 3000:3000 (`nas`) | 0755 |
-| `tank/backups` | repositorio `restic` | — | 0:0 | 0755 |
+| `tank/backups` | reservado; hoy sin uso (los backups van a la torre) | — | 0:0 | 0755 |
 | `tank/hypervisor` | dump de esta configuración | — | 0:0 | 0700 |
 
 **`lucho` es 1000 y no 30xx a propósito**: en la VM `lucho` es el usuario admin con

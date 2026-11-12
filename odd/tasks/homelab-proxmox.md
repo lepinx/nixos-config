@@ -17,6 +17,10 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
 - S3: "usar pangolin para vpn interna y tambien para servicios web o cosas
   publicas de forma segura" — Pangolin en la VM NixOS (hay IP pública real);
   port-forward 80/443 del router ADSL; 51820/UDP queda para WireGuard personal.
+  Aclaración del usuario (L7): el port-forward es el transporte, no la política
+  de exposición — Pangolin rutea recursos públicos y privados por separado, así
+  que reenviar 80/443 no publica nada por sí mismo; cada recurso decide si
+  exige autenticación o queda abierto.
 - S4: "configurar crowdsec tambien como seguridad (capaz es mejor eso que
   fail2ban)" — CrowdSec decidido (LAPI en VM NixOS, bouncers nftables en
   NixOS + Proxmox).
@@ -93,13 +97,32 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   21f0814.
 - T7 (S3): Pangolin en la VM NixOS (nativo si está empaquetado en nixpkgs,
   si no podman), port-forward 80/443, dominio home.pinol.dev. [inline ODD]
+  Estado: desbloqueada — el modelo de exposición quedó fijado (S3 + L7): se
+  reenvía 80/443 en el router y la exposición se decide por recurso en
+  Pangolin (público vs privado con auth). Incluye corregir el comentario del
+  firewall en hosts/homelab/default.nix y la sección "Exposición de red" del
+  README, que afirmaban que nada se reenvía nunca.
 - T8 (S4): CrowdSec + bouncer nftables en NixOS; bouncer en Proxmox. [inline]
 - T9 (S6): montaje del pool en la VM (virtiofs o NFS) + datasets por servicio.
-  [inline]
+  [inline] [commit: ab062a8]
+  Estado: hecha — `/tank/immich` y `/tank/familia` montados por NFS 4.2 desde
+  192.168.1.10 en `/mnt/tank/{immich,familia}`
+  (hosts/homelab/default.nix:32-60); el export vive en el hipervisor
+  (docs/proxmox.md, receta de `/etc/exports`).
 - T10 (S6): Immich (fotos familia) con datos en tank/immich. [inline]
+  [commit: 5dee442]
+  Estado: hecha — `services.immich` con `mediaLocation = "/mnt/tank/immich"`
+  (hosts/homelab/default.nix:268-281); se toma immich 2.7.5 de
+  nixpkgs-unstable porque el paquete del nixpkgs fijado está marcado inseguro;
+  uid/gid 3011 alineados con el dataset.
 - T11 (S6): Jellyfin con datos en tank/familia. [inline]
 - T12 (S6): restic server en la torre + job de backup nocturno desde la VM.
-  [inline + torre]
+  [inline + torre] [commit: ab062a8]
+  Estado: hecha — dos jobs restic (`homelab` y `nas`) con repository
+  `sftp:tower:/srv/data/restic/homelab` y password desde sops
+  (hosts/homelab/default.nix:98-175). Corrección: el destino es la torre vieja
+  por sftp sobre `lucho@192.168.1.50:2222`, **no** `tank/backups`; ese dataset
+  existe y sigue sin uso.
 - T13 (S7): migración AdGuard + Hermes gateway desde la torre a la VM.
   [inline]
   Estado: inventario de la torre completado (2026-11-09). Host `pinocloud`
@@ -130,6 +153,9 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   `docker system df`; ~82G viven en /var/lib/docker solo-legible-por-root,
   ilegible para el usuario de automatización → auditar capas/volúmenes
   huérfanos antes de migrar.
+  Avance (2026-11-10): Hermes ya corre nativo en la VM con credenciales desde
+  sops (691b19c, a2690e5), así que no se migra ese contenedor; AdGuard sigue
+  pendiente del mismo bloqueo.
 - T14 (S7): rol final de la torre: backups + laboratorio (decidir siempre
   encendida vs WOL nocturno). [decision + config]
 - T15 (acceso/herramientas): llave ed25519 de automatización dedicada (sin
@@ -163,7 +189,10 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
 - T18 (backups): definir e implementar un backup real antes de mover
   cualquier dato (hoy no existe ninguno). [inline + torre]
 - T19 (secrets): adoptar un almacén de secrets (sops-nix o agenix) antes
-  de mover declarativamente cualquier servicio. [inline]
+  de mover declarativamente cualquier servicio. [inline] [commit: 8625fe5]
+  Estado: hecha — sops-nix adoptado: input de flake, módulo en
+  hosts/homelab/default.nix:14, `.sops.yaml`, `sops/homelab.yaml` cifrado con
+  age sobre la host key ed25519, y `docs/secrets.md` reescrito con la política.
 - T20 (NAS): NAS **nativo NixOS, no TrueNAS** (en línea con L1/L2: ZFS
   gestionado por el host Proxmox). Requerimiento del usuario: NAS para
   compartir con la familia y que las fotos/videos sacados con el celular
@@ -171,7 +200,12 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   móvil hace auto-upload en segundo plano, que es el requisito de que las
   fotos del celular aterricen en el NAS) + **Samba** para shares de archivos
   familiares; un share SMB solo no resuelve el caso del upload desde el
-  teléfono. [inline]
+  teléfono. [inline] [commit: 5dee442]
+  Estado: hecha — Samba nativo con un share `personal` que resuelve
+  `/mnt/tank/familia/%U` (una sola URL para todos, sin `[homes]`) más los
+  shares por integrante y `compartido` en grupo `familia` (2775)
+  (hosts/homelab/default.nix:206-275); el auto-upload del celular lo cubre
+  Immich, no SMB.
 - T21 (backup): inventario del backup de migración de Cloudreve en la
   torre, /srv/data/migration-backup-20261010: backup bien formado, con
   MANIFEST.md, checksums.sha256 y procedimiento de restore. Contenido
@@ -250,3 +284,13 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   Immich (fotos/videos, auto-upload desde el celular) + Samba para shares
   familiares; dirección registrada en T20 y contenido/riesgos del backup
   en T21.
+- L7 (2026-11-11, exposición): "A ver solo te quiero informar, que si hay
+  que forwardear los puertos.. pero eso no necesariamente quiere decir que
+  todo va a ir publico, pangolin tiene para rutear servicios tanto publicos
+  como privados.. no?"
+  Decisión (no es cita): el port-forward 80/443 queda como parte del diseño
+  (S3/T7) y la exposición se decide por recurso en Pangolin, público o privado
+  con autenticación. Se corrigen en consecuencia el comentario del firewall de
+  hosts/homelab/default.nix y la sección "Exposición de red" del README.
+  Resumen de la sesión: se reconciliaron los estados del documento con main
+  (T9/T10/T12/T19/T20 ya estaban implementadas sin marcar).

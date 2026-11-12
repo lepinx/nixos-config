@@ -24,16 +24,25 @@ El host está definido y expuesto como `nixosConfigurations.homelab`, con
   virtio, guest agent);
 - `hosts/homelab/default.nix`: boot EFI (systemd-boot), IP estática
   `192.168.1.11`, SSH LAN-only con contraseña (decisión explícita del
-  usuario), firewall con 22/80/443 TCP + 51820/UDP.
+  usuario), firewall con 22/80/443 TCP + 51820/UDP;
+- secretos con `sops-nix` sobre `sops/homelab.yaml` (age contra la host key
+  ed25519): password de restic, credenciales de Telegram/Hermes y la API key
+  de NaN;
+- `/mnt/tank/{familia,immich}` montados por NFS 4.2 desde el hipervisor, más
+  dos jobs restic (`homelab` y `nas`) hacia la torre vieja por
+  `sftp:tower:/srv/data/restic/homelab`;
+- Samba con un share por integrante sobre `/mnt/tank/familia`, Immich sobre
+  `/mnt/tank/immich` y Hermes Agent nativo.
 
 Estado de instalación: **instalada en la VM (id 100): disko + nixos-install desde el flake aplicados, boot desde disco OK, ssh lucho@192.168.1.11 operativo (ver `odd/tasks/homelab-proxmox.md`, T6).**
 
 ## Exposición de red
 
-El firewall abre explícitamente 22/80/443 TCP y 51820/UDP. Todo queda
-LAN/VPN-only: el router ADSL no reenvía ninguno de esos puertos desde la WAN
-(hay IP pública real; la exposición públa se hará únicamente a través de
-Pangolin, cuando se configure).
+Hay IP pública real y el router reenvía 80/443 TCP hacia esta VM: ese es el
+puerto de entrada del edge. El reenvío **no publica nada por sí mismo** —
+Pangolin rutea por recurso, con recursos públicos y recursos privados que
+exigen autenticación, y 51820/UDP queda para WireGuard personal. Lo que no
+pasa por Pangolin (22/445/9119) nunca se reenvía y sigue siendo LAN/VPN-only.
 
 SSH con contraseña es una decisión explícita del usuario: solo LAN/VPN, nunca
 expuesto. Si cambia el modelo de exposición, reevaluar claves SSH.
@@ -65,9 +74,9 @@ expuesto. Si cambia el modelo de exposición, reevaluar claves SSH.
 
 ## Pendientes
 
-- Compartir `tank/{immich,familia,backups}` del host hacia la VM
-  (virtiofs o NFS) y retomar Samba sobre el mount point definitivo.
 - Pangolin (80/443, edge público), CrowdSec (LAPI + bouncers).
-- Immich y Jellyfin con datos en `tank`.
-- Backups con restic hacia la torre.
+- Jellyfin con datos en `/mnt/tank/familia`.
+- Verificar el primer backup restic real contra la torre
+  (`sftp:tower:/srv/data/restic/homelab`): el cliente está declarado, el
+  repositorio del otro lado todavía no se comprobó.
 - Cuotas ZFS por dataset: follow-up en runtime.

@@ -183,8 +183,9 @@
     firewall = {
       enable = true;
       # 22 for LAN SSH, 80/443 for the Pangolin edge, 51820/udp for WireGuard
-      # tunnels. The router never forwards these from the WAN, so everything
-      # stays LAN/VPN-only.
+      # tunnels. Only 80/443 is forwarded from the WAN, and the forward is just
+      # the transport: Pangolin decides per resource what is public and what
+      # requires authentication. Everything else stays LAN/VPN-only.
       allowedTCPPorts = [
         22
         80
