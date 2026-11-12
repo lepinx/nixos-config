@@ -211,6 +211,19 @@
         "server min protocol" = "SMB2";
       };
 
+      # Carpeta personal con una sola URL para todos: Samba sustituye %U por
+      # el usuario autenticado, asi cada quien aterriza en su propia carpeta
+      # sin saber como se llama su share. Si el dataset no existe la conexion
+      # falla, en vez de caer en el dataset padre y exponer a los demas.
+      # No se usa [homes]: deriva la ruta del home de /etc/passwd y el home de
+      # lucho es /home/lucho (ahi viven sus authorized_keys de sshd).
+      personal = {
+        path = "/mnt/tank/familia/%U";
+        "valid users" = "@familia";
+        "read only" = "no";
+        browseable = "yes";
+      };
+
       lucho = {
         path = "/mnt/tank/familia/lucho";
         "valid users" = "lucho";
