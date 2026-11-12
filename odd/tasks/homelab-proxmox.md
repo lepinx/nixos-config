@@ -156,8 +156,29 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   Avance (2026-11-10): Hermes ya corre nativo en la VM con credenciales desde
   sops (691b19c, a2690e5), así que no se migra ese contenedor; AdGuard sigue
   pendiente del mismo bloqueo.
+  Avance (2026-11-12): AdGuard Home declarado nativo en la VM
+  (`services.adguardhome`: upstreams 1.1.1.1/9.9.9.9, UI en 3000, DNS en
+  53/tcp+53/udp abierto en el firewall, `mutableSettings` para que la
+  credencial de admin viva solo en el host y no en el repo público). Falta
+  desplegarlo y cambiar el DNS del DHCP del router a .11.
+  Hallazgo (2026-11-12): la LAN quedó SIN DNS propio — los 12 contenedores de
+  la torre están exited (traefik, adguard-home, wg-easy incluidos), así que
+  sólo escucha 2222/ssh y 68/dhcp. Y el payload familiar NO está migrado: en
+  la VM `/mnt/tank/familia` suma 159 bytes (esqueleto vacío con
+  `cloudreve-legacy/{avatar,temp,uploads}` y un `conf.ini`) y
+  `/mnt/tank/immich` 36K; los archivos siguen sólo en
+  `/srv/data/migration-backup-20261010/docker-volumes/cloudreve.tar`
+  (23,2 GB, `root:root` 644).
 - T14 (S7): rol final de la torre: backups + laboratorio (decidir siempre
   encendida vs WOL nocturno). [decision + config]
+  Estado: el usuario quiere reinstalarla con NixOS desde cero y dejar los
+  backups andando. Decisiones del 2026-11-12: se **descarta la historia del
+  repo restic** (12G en `/srv/data/restic`) y se arranca uno nuevo en la
+  torre reinstalada; el rol “laboratorio” sigue sin decidir. Prerrequisitos
+  antes de formatear: rescatar el payload familiar (cloudreve.tar) y los
+  secretos (ver T13/T21). No existe todavía un `hosts/tower` en el repo:
+  hay que escribir el perfil bare-metal (el diseño viejo con disko+LUKS
+  sigue en el historial de git).
 - T15 (acceso/herramientas): llave ed25519 de automatización dedicada (sin
   passphrase) instalada en lucho@192.168.1.50:2222 y lucho@192.168.1.11;
   Proxmox se maneja por ahora como root@192.168.1.10, con token API de
@@ -226,6 +247,11 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   wg-easy, ~/.engram, ssh) pesa menos de 100 MB y debería copiarse fuera
   de la máquina. Los tars con credenciales no se abrieron a propósito.
   [torre]
+  Confirmado 2026-11-12: es la única copia. El NAS nuevo no tiene el payload
+  (159 bytes en `/tank/familia`, 36K en `/tank/immich`), así que formatear la
+  torre destruye los 23,2 GB de archivos familiares hasta que se extraigan.
+  El repo restic de la torre (12G) sí es descartable por decisión del usuario:
+  contiene una copia de lo que ya vive en la VM más la config, no el payload.
 
 ## Log
 
@@ -294,3 +320,30 @@ hosts/homelab/README.md, memoria obs 249/250/257/291.
   hosts/homelab/default.nix y la sección "Exposición de red" del README.
   Resumen de la sesión: se reconciliaron los estados del documento con main
   (T9/T10/T12/T19/T20 ya estaban implementadas sin marcar).
+- L8 (2026-11-12, Dokploy, tower y AdGuard): "Creo que no entra dokploy.. te
+  acordas todo lo que hablamos? de ci/cd en nixos.. estuvimos hablando de
+  esto, arcane tambien.. pero es de contenedores.. nosotros tenemos nativo en
+  nixos.. Podes buscar todo lo que hablamos? En que estado esta el homelab
+  nuevo y el viejo? Quiero saber si el otro falta migrar algo, porque me
+  gustaria instalarle de nuevo nixos y dejarlo 0km con los backups andando y
+  seguir configurando el homelab nuevo, con pangolin etc... configurar
+  immich, el samba ya estaria creo.. quiero saber el panorama completo"
+  Más tarde: "Los datos ya los tengo en el homelab nuevo no? el backup ni
+  importa si ya tengo todo en el nuevo.. la historia da igual (solo para
+  estar seguro)".
+  Decisiones (no son citas):
+  (1) **Dokploy descartado** y con eso se cierra la pregunta abierta de L3:
+  el despliegue acá es `nixos-rebuild switch` sobre un flake, y Dokploy o
+  Arcane asumen compose como unidad de despliegue; lo container-only real se
+  reduce a pocas excepciones declaradas. CI = `nix flake check`/build, CD =
+  rebuild con `--target-host` (depende de T16).
+  (2) **Historia del repo restic descartada**; repo nuevo en la torre
+  reinstalada (T14). Se avisó el costo: entre el wipe y la torre nueva no hay
+  backup fuera de la VM.
+  (3) **AdGuard Home pasa a ser nativo en la VM** (T13), próximo paso de
+  implementación.
+  Corrección de un supuesto del usuario, con evidencia: el payload familiar NO
+  está en el homelab nuevo; “la historia da igual” aplica al repo restic, no
+  a los 23,2 GB de archivos de Cloudreve, que siguen únicamente en la torre.
+  No se encontró en memoria ningún registro previo de la conversación de
+  CI/CD en NixOS: sólo la pregunta abierta de L3 sobre Dokploy.

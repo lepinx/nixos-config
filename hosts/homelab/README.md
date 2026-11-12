@@ -74,6 +74,9 @@ expuesto. Si cambia el modelo de exposición, reevaluar claves SSH.
 
 ## Pendientes
 
+- AdGuard Home desplegado y el DHCP del router apuntando a `192.168.1.11`
+  como DNS (hoy la LAN no tiene resolver propio: el contenedor de la torre
+  está apagado).
 - Pangolin (80/443, edge público), CrowdSec (LAPI + bouncers).
 - Jellyfin con datos en `/mnt/tank/familia`.
 - Verificar el primer backup restic real contra la torre

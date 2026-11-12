@@ -194,8 +194,15 @@
         9119
         # Samba (solo SMB directo; sin NetBIOS 137-139)
         445
+        # AdGuard Home: el resolver DNS de la LAN (TCP para respuestas grandes)
+        53
       ];
-      allowedUDPPorts = [ 51820 ];
+      # 53/udp es el camino normal de las consultas; el modulo de AdGuard solo
+      # abre el puerto de su UI (3000), asi que 53 se abre a mano.
+      allowedUDPPorts = [
+        53
+        51820
+      ];
     };
     nftables.enable = true;
   };
@@ -289,6 +296,37 @@
       PasswordAuthentication = true;
       KbdInteractiveAuthentication = false;
       PermitRootLogin = "no";
+    };
+  };
+
+  # AdGuard Home: el resolver DNS de la LAN, nativo (era un contenedor en la
+  # torre vieja). El modulo abre solo el puerto de la UI; 53/tcp y 53/udp se
+  # abren a mano en el firewall de arriba.
+  #
+  # La credencial de administracion NO se declara aca: el repo es publico y
+  # docs/secrets.md prohibe publicar hashes de contrasena. Con mutableSettings
+  # el primer arranque usa el asistente web y el usuario queda en
+  # /var/lib/AdGuardHome/AdGuardHome.yaml, que sobrevive a los rebuilds; el
+  # merge declarativo solo pisa las claves que este archivo define.
+  services.adguardhome = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 3000;
+    openFirewall = true;
+    mutableSettings = true;
+    settings = {
+      dns = {
+        upstream_dns = [
+          "1.1.1.1"
+          "9.9.9.9"
+        ];
+        bootstrap_dns = [
+          "9.9.9.9"
+          "1.1.1.1"
+        ];
+      };
+      # El DHCP lo hace el router; habilitarlo aca pediria CAP_NET_RAW de mas.
+      dhcp.enabled = false;
     };
   };
 
