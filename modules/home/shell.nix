@@ -53,6 +53,9 @@ let
     njt = "nixcfg test";
     njs = "nixcfg switch";
     nju = "nixcfg update";
+    # update + switch in one step; `nju` stays for reviewing the lock before
+    # applying it, or for retrying after a failed switch without re-locking.
+    njup = "nixcfg up";
 
     # docker -> Podman CLI (dockerCompat).
     d = "docker";
