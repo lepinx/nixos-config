@@ -5,6 +5,7 @@
     inputs.noctalia-greeter.nixosModules.default
     ../core.nix
     ../desktop.nix
+    ../diagnostics.nix
     ../greeter.nix
     ../hardware
     ../maintenance.nix
