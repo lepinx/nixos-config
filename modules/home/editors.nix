@@ -41,9 +41,9 @@ let
     shfmt
     statix
     stylua
+    tailwindcss-language-server
     taplo
     tree-sitter
-    typescript-language-server
     unzip
     vtsls
     wget
