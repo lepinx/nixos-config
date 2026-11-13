@@ -1,0 +1,16 @@
+{
+  "schema": "gentle-pi.visual-customization/v1",
+  "statusPlacement": "right",
+  "headerPlacement": "below-input",
+  "density": "compact",
+  "visibility": {
+    "changes": true,
+    "rdd": true,
+    "agents": true,
+    "todo": true,
+    "usageCost": true,
+    "modelDetails": true,
+    "contextWarning": true,
+    "stats": true
+  }
+}

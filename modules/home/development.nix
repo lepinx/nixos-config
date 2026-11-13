@@ -53,19 +53,33 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/agent/skills/oss-fork";
     };
 
-    file.".gentle-shell/gentle-ai/models.json" = {
+    # The bundled launcher resolves its gentle-pi config home from
+    # GENTLE_SHELL_PREFIX before any other override, so it reads
+    # ~/.gentle-shell/config/gentle-ai. These files used to live one level up, in
+    # ~/.gentle-shell/gentle-ai, where the bundled launcher never looked: the
+    # settings were present and silently ignored. These three are safe to
+    # symlink because nothing rewrites them with an atomic rename.
+    file.".gentle-shell/config/gentle-ai/models.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/models.json";
     };
 
-    file.".gentle-shell/gentle-ai/vim.json" = {
+    file.".gentle-shell/config/gentle-ai/vim.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/vim.json";
     };
 
-    file.".gentle-shell/gentle-ai/background-subagents.json" = {
+    file.".gentle-shell/config/gentle-ai/background-subagents.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/background-subagents.json";
+    };
+
+    # Layout (panel placement, header placement, density, panel visibility) is a
+    # versioned preference, not runtime state: symlinked so the repo is the only
+    # source of truth.
+    file.".gentle-shell/config/gentle-ai/visual-customization.json" = {
+      force = true;
+      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/visual-customization.json";
     };
 
     # One Pi, owned by the Gentle Shell product. The bundled install keeps its Pi
@@ -152,6 +166,21 @@ in
     seed "${repoPath}/configs/gentle-shell/agent/mcp.json" "$HOME/.gentle-shell/agent/mcp.json"
     seed "${repoPath}/configs/gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/gentle-ai/persona.json"
     seed "${repoPath}/configs/gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/gentle-ai/profiles.json"
+
+    # persona.json and profiles.json cannot be symlinks: gentle-ai's setup/sync
+    # refuse to read a symlink they are about to inject, and /gentle:profiles
+    # rewrites profiles.json with an atomic rename that replaces the link. So the
+    # config home the bundled launcher actually reads gets them by migration of
+    # the live file, falling back to nothing on a fresh machine (the launcher
+    # writes defaults, and the repo copy is the reference).
+    migrate() {
+      if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$2" ] && [ -e "$1" ]; then
+        install -Dm600 "$1" "$2"
+        echo "migrated $2 from the pre-bundled config home"
+      fi
+    }
+    migrate "$HOME/.gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/config/gentle-ai/persona.json"
+    migrate "$HOME/.gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/config/gentle-ai/profiles.json"
   '';
 
   # Install missing mutable tools on first login; existing installations and
