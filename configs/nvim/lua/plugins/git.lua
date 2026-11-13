@@ -6,18 +6,46 @@ return {
       -- These are the shorter aliases on top, nothing more.
       {
         "<leader>hp",
-        function() require("gitsigns").preview_hunk() end,
+        function()
+          require("gitsigns").preview_hunk()
+        end,
         desc = "Preview Git hunk",
       },
-      { "<leader>hs", function() require("gitsigns").stage_hunk() end, desc = "Stage Git hunk" },
-      { "<leader>hr", function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" },
+      {
+        "<leader>hs",
+        function()
+          require("gitsigns").stage_hunk()
+        end,
+        desc = "Stage Git hunk",
+      },
+      {
+        "<leader>hr",
+        function()
+          require("gitsigns").reset_hunk()
+        end,
+        desc = "Reset Git hunk",
+      },
       {
         "<leader>hb",
-        function() require("gitsigns").blame_line({ full = true }) end,
+        function()
+          require("gitsigns").blame_line({ full = true })
+        end,
         desc = "Blame Git line",
       },
-      { "<leader>hS", function() require("gitsigns").stage_buffer() end, desc = "Stage Git buffer" },
-      { "<leader>hR", function() require("gitsigns").reset_buffer() end, desc = "Reset Git buffer" },
+      {
+        "<leader>hS",
+        function()
+          require("gitsigns").stage_buffer()
+        end,
+        desc = "Stage Git buffer",
+      },
+      {
+        "<leader>hR",
+        function()
+          require("gitsigns").reset_buffer()
+        end,
+        desc = "Reset Git buffer",
+      },
       { "<leader>hs", ":Gitsigns stage_hunk<CR>", mode = "v", desc = "Stage selected Git hunk" },
       { "<leader>hr", ":Gitsigns reset_hunk<CR>", mode = "v", desc = "Reset selected Git hunk" },
     },

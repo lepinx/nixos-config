@@ -8,13 +8,15 @@ default:
 check:
     nix flake check
 
-# Fast tripwire: nix fmt (rewrites files), deadnix, statix, shellcheck, justfile.
+# Fast tripwire: nix fmt (rewrites files), deadnix, statix, shellcheck, justfile,
+# and stylua for the Neovim config (which nix fmt does not touch).
 lint:
     nix fmt -- --fail-on-change
     deadnix --fail .
     statix check .
     shellcheck scripts/*.sh
     just --fmt --check
+    stylua --config-path configs/nvim/stylua.toml --check configs/nvim
 
 build:
     nix build .#nixosConfigurations.{{ host }}.config.system.build.toplevel --no-link
