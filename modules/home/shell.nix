@@ -102,6 +102,11 @@ in
       interactiveShellInit = ''
         # Noctalia owns ~/.config/starship.toml, so the starship module is unused and init is manual.
         starship init fish | source
+        # ~/.local/bin holds the bundled gentle-shell launcher and must win over
+        # the legacy npm global. That path ships its own gentle-pi, so a session
+        # started from it injects a different extension root, and two sessions in
+        # one repo then fight over .atl/skill-registry.cache.json (refresh notice
+        # every 2s). Profiles still come first.
         set -gx PATH \
           "/etc/profiles/per-user/$USER/bin" \
           (string match -v -- \
@@ -109,8 +114,8 @@ in
             (string match -v -- \
               "$HOME/.local/share/agent-runtime/npm/bin" \
               (string match -v -- "$HOME/.local/bin" $PATH))) \
-          "$HOME/.local/share/agent-runtime/npm/bin" \
-          "$HOME/.local/bin"
+          "$HOME/.local/bin" \
+          "$HOME/.local/share/agent-runtime/npm/bin"
         fish_vi_key_bindings
         set fish_greeting
 

@@ -82,8 +82,10 @@ in
 
     sessionPath = [
       "/etc/profiles/per-user/$USER/bin"
-      "$HOME/.local/share/agent-runtime/npm/bin"
+      # The bundled gentle-shell launcher lives in ~/.local/bin and must win over
+      # the legacy npm global; fish builds PATH explicitly, see shell.nix.
       "$HOME/.local/bin"
+      "$HOME/.local/share/agent-runtime/npm/bin"
     ];
 
     packages = with pkgs; [
