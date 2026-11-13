@@ -30,7 +30,13 @@ fi
 # needed here — it installs no artifact at package level on Linux — so npm's
 # lifecycle-script gate can stay closed; gentle-ai remains the binary the block
 # above provisions.
-if [ ! -x "$npm_prefix/bin/gentle-shell" ]; then
+#
+# A bundled install (~/.gentle-shell) ships its own launcher and Pi and is the
+# productised path: `gentle-shell upgrade` converts to it and removes the npm
+# global. That path sits on ~/.local/bin, so reinstalling the npm global here
+# would shadow it through sessionPath and silently resurrect the old layout.
+# Provision the npm launcher only when no bundled install owns the command.
+if [ ! -x "$HOME/.gentle-shell/bin/gentle-shell" ] && [ ! -x "$npm_prefix/bin/gentle-shell" ]; then
   npm install -g --prefix "$npm_prefix" gentle-pi
   [ -x "$npm_prefix/bin/gentle-shell" ] || { echo 'gentle-shell launcher installation failed' >&2; exit 1; }
 fi

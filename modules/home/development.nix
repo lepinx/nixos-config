@@ -68,6 +68,36 @@ in
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/background-subagents.json";
     };
 
+    # One Pi, owned by the Gentle Shell product. The bundled install keeps its Pi
+    # under ~/.gentle-shell/current (a stable symlink that `gentle-shell upgrade`
+    # moves), so this exposes that binary instead of letting nixpkgs ship a
+    # second, independently-versioned one. gentle-ai needs a `pi` on PATH (it runs
+    # `pi install npm:gentle-pi`), and now it gets the same binary the launcher
+    # runs: no drift, and no "which Pi am I in" ambiguity.
+    #
+    # A wrapper, not a symlink: node_modules/.bin/pi is an npm shim that derives
+    # its target from $0, so following a symlink from ~/.local/bin makes it load
+    # ~/.local/@earendil-works/... and fail with MODULE_NOT_FOUND. Invoking the
+    # bundled entry with the launcher's own node is what the launcher itself does.
+    file.".local/bin/pi" = {
+      executable = true;
+      text = ''
+        #!/bin/sh
+        root="$HOME/.gentle-shell"
+        entry="$root/current/node_modules/@earendil-works/pi-coding-agent/dist/bundle/cli.js"
+        if [ ! -f "$entry" ]; then
+          for c in "$HOME/.local/share/agent-runtime/npm/bin/pi" "/etc/profiles/per-user/$USER/bin/pi"; do
+            [ -x "$c" ] && exec "$c" "$@"
+          done
+          echo "pi: no Pi installation found ($entry); run the Gentle Shell installer" >&2
+          exit 127
+        fi
+        node_bin="$root/runtime/node-24.21.0/bin/node"
+        [ -x "$node_bin" ] || node_bin="$(command -v node)"
+        exec "$node_bin" "$entry" "$@"
+      '';
+    };
+
     sessionVariables = {
       NPM_CONFIG_PREFIX = "$HOME/.local/share/agent-runtime/npm";
       NPM_CONFIG_CACHE = "$HOME/.cache/agent-runtime/npm";
@@ -92,7 +122,6 @@ in
       direnv
       gh
       pkgs.glab
-      pkgs.pi-coding-agent
       just-lsp
       jujutsu
       lazydocker
