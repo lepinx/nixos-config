@@ -6,6 +6,7 @@ _:
     ../diagnostics.nix
     ../maintenance.nix
     ../shell.nix
+    ../tools.nix
   ];
 
 }
