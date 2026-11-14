@@ -57,16 +57,11 @@ in
     # GENTLE_SHELL_PREFIX before any other override, so it reads
     # ~/.gentle-shell/config/gentle-ai. These files used to live one level up, in
     # ~/.gentle-shell/gentle-ai, where the bundled launcher never looked: the
-    # settings were present and silently ignored. These three are safe to
-    # symlink because nothing rewrites them with an atomic rename.
+    # settings were present and silently ignored. These two are safe to symlink
+    # because nothing rewrites them with an atomic rename.
     file.".gentle-shell/config/gentle-ai/models.json" = {
       force = true;
       source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/models.json";
-    };
-
-    file.".gentle-shell/config/gentle-ai/vim.json" = {
-      force = true;
-      source = config.lib.file.mkOutOfStoreSymlink "${repoPath}/configs/gentle-shell/gentle-ai/vim.json";
     };
 
     file.".gentle-shell/config/gentle-ai/background-subagents.json" = {
@@ -167,20 +162,29 @@ in
     seed "${repoPath}/configs/gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/gentle-ai/persona.json"
     seed "${repoPath}/configs/gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/gentle-ai/profiles.json"
 
-    # persona.json and profiles.json cannot be symlinks: gentle-ai's setup/sync
-    # refuse to read a symlink they are about to inject, and /gentle:profiles
-    # rewrites profiles.json with an atomic rename that replaces the link. So the
-    # config home the bundled launcher actually reads gets them by migration of
-    # the live file, falling back to nothing on a fresh machine (the launcher
-    # writes defaults, and the repo copy is the reference).
-    migrate() {
-      if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$2" ] && [ -e "$1" ]; then
-        install -Dm600 "$1" "$2"
-        echo "migrated $2 from the pre-bundled config home"
+    # persona.json, profiles.json and vim.json cannot be symlinks: gentle-ai's
+    # setup/sync refuse to read a symlink they are about to inject,
+    # /gentle:profiles rewrites profiles.json with an atomic rename, and the vim
+    # policy rewrites vim.json the same way. Each rename replaces the link with a
+    # regular file, so a symlink here only survives until the first write, and
+    # with force = true the next activation puts the repo value back over
+    # whatever the UI just stored. place() prefers the live copy from the
+    # pre-bundled config home and falls back to the repo reference, which is what
+    # a fresh machine needs.
+    place() {
+      if [ "''${DRY_RUN:-}" != 1 ] && [ ! -e "$3" ]; then
+        if [ -e "$1" ]; then
+          install -Dm600 "$1" "$3"
+          echo "migrated $3 from the pre-bundled config home"
+        elif [ -e "$2" ]; then
+          install -Dm600 "$2" "$3"
+          echo "seeded $3 from repo"
+        fi
       fi
     }
-    migrate "$HOME/.gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/config/gentle-ai/persona.json"
-    migrate "$HOME/.gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/config/gentle-ai/profiles.json"
+    place "$HOME/.gentle-shell/gentle-ai/persona.json" "${repoPath}/configs/gentle-shell/gentle-ai/persona.json" "$HOME/.gentle-shell/config/gentle-ai/persona.json"
+    place "$HOME/.gentle-shell/gentle-ai/profiles.json" "${repoPath}/configs/gentle-shell/gentle-ai/profiles.json" "$HOME/.gentle-shell/config/gentle-ai/profiles.json"
+    place "$HOME/.gentle-shell/gentle-ai/vim.json" "${repoPath}/configs/gentle-shell/gentle-ai/vim.json" "$HOME/.gentle-shell/config/gentle-ai/vim.json"
   '';
 
   # Install missing mutable tools on first login; existing installations and
